@@ -2,9 +2,18 @@
   "name": "react-chloroform",
   "version": "0.1.0",
   "description": "A framework for building forms in React applications",
-  "main": "src",
+  "main": "./lib/index.js",
   "scripts": {
-    "test": "eslint src"
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
+    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
+    "build:umd": "cross-env BABEL_ENV=rollup NODE_ENV=development rollup -c -o dist/react-redux.js",
+    "build:umd:min": "cross-env BABEL_ENV=rollup NODE_ENV=production rollup -c -o dist/react-redux.min.js",
+    "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
+    "clean": "rimraf lib dist es coverage",
+    "lint": "eslint src test",
+    "prepare": "npm run clean && npm run build",
+    "test": "cross-env BABEL_ENV=commonjs NODE_ENV=test mocha --compilers js:babel-register --recursive --require ./test/setup.js",
+    "test:watch": "npm test -- --watch"
   },
   "repository": {
     "type": "git",
@@ -19,5 +28,10 @@
   "bugs": {
     "url": "https://github.com/darrikonn/react-chloroform/issues"
   },
-  "homepage": "https://github.com/darrikonn/react-chloroform#readme"
+  "homepage": "https://github.com/darrikonn/react-chloroform#readme",
+  "dependencies": {
+    "immutable": "^3.8.1",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1"
+  }
 }
