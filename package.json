@@ -1,0 +1,23 @@
+{
+  "name": "react-chloroform",
+  "version": "0.1.0",
+  "description": "A framework for building forms in React applications",
+  "main": "src",
+  "scripts": {
+    "test": "eslint src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darrikonn/react-chloroform.git"
+  },
+  "keywords": [
+    "react",
+    "form"
+  ],
+  "author": "Darri Steinn Konradsson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/darrikonn/react-chloroform/issues"
+  },
+  "homepage": "https://github.com/darrikonn/react-chloroform#readme"
+}
