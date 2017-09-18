@@ -9,8 +9,7 @@
     "es": {
       "plugins": [
         "./build/babel-lodash-es",
-        "transform-class-properties",
-        "external-helpers"
+        "transform-class-properties"
       ],
     }
   }
