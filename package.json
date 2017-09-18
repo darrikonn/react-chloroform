@@ -45,9 +45,6 @@
   "jest": {
     "testRegex": "(/tests/.*\\.spec.js)$"
   },
-  "pre-commit": [
-    "test"
-  ],
   "dependencies": {
     "immutable": "^3.8.1",
     "prop-types": "^15.5.10",
@@ -71,7 +68,6 @@
     "eslint-plugin-import": "^2.7.0",
     "jest": "^21.1.0",
     "lodash-es": "^4.17.4",
-    "pre-commit": "^1.2.2",
     "rimraf": "^2.6.2",
     "rollup": "^0.50.0",
     "rollup-plugin-babel": "^3.0.2",
