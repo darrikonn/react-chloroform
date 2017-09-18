@@ -4,15 +4,15 @@ export default (reducer) => {
 
   const getState = () => state;
 
-  const dispatch = action => {
+  const dispatch = (action) => {
     state = reducer(state, action);
-    listeners.forEach(listener => listener());
+    listeners.forEach((listener) => listener());
   };
 
-  const subscribe = listener => {
+  const subscribe = (listener) => {
     listeners.push(listener);
     return () => {
-      listeners = listeners.filter(l => l !== listener);
+      listeners = listeners.filter((l) => l !== listener);
     };
   };
 
