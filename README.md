@@ -3,7 +3,15 @@
 ## Why
 
 ## Install
+To install this package, run:
+```
+npm install --save react-chloroform
+```
 
+`yarn` users can use:
+```
+yarn add react-chloroform
+```
 ## Example
 ```javascript
 import React from 'react';
