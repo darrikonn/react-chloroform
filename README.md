@@ -14,13 +14,13 @@ const YourFormComponent = () => {
     console.log(model);
   };
 
-  const initalState = {
+  const initialState = {
     email: 'bla@bla.is',
     name: 'Your name',
   };
 
   return (
-    <Form initialState={initalState} onSubmit={handleSubmit}>
+    <Form initialState={initialState} onSubmit={handleSubmit}>
       <label htmlFor="email">Email: </label>
       <TextInput name="email" id="email" label="email" />
       <div>
