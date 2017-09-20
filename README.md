@@ -20,7 +20,7 @@ const YourFormComponent = () => {
   };
 
   return (
-    <Form initialState={initalState} onSubmit={this.handleSubmit}>
+    <Form initialState={initalState} onSubmit={handleSubmit}>
       <label htmlFor="email">Email: </label>
       <TextInput name="email" id="email" label="email" />
       <div>
