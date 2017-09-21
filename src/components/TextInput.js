@@ -19,16 +19,14 @@ class TextInput extends Control {
     const {placeholder, id, type, name} = this.props;
 
     return (
-      React.createElement('input',
-        {
-          placeholder,
-          id,
-          type,
-          name,
-          value: this._getValue(),
-          onChange: (e) => this._onChange(e.target.value),
-        },
-      )
+      <input
+        placeholder={placeholder}
+        id={id}
+        type={type}
+        name={name}
+        value={this._getValue()}
+        onChange={(e) => this._onChange(e.target.value)}
+      />
     );
   }
 }

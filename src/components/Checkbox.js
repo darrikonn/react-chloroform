@@ -17,15 +17,13 @@ class Checkbox extends Control {
     const {id, name} = this.props;
 
     return (
-      React.createElement('input',
-        {
-          type: 'checkbox',
-          id,
-          name,
-          checked: this._getValue() || false,
-          onChange: (e) => this._onChange(e.target.checked),
-        },
-      )
+      <input
+        type="checkbox"
+        id={id}
+        name={name}
+        checked={this._getValue() || false}
+        onChange={(e) => this._onChange(e.target.checked)}
+      />
     );
   }
 }

@@ -14,16 +14,14 @@ class RadioButton extends Control {
     const {id, name, value} = this.props;
 
     return (
-      React.createElement('input',
-        {
-          type: 'radio',
-          id,
-          name,
-          value,
-          checked: this._getValue() === value,
-          onChange: (e) => this._onChange(e.target.value),
-        },
-      )
+      <input
+        type="radio"
+        id={id}
+        name={name}
+        value={value}
+        checked={this._getValue() === value}
+        onChange={(e) => this._onChange(e.target.value)}
+      />
     );
   }
 }

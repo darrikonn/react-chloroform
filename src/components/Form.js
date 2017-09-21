@@ -57,11 +57,9 @@ class Form extends Component {
 
   render() {
     return (
-      React.createElement('form',
-        {
-          onSubmit: this.handleSubmit,
-          onReset: this.handleReset,
-        }, this.props.children)
+      <form onSubmit={this.handleSubmit} onReset={this.handleReset}>
+        {this.props.children}
+      </form>
     );
   }
 }
