@@ -11,12 +11,14 @@ class RadioButton extends Control {
   }
 
   render() {
-    const {id, name, value} = this.props;
+    const {id, name, value, className, style} = this.props;
 
     return (
       <input
         type="radio"
         id={id}
+        className={className}
+        style={style}
         name={name}
         value={value}
         checked={this._getValue() === value}

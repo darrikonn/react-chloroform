@@ -9,6 +9,8 @@ class TextInput extends Control {
     id: PropTypes.string,
     placeholder: PropTypes.string,
     type: PropTypes.oneOf(['text', 'email']),
+    className: PropTypes.string,
+    style: PropTypes.string,
   };
 
   static defaultProps = {
@@ -16,12 +18,14 @@ class TextInput extends Control {
   };
 
   render() {
-    const {placeholder, id, type, name} = this.props;
+    const {placeholder, id, type, name, className, style} = this.props;
 
     return (
       <input
         placeholder={placeholder}
         id={id}
+        className={className}
+        style={style}
         type={type}
         name={name}
         value={this._getValue()}

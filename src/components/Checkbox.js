@@ -14,11 +14,13 @@ class Checkbox extends Control {
   };
 
   render() {
-    const {id, name} = this.props;
+    const {id, name, className, style} = this.props;
 
     return (
       <input
         type="checkbox"
+        className={className}
+        style={style}
         id={id}
         name={name}
         checked={this._getValue() || false}
