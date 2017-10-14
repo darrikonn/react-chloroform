@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 
 import {Form, TextInput, RadioButton, Checkbox, Button} from 'react-chloroform';
+import styles from './app.module.css';
 
 class App extends Component {
   handleSubmit = (model) => {
@@ -34,7 +36,7 @@ class App extends Component {
               <label htmlFor="darrmundur2">No</label>
               <RadioButton name="darrmundur" id="darrmundur2" value="false" />
             </div>
-            <Button type="submit" text="Submit" />
+            <Button type="submit" text="Submit" className={classNames(styles.root, styles.button)} />
           </Form>
         </div>
       </div>
