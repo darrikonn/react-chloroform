@@ -56,5 +56,13 @@ export default YourFormComponent;
 
 ## Contribution
 
+### Testing
+```bash
+npm run build:es
+```
+```bash
+npm link react-chloroform
+```
+
 ## License
 MIT
