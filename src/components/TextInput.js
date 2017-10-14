@@ -5,12 +5,12 @@ import Control from './Control';
 
 class TextInput extends Control {
   static propTypes = {
-    name: PropTypes.string.isRequired,
-    id: PropTypes.string,
-    placeholder: PropTypes.string,
-    type: PropTypes.oneOf(['text', 'email']),
     className: PropTypes.string,
+    id: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
     style: PropTypes.string,
+    type: PropTypes.oneOf(['text', 'email']),
   };
 
   static defaultProps = {

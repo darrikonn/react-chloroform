@@ -5,8 +5,10 @@ import Control from './Control';
 
 class Checkbox extends Control {
   static propTypes = {
-    name: PropTypes.string.isRequired,
+    className: PropTypes.string,
     id: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    style: PropTypes.string,
   };
 
   static defaultProps = {

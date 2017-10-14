@@ -5,9 +5,11 @@ import Control from './Control';
 
 class RadioButton extends Control {
   static propTypes = {
-    name: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
+    className: PropTypes.string,
     id: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    style: PropTypes.string,
+    value: PropTypes.string.isRequired,
   }
 
   render() {
