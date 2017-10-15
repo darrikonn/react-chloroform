@@ -24,6 +24,35 @@ const createStore = (reducer) => {
 
   return {getState, dispatch, subscribe};
 };
+
+export const withNewLocalStore = (reducers) => WrappedComponent => {
+  return class LocalStore extends Component {
+    static childContextTypes = {
+      store: PropTypes.shape({
+        subscribe: PropTypes.func,
+        dispatch: PropTypes.func,
+        getState: PropTypes.func,
+      }),
+    };
+
+    constructor(props) {
+      super(props);
+
+      this.store = createStore(reducers);
+    }
+
+    getChildContext() {
+      return {
+        store: this.store,
+      };
+    }
+
+    render() {
+      return <WrappedComponent {...this.props} />;
+    }
+  };
+};
+
 export const connect = (stateToProps, dispatchToProps) => WrappedComponent => {
   return class Connect extends Component {
     static contextTypes = {
