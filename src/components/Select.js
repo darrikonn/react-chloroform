@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import Control from './Control';
+import {updateValue} from '../actions/controls';
+import {connect} from '../store';
 
-class Select extends Control {
+class Select extends Component {
   static propTypes = {
     className: PropTypes.string,
     id: PropTypes.string,
@@ -20,13 +21,15 @@ class Select extends Control {
   };
 
   componentDidMount() {
-    if (this.props.initialValue) {
-      this._onChange(this.props.initialValue);
+    const {initialValue, name} = this.props;
+
+    if (initialValue) {
+      // this.props.updateValue(name, initialValue); TODO
     }
   }
 
   render() {
-    const {className, id, name, style, value, placeholder} = this.props;
+    const {className, id, name, style, placeholder} = this.props;
 
     const options = this.props.options.map(option => (
       <option key={option.value} value={option.value}>
@@ -46,10 +49,10 @@ class Select extends Control {
       <select
         id={id}
         name={name}
-        value={this._getValue() || ""}
+        value={this.props.value || ""}
         className={className}
         style={style}
-        onChange={e => this._onChange(e.target.value)}
+        onChange={e => this.props.updateValue(name, e.target.value)}
       >
         {options}
       </select>
@@ -57,4 +60,12 @@ class Select extends Control {
   }
 }
 
-export default Select;
+const mapStateToProps = ({controls}, props) => ({
+  value: controls.get(props.name),
+});
+
+const mapDispatchToProps = {
+  updateValue,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Select);
