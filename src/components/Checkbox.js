@@ -1,35 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Control from './Control';
+import {updateValue} from '../actions/controls';
+import {connect} from '../store';
 
-class Checkbox extends Control {
-  static propTypes = {
-    className: PropTypes.string,
-    id: PropTypes.string,
-    name: PropTypes.string.isRequired,
-    style: PropTypes.string,
-  };
+const Checkbox = ({id, name, className, style, value, updateValue}) =>
+  <input
+    type="checkbox"
+    className={className}
+    style={style}
+    id={id}
+    name={name}
+    checked={value || false}
+    onChange={(e) => updateValue(name, e.target.checked)}
+  />;
 
-  static defaultProps = {
-    type: 'text',
-  };
+Checkbox.propTypes = {
+  className: PropTypes.string,
+  id: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  style: PropTypes.string,
+  value: PropTypes.bool,
+};
 
-  render() {
-    const {id, name, className, style} = this.props;
+const mapStateToProps = ({controls}, props) => ({
+  value: controls.get(props.name),
+});
 
-    return (
-      <input
-        type="checkbox"
-        className={className}
-        style={style}
-        id={id}
-        name={name}
-        checked={this._getValue() || false}
-        onChange={(e) => this._onChange(e.target.checked)}
-      />
-    );
-  }
-}
+const mapDispatchToProps = {
+  updateValue,
+};
 
-export default Checkbox;
+export default connect(mapStateToProps, mapDispatchToProps)(Checkbox);
