@@ -2,52 +2,43 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 
-import {UPDATE_VALUE} from '../store/action-types';
-import createStore from '../store';
+import {initializeState} from '../actions/controls';
+import {setPending} from '../actions/state';
+import {withNewLocalStore, connect} from '../store';
+import reducers from '../store/reducers';
 
 class Form extends Component {
   static propTypes = {
     children: PropTypes.node,
     initialState: PropTypes.shape({}),
     onSubmit: PropTypes.func.isRequired,
+    name: PropTypes.string,
+    controls: PropTypes.instanceOf(Immutable.Map),
   };
 
   static defaultProps = {
     initialState: {},
+    name: 'local',
   };
 
-  static childContextTypes = {
-    store: PropTypes.shape({
-      subscribe: PropTypes.func,
-      dispatch: PropTypes.func,
-      getState: PropTypes.func,
-    }),
-  };
-
-  constructor(props) {
-    super(props);
-
-    const reducer = (state = Immutable.fromJS(props.initialState), action) => {
-      const {payload} = action;
-      switch (action.type) {
-        case UPDATE_VALUE:
-          return state.set(payload.name, payload.value);
-        default:
-          return state;
-      }
-    };
-    this.store = createStore(reducer);
-  }
-
-  getChildContext() {
-    return {
-      store: this.store,
-    };
+  componentDidMount() {
+    this.props.initializeState(this.props.initialState);
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.onSubmit(this.store.getState().toJS());
+
+    // setPending(this.props.name, true)(this.store.dispatch);
+    try {
+      this.props.onSubmit(this.props.controls.toJS());
+      // setSubmitting(this.props.name, true)(this.store.dispatch);
+    } catch (err) {
+      console.log(err);
+      // setSubmitFailed(this.props.name, true)(this.store.dispatch);
+    } finally {
+      // this.props.resetState()(this.store.dispatch);
+      console.log('finally');
+    }
   };
 
   handleReset = (e) => {
@@ -64,4 +55,14 @@ class Form extends Component {
   }
 }
 
-export default Form;
+const mapStateToProps = ({controls}) => ({
+  controls,
+});
+
+const mapDispatchToProps = {
+  initializeState,
+};
+
+export default withNewLocalStore(reducers)(
+  connect(mapStateToProps, mapDispatchToProps)(Form)
+);
