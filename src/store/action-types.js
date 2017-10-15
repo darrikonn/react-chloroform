@@ -1,2 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
+export const INITIALIZE_STATE = 'INITIALIZE_STATE';
 export const UPDATE_VALUE = 'UPDATE_VALUE';
+export const SET_PENDING = 'SET_PENDING';
