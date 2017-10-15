@@ -1,38 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Control from './Control';
+import {updateValue} from '../actions/controls';
+import {connect} from '../store';
 
-class TextInput extends Control {
-  static propTypes = {
-    className: PropTypes.string,
-    id: PropTypes.string,
-    name: PropTypes.string.isRequired,
-    placeholder: PropTypes.string,
-    style: PropTypes.string,
-    type: PropTypes.oneOf(['text', 'email']),
-  };
+const TextInput = ({placeholder, id, type='text', name, className, style, value='', updateValue}) =>
+  <input
+    placeholder={placeholder}
+    id={id}
+    className={className}
+    style={style}
+    type={type}
+    name={name}
+    value={value}
+    onChange={(e) => updateValue(name, e.target.value)}
+  />;
 
-  static defaultProps = {
-    type: 'text',
-  };
+TextInput.propTypes = {
+  className: PropTypes.string,
+  id: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  style: PropTypes.string,
+  type: PropTypes.oneOf(['text', 'email']),
+  value: PropTypes.string,
+  updateValue: PropTypes.func.isRequired,
+};
 
-  render() {
-    const {placeholder, id, type, name, className, style} = this.props;
+const mapStateToProps = ({controls}, props) => ({
+  value: controls.get(props.name),
+});
 
-    return (
-      <input
-        placeholder={placeholder}
-        id={id}
-        className={className}
-        style={style}
-        type={type}
-        name={name}
-        value={this._getValue()}
-        onChange={(e) => this._onChange(e.target.value)}
-      />
-    );
-  }
-}
+const mapDispatchToProps = {
+  updateValue,
+};
 
-export default TextInput;
+export default connect(mapStateToProps, mapDispatchToProps)(TextInput);
