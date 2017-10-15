@@ -34,8 +34,6 @@ class App extends Component {
       },
     ];
 
-    console.log(options);
-
     return (
       <div>
         <h1>React Chloroform</h1>
