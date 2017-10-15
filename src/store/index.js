@@ -24,3 +24,39 @@ const createStore = (reducer) => {
 
   return {getState, dispatch, subscribe};
 };
+export const connect = (stateToProps, dispatchToProps) => WrappedComponent => {
+  return class Connect extends Component {
+    static contextTypes = {
+      store: PropTypes.shape({
+        subscribe: PropTypes.func,
+        dispatch: PropTypes.func,
+        getState: PropTypes.func,
+      }),
+    };
+
+    constructor(props, {store}) {
+      super(props);
+
+      this.unsubscribe = store.subscribe(() => this.forceUpdate());
+      this.store = store;
+    }
+
+    componentWillUnmount() {
+      this.unsubscribe();
+    }
+
+    mapStateToProps = () => (stateToProps ? stateToProps(this.store.getState(), this.props) : {});
+
+    mapDispatchToProps = () =>
+      dispatchToProps
+        ? Object.keys(dispatchToProps).reduce((obj, f) => {
+            obj[f] = (...args) => dispatchToProps[f](...args)(this.store.dispatch);
+            return obj;
+          }, {})
+        : {};
+
+    render() {
+      return <WrappedComponent {...this.props} {...this.mapStateToProps()} {...this.mapDispatchToProps()} />;
+    }
+  };
+};
