@@ -1,7 +1,9 @@
+/* eslint react/no-multi-comp: 0 */
+
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-const createStore = (reducer) => {
+const createStore = reducer => {
   let state;
   let listeners = [];
 
@@ -25,7 +27,7 @@ const createStore = (reducer) => {
   return {getState, dispatch, subscribe};
 };
 
-export const withNewLocalStore = (reducers) => WrappedComponent => {
+export const withNewLocalStore = reducers => WrappedComponent => {
   return class LocalStore extends Component {
     static childContextTypes = {
       store: PropTypes.shape({
@@ -78,10 +80,13 @@ export const connect = (stateToProps, dispatchToProps) => WrappedComponent => {
 
     mapDispatchToProps = () =>
       dispatchToProps
-        ? Object.keys(dispatchToProps).reduce((obj, f) => {
-            obj[f] = (...args) => dispatchToProps[f](...args)(this.store.dispatch);
-            return obj;
-          }, {})
+        ? Object.keys(dispatchToProps).reduce(
+            (obj, f) => ({
+              ...obj,
+              [f]: (...args) => dispatchToProps[f](...args)(this.store.dispatch),
+            }),
+            {},
+          )
         : {};
 
     render() {
