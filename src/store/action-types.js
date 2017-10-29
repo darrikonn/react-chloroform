@@ -1,3 +1,7 @@
 export const INITIALIZE_STATE = 'INITIALIZE_STATE';
-export const UPDATE_VALUE = 'UPDATE_VALUE';
+export const RESET_FORM = 'RESET_FORM';
+export const RESET_STATES = 'RESET_STATES';
 export const SET_PENDING = 'SET_PENDING';
+export const SET_SUBMITTING = 'SET_SUBMITTING';
+export const SET_SUBMIT_FAILED = 'SET_SUBMIT_FAILED';
+export const UPDATE_VALUE = 'UPDATE_VALUE';
