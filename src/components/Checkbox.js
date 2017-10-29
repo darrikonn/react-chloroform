@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {updateValue} from '../actions/controls';
+import controlActions from '../actions/controls';
 import {connect} from '../store';
 
-const Checkbox = ({id, name, className, style, value, updateValue}) =>
+const Checkbox = ({id, name, className, style, value, updateValue}) => (
   <input
     type="checkbox"
     className={className}
@@ -12,8 +12,9 @@ const Checkbox = ({id, name, className, style, value, updateValue}) =>
     id={id}
     name={name}
     checked={value || false}
-    onChange={(e) => updateValue(name, e.target.checked)}
-  />;
+    onChange={e => updateValue(name, e.target.checked)}
+  />
+);
 
 Checkbox.propTypes = {
   className: PropTypes.string,
@@ -21,6 +22,7 @@ Checkbox.propTypes = {
   name: PropTypes.string.isRequired,
   style: PropTypes.string,
   value: PropTypes.bool,
+  updateValue: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({controls}, props) => ({
@@ -28,7 +30,7 @@ const mapStateToProps = ({controls}, props) => ({
 });
 
 const mapDispatchToProps = {
-  updateValue,
+  updateValue: controlActions.updateValue,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Checkbox);

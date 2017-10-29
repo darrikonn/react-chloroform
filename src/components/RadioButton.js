@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {updateValue} from '../actions/controls';
+import controlActions from '../actions/controls';
 import {connect} from '../store';
 
-const RadioButton = ({id, name, value, className, style, updateValue, checked}) =>
+const RadioButton = ({id, name, value, className, style, updateValue, checked}) => (
   <input
     type="radio"
     id={id}
@@ -13,8 +13,9 @@ const RadioButton = ({id, name, value, className, style, updateValue, checked}) 
     name={name}
     value={value}
     checked={checked === value}
-    onChange={(e) => updateValue(name, e.target.value)}
-  />;
+    onChange={e => updateValue(name, e.target.value)}
+  />
+);
 
 RadioButton.propTypes = {
   className: PropTypes.string,
@@ -22,14 +23,16 @@ RadioButton.propTypes = {
   name: PropTypes.string.isRequired,
   style: PropTypes.string,
   value: PropTypes.string.isRequired,
-}
+  checked: PropTypes.string,
+  updateValue: PropTypes.func,
+};
 
 const mapStateToProps = ({controls}, props) => ({
   checked: controls.get(props.name),
 });
 
 const mapDispatchToProps = {
-  updateValue,
+  updateValue: controlActions.updateValue,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RadioButton);

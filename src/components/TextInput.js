@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {updateValue} from '../actions/controls';
+import controlActions from '../actions/controls';
 import {connect} from '../store';
 
-const TextInput = ({placeholder, id, type='text', name, className, style, value='', updateValue}) =>
+const TextInput = ({placeholder, id, type = 'text', name, className, style, value = '', updateValue}) => (
   <input
     placeholder={placeholder}
     id={id}
@@ -13,8 +13,9 @@ const TextInput = ({placeholder, id, type='text', name, className, style, value=
     type={type}
     name={name}
     value={value}
-    onChange={(e) => updateValue(name, e.target.value)}
-  />;
+    onChange={e => updateValue(name, e.target.value)}
+  />
+);
 
 TextInput.propTypes = {
   className: PropTypes.string,
@@ -32,7 +33,7 @@ const mapStateToProps = ({controls}, props) => ({
 });
 
 const mapDispatchToProps = {
-  updateValue,
+  updateValue: controlActions.updateValue,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextInput);

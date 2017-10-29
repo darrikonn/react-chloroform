@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 
-import {initializeState} from '../actions/controls';
-import {setPending} from '../actions/state';
+import controlActions from '../actions/controls';
+import stateActions from '../actions/state';
 import {withNewLocalStore, connect} from '../store';
 import reducers from '../store/reducers';
 
@@ -14,6 +14,12 @@ class Form extends Component {
     onSubmit: PropTypes.func.isRequired,
     name: PropTypes.string,
     controls: PropTypes.instanceOf(Immutable.Map),
+    initializeState: PropTypes.func.isRequired,
+    setPending: PropTypes.func.isRequired,
+    setSubmitting: PropTypes.func.isRequired,
+    setSubmitFailed: PropTypes.func.isRequired,
+    resetStates: PropTypes.func.isRequired,
+    resetForm: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -25,26 +31,23 @@ class Form extends Component {
     this.props.initializeState(this.props.initialState);
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = e => {
     e.preventDefault();
 
-    // setPending(this.props.name, true)(this.store.dispatch);
+    this.props.setPending(this.props.name);
     try {
       this.props.onSubmit(this.props.controls.toJS());
-      // setSubmitting(this.props.name, true)(this.store.dispatch);
+      this.props.setSubmitting(this.props.name);
     } catch (err) {
       console.log(err);
-      // setSubmitFailed(this.props.name, true)(this.store.dispatch);
+      this.props.setSubmitFailed(this.props.name);
     } finally {
-      // this.props.resetState()(this.store.dispatch);
+      this.props.resetStates();
       console.log('finally');
     }
   };
 
-  handleReset = (e) => {
-    console.log(e);
-    e.preventDefault();
-  };
+  handleReset = () => this.props.resetForm();
 
   render() {
     return (
@@ -60,9 +63,13 @@ const mapStateToProps = ({controls}) => ({
 });
 
 const mapDispatchToProps = {
-  initializeState,
+  initializeState: controlActions.initializeState,
+  resetForm: controlActions.resetForm,
+
+  resetStates: stateActions.resetStates,
+  setPending: stateActions.setPending,
+  setSubmitFailed: stateActions.setSubmitFailed,
+  setSubmitting: stateActions.setSubmitting,
 };
 
-export default withNewLocalStore(reducers)(
-  connect(mapStateToProps, mapDispatchToProps)(Form)
-);
+export default withNewLocalStore(reducers)(connect(mapStateToProps, mapDispatchToProps)(Form));
