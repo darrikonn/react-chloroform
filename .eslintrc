@@ -1,11 +1,32 @@
 {
+  "extends": [
+    "airbnb",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/react"
+  ],
   "parser": "babel-eslint",
-  "extends": "airbnb-base",
+  "plugins": [
+      "react",
+      "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2016,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
   "env": {
+    "es6": true,
+    "node": true,
     "browser": true,
     "jest": true
   },
   "rules": {
+    "arrow-body-style": "off",
+    "arrow-parens": "off",
     "comma-dangle": ["error", "always-multiline"],
     "spaced-comment": 1,
     "global-require": "off",
@@ -14,11 +35,21 @@
     "no-mixed-operators": "off",
     "no-underscore-dangle": "off",
     "function-paren-newline": "off",
-    "arrow-parens": ["error", "always"],
     "operator-assignment": ["error", "never"],
     "camelcase": "off",
     "object-curly-spacing": ["error", "never"],
     "object-curly-newline": "off",
-    "quotes": ["error", "single", {"avoidEscape": true}]
+    "quotes": ["error", "single", {"avoidEscape": true}],
+
+    "react/require-default-props": "off",
+    "react/jsx-filename-extension": "off",
+    "react/no-multi-comp": ["error", { "ignoreStateless": true }],
+
+    "prettier/prettier": ["error", {
+      "singleQuote": true,
+      "bracketSpacing": false,
+      "trailingComma": "all",
+      "printWidth": 120
+    }]
   }
 }
