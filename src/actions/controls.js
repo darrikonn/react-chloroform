@@ -1,21 +1,10 @@
-import {UPDATE_VALUE, INITIALIZE_STATE} from '../store/action-types';
+import createActions from '.';
+import {UPDATE_VALUE, INITIALIZE_STATE, RESET_FORM} from '../store/action-types';
 
-export const updateValue = (name, value) => (dispatch) => {
-  dispatch({
-    type: UPDATE_VALUE,
-    payload: {
-      name,
-      value,
-    },
-  });
+const actions = {
+  [UPDATE_VALUE]: (name, value) => ({name, value}),
+  [INITIALIZE_STATE]: state => ({state}),
+  [RESET_FORM]: () => {},
 };
 
-export const initializeState = state => dispatch => {
-  dispatch({
-    type: INITIALIZE_STATE,
-    payload: {
-      state,
-    },
-  });
-};
-
+export default createActions(actions);
