@@ -26,10 +26,9 @@ const TextInput = ({
     type={type}
     name={name}
     value={value}
-    onChange={e => {
-      const val = e.target.value;
-      setErrors(name, parseValidators(validator, val));
-      setValue(name, val);
+    onChange={({target: {value}}) => {
+      setErrors(name, parseValidators(validator, value));
+      setValue(name, value);
     }}
   />
 );

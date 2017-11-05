@@ -36,7 +36,7 @@ class Form extends Component {
     const {values} = this.props;
 
     // this.props.setPending(this.props.name);
-    console.log('here', this.props.errors, this.props.hasError);
+    console.log('here', this.props.errors.toJS(), this.props.hasError);
     try {
       this.props.setSubmitting();
       this.props.onSubmit(values.toJS());
