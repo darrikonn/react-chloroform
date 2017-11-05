@@ -1,10 +1,11 @@
 import createActions from '.';
-import {UPDATE_VALUE, INITIALIZE_STATE, RESET_FORM} from '../store/action-types';
+import {INITIALIZE_STATE, SET_ERRORS, SET_PENDING, SET_VALUE} from '../store/action-types';
 
 const actions = {
-  [UPDATE_VALUE]: (name, value) => ({name, value}),
   [INITIALIZE_STATE]: state => ({state}),
-  [RESET_FORM]: () => {},
+  [SET_ERRORS]: (name, errors) => ({name, errors}),
+  [SET_PENDING]: (name, pending = true) => ({name, pending}),
+  [SET_VALUE]: (name, value) => ({name, value}),
 };
 
 export default createActions(actions);
