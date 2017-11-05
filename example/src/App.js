@@ -34,6 +34,13 @@ class App extends Component {
       },
     ];
 
+    const isRequired = val => (val && val.length > 0) || 'This field is required';
+
+    const isEmail = val =>
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+        val,
+      ) || `"${val}" is not a valid email`;
+
     return (
       <div>
         <h1>React Chloroform</h1>
@@ -45,8 +52,8 @@ class App extends Component {
               id="email"
               label="email"
               validator={[
-                val => val === 'darri' && `Do not prump me with "${val}"`,
-                val => val.length === 5 && 'shit not me',
+                isEmail,
+                isRequired,
               ]}
             />
             <div>
@@ -57,7 +64,6 @@ class App extends Component {
                 placeholder="name"
                 validator={[
                   val => val === 'darri' && `Do not rump me with "${val}"`,
-                  val => val.length === 5 && 'shit not me',
                 ]}
               />
             </div>
