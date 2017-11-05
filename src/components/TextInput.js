@@ -1,50 +1,44 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Control from './Control';
 import controlActions from '../actions/controls';
 import {connect} from '../store';
 import {getValue} from '../store/reducers';
-import {parseValidators} from '../services/validators';
 
-const TextInput = ({
-  className,
-  id,
-  name,
-  placeholder,
-  setErrors,
-  style,
-  type = 'text',
-  setValue,
-  validator = [],
-  value = '',
-}) => (
-  <input
-    placeholder={placeholder}
-    id={id}
-    className={className}
-    style={style}
-    type={type}
-    name={name}
-    value={value}
-    onChange={({target: {value}}) => {
-      setErrors(name, parseValidators(validator, value));
-      setValue(name, value);
-    }}
-  />
-);
+class TextInput extends Control {
+  static propTypes = {
+    className: PropTypes.string,
+    id: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    placeholder: PropTypes.string,
+    style: PropTypes.string,
+    type: PropTypes.oneOf(['text', 'email']),
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  };
 
-TextInput.propTypes = {
-  className: PropTypes.string,
-  id: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  style: PropTypes.string,
-  type: PropTypes.oneOf(['text', 'email']),
-  setValue: PropTypes.func.isRequired,
-  setErrors: PropTypes.func.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  validator: PropTypes.arrayOf(PropTypes.func.isRequired),
-};
+  static defaultProps = {
+    type: 'text',
+    value: '',
+  };
+
+  render() {
+    const {className, id, name, placeholder, style, type, value} = this.props;
+
+    return (
+      <input
+        placeholder={placeholder}
+        id={id}
+        className={className}
+        style={style}
+        type={type}
+        name={name}
+        value={value}
+        onChange={e => this._onChange(e.target.value)}
+      />
+    );
+  }
+}
 
 const mapStateToProps = (state, props) => ({
   value: getValue(state, props.name),
