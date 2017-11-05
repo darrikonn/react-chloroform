@@ -40,10 +40,26 @@ class App extends Component {
         <div>
           <Form initialState={initalState} onSubmit={this.handleSubmit}>
             <label htmlFor="email">Email: </label>
-            <TextInput name="email" id="email" label="email" />
+            <TextInput
+              name="email"
+              id="email"
+              label="email"
+              validator={[
+                val => val === 'darri' && `Do not prump me with "${val}"`,
+                val => val.length === 5 && 'shit not me',
+              ]}
+            />
             <div>
               <label htmlFor="name">Name: </label>
-              <TextInput name="name" id="name" placeholder="name" />
+              <TextInput
+                name="name"
+                id="name"
+                placeholder="name"
+                validator={[
+                  val => val === 'darri' && `Do not rump me with "${val}"`,
+                  val => val.length === 5 && 'shit not me',
+                ]}
+              />
             </div>
             <label htmlFor="age">Age</label>
             <Checkbox name="age" id="age" />
