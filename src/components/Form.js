@@ -1,30 +1,29 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import Immutable from 'immutable';
 
 import controlActions from '../actions/controls';
-import stateActions from '../actions/state';
+import formActions from '../actions/form';
 import {withNewLocalStore, connect} from '../store';
-import reducers from '../store/reducers';
+import reducers, {getValues, getErrors, hasError} from '../store/reducers';
 
 class Form extends Component {
   static propTypes = {
     children: PropTypes.node,
     initialState: PropTypes.shape({}),
     onSubmit: PropTypes.func.isRequired,
-    name: PropTypes.string,
-    controls: PropTypes.instanceOf(Immutable.Map),
     initializeState: PropTypes.func.isRequired,
-    setPending: PropTypes.func.isRequired,
+    // setPending: PropTypes.func.isRequired,
     setSubmitting: PropTypes.func.isRequired,
     setSubmitFailed: PropTypes.func.isRequired,
-    resetStates: PropTypes.func.isRequired,
+    resetSubmit: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
+    errors: PropTypes.shape({}),
+    values: PropTypes.shape({}),
+    hasError: PropTypes.bool,
   };
 
   static defaultProps = {
     initialState: {},
-    name: 'local',
   };
 
   componentDidMount() {
@@ -34,15 +33,18 @@ class Form extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    this.props.setPending(this.props.name);
+    const {values} = this.props;
+
+    // this.props.setPending(this.props.name);
+    console.log('here', this.props.errors, this.props.hasError);
     try {
-      this.props.onSubmit(this.props.controls.toJS());
-      this.props.setSubmitting(this.props.name);
+      this.props.setSubmitting();
+      this.props.onSubmit(values.toJS());
     } catch (err) {
       console.log(err);
-      this.props.setSubmitFailed(this.props.name);
+      this.props.setSubmitFailed();
     } finally {
-      this.props.resetStates();
+      this.props.resetSubmit();
       console.log('finally');
     }
   };
@@ -58,18 +60,20 @@ class Form extends Component {
   }
 }
 
-const mapStateToProps = ({controls}) => ({
-  controls,
+const mapStateToProps = state => ({
+  values: getValues(state),
+  errors: getErrors(state),
+  hasError: hasError(state),
 });
 
 const mapDispatchToProps = {
   initializeState: controlActions.initializeState,
   resetForm: controlActions.resetForm,
 
-  resetStates: stateActions.resetStates,
-  setPending: stateActions.setPending,
-  setSubmitFailed: stateActions.setSubmitFailed,
-  setSubmitting: stateActions.setSubmitting,
+  resetSubmit: formActions.resetSubmit,
+  // setPending: formActions.setPending,
+  setSubmitFailed: formActions.setSubmitFailed,
+  setSubmitting: formActions.setSubmitting,
 };
 
 export default withNewLocalStore(reducers)(connect(mapStateToProps, mapDispatchToProps)(Form));
