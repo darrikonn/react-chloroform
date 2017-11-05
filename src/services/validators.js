@@ -1,6 +1,7 @@
-// eslint-disable-next-line import/prefer-default-export
+export const isString = val => typeof(val) === 'string';
+
 export const parseValidators = (validator, value) =>
   validator.reduce((errorList, nextValidator) => {
     const validatedValue = nextValidator(value);
-    return [...errorList, ...(validatedValue ? [validatedValue] : errorList)];
+    return [...errorList, ...(isString(validatedValue) ? [validatedValue] : [])];
   }, []);
