@@ -1,5 +1,5 @@
-import controls from './controls';
-import states from './states';
+import controls, * as fromControls from './controls';
+import form from './form';
 
 const combineReducers = reducers => (state = {}, action) =>
   Object.keys(reducers).reduce(
@@ -12,5 +12,13 @@ const combineReducers = reducers => (state = {}, action) =>
 
 export default combineReducers({
   controls,
-  states,
+  form,
 });
+
+export const getValue = (state, name) => fromControls.getValue(state.controls, name);
+
+export const getValues = state => fromControls.getValues(state.controls);
+
+export const getErrors = state => fromControls.getErrors(state.controls);
+
+export const hasError = state => fromControls.hasError(state.controls);
