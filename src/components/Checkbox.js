@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 
 import controlActions from '../actions/controls';
 import {connect} from '../store';
+import {getValue} from '../store/reducers';
 
-const Checkbox = ({id, name, className, style, value, updateValue}) => (
+const Checkbox = ({id, name, className, style, value, setValue}) => (
   <input
     type="checkbox"
     className={className}
@@ -12,7 +13,7 @@ const Checkbox = ({id, name, className, style, value, updateValue}) => (
     id={id}
     name={name}
     checked={value || false}
-    onChange={e => updateValue(name, e.target.checked)}
+    onChange={e => setValue(name, e.target.checked)}
   />
 );
 
@@ -22,15 +23,15 @@ Checkbox.propTypes = {
   name: PropTypes.string.isRequired,
   style: PropTypes.string,
   value: PropTypes.bool,
-  updateValue: PropTypes.func.isRequired,
+  setValue: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({controls}, props) => ({
-  value: controls.get(props.name),
+const mapStateToProps = (state, props) => ({
+  value: getValue(state, props.name),
 });
 
 const mapDispatchToProps = {
-  updateValue: controlActions.updateValue,
+  setValue: controlActions.setValue,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Checkbox);

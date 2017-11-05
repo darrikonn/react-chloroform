@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 
 import controlActions from '../actions/controls';
 import {connect} from '../store';
+import {getValue} from '../store/reducers';
 
-const Select = ({options, value, updateValue, className, id, name, style, placeholder}) => {
+const Select = ({options, value, setValue, className, id, name, style, placeholder}) => {
   const mappedOptions = options.map(option => (
     <option key={option.value} value={option.value}>
       {option.name}
@@ -26,7 +27,7 @@ const Select = ({options, value, updateValue, className, id, name, style, placeh
       value={value || ''}
       className={className}
       style={style}
-      onChange={e => updateValue(name, e.target.value)}
+      onChange={e => setValue(name, e.target.value)}
     >
       {mappedOptions}
     </select>
@@ -46,15 +47,15 @@ Select.propTypes = {
   style: PropTypes.string,
   placeholder: PropTypes.string,
   value: PropTypes.string,
-  updateValue: PropTypes.func.isRequired,
+  setValue: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({controls}, props) => ({
-  value: controls.get(props.name),
+const mapStateToProps = (state, props) => ({
+  value: getValue(state, props.name),
 });
 
 const mapDispatchToProps = {
-  updateValue: controlActions.updateValue,
+  setValue: controlActions.setValue,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Select);

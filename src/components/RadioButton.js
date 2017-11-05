@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 
 import controlActions from '../actions/controls';
 import {connect} from '../store';
+import {getValue} from '../store/reducers';
 
-const RadioButton = ({id, name, value, className, style, updateValue, checked}) => (
+const RadioButton = ({id, name, value, className, style, setValue, checked}) => (
   <input
     type="radio"
     id={id}
@@ -13,7 +14,7 @@ const RadioButton = ({id, name, value, className, style, updateValue, checked}) 
     name={name}
     value={value}
     checked={checked === value}
-    onChange={e => updateValue(name, e.target.value)}
+    onChange={e => setValue(name, e.target.value)}
   />
 );
 
@@ -24,15 +25,15 @@ RadioButton.propTypes = {
   style: PropTypes.string,
   value: PropTypes.string.isRequired,
   checked: PropTypes.string,
-  updateValue: PropTypes.func,
+  setValue: PropTypes.func,
 };
 
-const mapStateToProps = ({controls}, props) => ({
-  checked: controls.get(props.name),
+const mapStateToProps = (state, props) => ({
+  checked: getValue(state, props.name),
 });
 
 const mapDispatchToProps = {
-  updateValue: controlActions.updateValue,
+  setValue: controlActions.setValue,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RadioButton);
