@@ -3,8 +3,21 @@ import PropTypes from 'prop-types';
 
 import controlActions from '../actions/controls';
 import {connect} from '../store';
+import {getValue} from '../store/reducers';
+import {parseValidators} from '../services/validators';
 
-const TextInput = ({placeholder, id, type = 'text', name, className, style, value = '', updateValue}) => (
+const TextInput = ({
+  className,
+  id,
+  name,
+  placeholder,
+  setErrors,
+  style,
+  type = 'text',
+  setValue,
+  validator = [],
+  value = '',
+}) => (
   <input
     placeholder={placeholder}
     id={id}
@@ -13,7 +26,11 @@ const TextInput = ({placeholder, id, type = 'text', name, className, style, valu
     type={type}
     name={name}
     value={value}
-    onChange={e => updateValue(name, e.target.value)}
+    onChange={e => {
+      const val = e.target.value;
+      setErrors(name, parseValidators(validator, val));
+      setValue(name, val);
+    }}
   />
 );
 
@@ -24,16 +41,19 @@ TextInput.propTypes = {
   placeholder: PropTypes.string,
   style: PropTypes.string,
   type: PropTypes.oneOf(['text', 'email']),
-  value: PropTypes.string,
-  updateValue: PropTypes.func.isRequired,
+  setValue: PropTypes.func.isRequired,
+  setErrors: PropTypes.func.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  validator: PropTypes.arrayOf(PropTypes.func.isRequired),
 };
 
-const mapStateToProps = ({controls}, props) => ({
-  value: controls.get(props.name),
+const mapStateToProps = (state, props) => ({
+  value: getValue(state, props.name),
 });
 
 const mapDispatchToProps = {
-  updateValue: controlActions.updateValue,
+  setErrors: controlActions.setErrors,
+  setValue: controlActions.setValue,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextInput);
