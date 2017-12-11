@@ -9,7 +9,6 @@ class Control extends Component {
     setErrors: PropTypes.func.isRequired,
     setValue: PropTypes.func.isRequired,
     validator: PropTypes.arrayOf(PropTypes.func.isRequired),
-    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   };
 
   static defaultProps = {
