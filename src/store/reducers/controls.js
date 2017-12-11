@@ -18,17 +18,17 @@ export default (state = Immutable.Map(), action) => {
         ),
       );
     case SET_ERRORS:
-      return state.setIn([payload.name, 'errors'], Immutable.fromJS(payload.errors));
+      return state.setIn([payload.model, 'errors'], Immutable.fromJS(payload.errors));
     case SET_PENDING:
-      return state.setIn([payload.name, 'pending'], payload.pending);
+      return state.setIn([payload.model, 'pending'], payload.pending);
     case SET_VALUE:
-      return state.setIn([payload.name, 'value'], payload.value);
+      return state.setIn([payload.model, 'value'], payload.value);
     default:
       return state;
   }
 };
 
-export const getValue = (state, name) => state.getIn([name, 'value']);
+export const getValue = (state, model) => state.getIn([model, 'value']);
 
 export const getValues = state => state.map(model => model.get('value'));
 

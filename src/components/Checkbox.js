@@ -10,20 +10,19 @@ class Checkbox extends Control {
   static propTypes = {
     className: PropTypes.string,
     id: PropTypes.string,
-    name: PropTypes.string.isRequired,
+    model: PropTypes.string.isRequired,
     style: PropTypes.string,
     value: PropTypes.bool,
   };
 
   render() {
-    const {id, name, className, style, value} = this.props;
+    const {id, className, style, value} = this.props;
     return (
       <input
         type="checkbox"
         className={className}
         style={style}
         id={id}
-        name={name}
         checked={value || false}
         onChange={e => this._onChange(e.target.checked)}
       />
@@ -32,7 +31,7 @@ class Checkbox extends Control {
 }
 
 const mapStateToProps = (state, props) => ({
-  value: getValue(state, props.name),
+  value: getValue(state, props.model),
 });
 
 const mapDispatchToProps = {

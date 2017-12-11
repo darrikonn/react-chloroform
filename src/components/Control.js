@@ -5,7 +5,7 @@ import {parseValidators} from '../services/validators';
 
 class Control extends Component {
   static propTypes = {
-    name: PropTypes.string.isRequired,
+    model: PropTypes.string.isRequired,
     setErrors: PropTypes.func.isRequired,
     setValue: PropTypes.func.isRequired,
     validator: PropTypes.arrayOf(PropTypes.func.isRequired),
@@ -21,8 +21,8 @@ class Control extends Component {
   }
 
   _onChange = value => {
-    this.props.setErrors(this.props.name, parseValidators(this.props.validator, value));
-    this.props.setValue(this.props.name, value);
+    this.props.setErrors(this.props.model, parseValidators(this.props.validator, value));
+    this.props.setValue(this.props.model, value);
   };
 }
 

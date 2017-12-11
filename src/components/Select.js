@@ -10,7 +10,7 @@ class Select extends Control {
   static propTypes = {
     className: PropTypes.string,
     id: PropTypes.string,
-    name: PropTypes.string.isRequired,
+    model: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(
       PropTypes.shape({
         name: PropTypes.string.isRequired,
@@ -23,7 +23,7 @@ class Select extends Control {
   };
 
   render() {
-    const {options, value, className, id, name, style, placeholder} = this.props;
+    const {options, value, className, id, style, placeholder} = this.props;
     const mappedOptions = options.map(option => (
       <option key={option.value} value={option.value}>
         {option.name}
@@ -41,7 +41,6 @@ class Select extends Control {
     return (
       <select
         id={id}
-        name={name}
         value={value || ''}
         className={className}
         style={style}
@@ -54,7 +53,7 @@ class Select extends Control {
 }
 
 const mapStateToProps = (state, props) => ({
-  value: getValue(state, props.name),
+  value: getValue(state, props.model),
 });
 
 const mapDispatchToProps = {

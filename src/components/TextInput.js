@@ -10,7 +10,7 @@ class TextInput extends Control {
   static propTypes = {
     className: PropTypes.string,
     id: PropTypes.string,
-    name: PropTypes.string.isRequired,
+    model: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
     style: PropTypes.string,
     type: PropTypes.oneOf(['text', 'email']),
@@ -23,7 +23,7 @@ class TextInput extends Control {
   };
 
   render() {
-    const {className, id, name, placeholder, style, type, value} = this.props;
+    const {className, id, placeholder, style, type, value} = this.props;
 
     return (
       <input
@@ -32,7 +32,6 @@ class TextInput extends Control {
         className={className}
         style={style}
         type={type}
-        name={name}
         value={value}
         onChange={e => this._onChange(e.target.value)}
       />
@@ -41,7 +40,7 @@ class TextInput extends Control {
 }
 
 const mapStateToProps = (state, props) => ({
-  value: getValue(state, props.name),
+  value: getValue(state, props.model),
 });
 
 const mapDispatchToProps = {

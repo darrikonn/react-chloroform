@@ -10,14 +10,14 @@ class RadioButton extends Control {
   static propTypes = {
     className: PropTypes.string,
     id: PropTypes.string,
-    name: PropTypes.string.isRequired,
+    model: PropTypes.string.isRequired,
     style: PropTypes.string,
     value: PropTypes.string.isRequired,
     checked: PropTypes.string,
   };
 
   render() {
-    const {id, name, value, className, style, checked} = this.props;
+    const {id, value, className, style, checked} = this.props;
 
     return (
       <input
@@ -25,7 +25,6 @@ class RadioButton extends Control {
         id={id}
         className={className}
         style={style}
-        name={name}
         value={value}
         checked={checked === value}
         onChange={e => this._onChange(e.target.value)}
@@ -35,7 +34,7 @@ class RadioButton extends Control {
 }
 
 const mapStateToProps = (state, props) => ({
-  checked: getValue(state, props.name),
+  checked: getValue(state, props.model),
 });
 
 const mapDispatchToProps = {

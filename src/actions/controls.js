@@ -3,9 +3,9 @@ import {INITIALIZE_STATE, SET_ERRORS, SET_PENDING, SET_VALUE} from '../store/act
 
 const actions = {
   [INITIALIZE_STATE]: state => ({state}),
-  [SET_ERRORS]: (name, errors) => ({name, errors}),
-  [SET_PENDING]: (name, pending = true) => ({name, pending}),
-  [SET_VALUE]: (name, value) => ({name, value}),
+  [SET_ERRORS]: (model, errors) => ({model, errors}),
+  [SET_PENDING]: (model, pending = true) => ({model, pending}),
+  [SET_VALUE]: (model, value) => ({model, value}),
 };
 
 export default createActions(actions);

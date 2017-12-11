@@ -48,7 +48,7 @@ class App extends Component {
           <Form initialState={initalState} onSubmit={this.handleSubmit}>
             <label htmlFor="email">Email: </label>
             <TextInput
-              name="email"
+              model="email"
               id="email"
               label="email"
               validator={[
@@ -59,7 +59,7 @@ class App extends Component {
             <div>
               <label htmlFor="name">Name: </label>
               <TextInput
-                name="name"
+                model="name"
                 id="name"
                 placeholder="name"
                 validator={[
@@ -68,25 +68,25 @@ class App extends Component {
               />
             </div>
             <label htmlFor="age">Age</label>
-            <Checkbox name="age" id="age" />
+            <Checkbox model="age" id="age" />
             <div>
               <label htmlFor="darrmundur1">Yes</label>
-              <RadioButton name="darrmundur" id="darrmundur1" value="true" />
+              <RadioButton model="darrmundur" id="darrmundur1" value="true" />
             </div>
             <div>
               <label htmlFor="darrmundur2">No</label>
-              <RadioButton name="darrmundur" id="darrmundur2" value="false" />
+              <RadioButton model="darrmundur" id="darrmundur2" value="false" />
             </div>
             <div>
               <Select
-                name="wabbalabbadubdub"
+                model="wabbalabbadubdub"
                 options={options}
                 placeholder="Choose your option"
               />
             </div>
             <div>
               <Select
-                name="rickandmorty"
+                model="rickandmorty"
                 options={options}
                 initialValue="darri"
               />
