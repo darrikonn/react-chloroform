@@ -5,7 +5,12 @@ import {Form, TextInput, RadioButton, Checkbox, Button, Select} from 'react-chlo
 import styles from './app.module.css';
 
 class App extends Component {
-  handleSubmit = model => {
+  do = () => {
+    return new Promise(resolve => setTimeout(resolve, 5000));
+  };
+
+  handleSubmit = async model => {
+    await this.do();
     console.log(model);
   };
 

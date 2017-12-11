@@ -8,6 +8,10 @@
     },
     "es": {
       "plugins": [
+        ["transform-runtime", {
+          "polyfill": false,
+          "regenerator": true
+        }],
         "./build/babel-lodash-es",
         "transform-class-properties"
       ],
