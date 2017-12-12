@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Control from './Control';
 import controlActions from '../actions/controls';
 import {connect} from '../store';
-import {getValue} from '../store/reducers';
+import {getValue, hasError} from '../store/reducers';
 
 class TextInput extends Control {
   static propTypes = {
@@ -23,17 +23,17 @@ class TextInput extends Control {
   };
 
   render() {
-    const {className, id, placeholder, style, type, value} = this.props;
+    const {id, placeholder, style, type, value} = this.props;
 
     return (
       <input
         placeholder={placeholder}
         id={id}
-        className={className}
+        className={this.getClassName()}
         style={style}
         type={type}
         value={value}
-        onChange={e => this._onChange(e.target.value)}
+        onChange={e => this.onChange(e.target.value)}
       />
     );
   }
@@ -41,6 +41,7 @@ class TextInput extends Control {
 
 const mapStateToProps = (state, props) => ({
   value: getValue(state, props.model),
+  hasError: hasError(state, props.model),
 });
 
 const mapDispatchToProps = {

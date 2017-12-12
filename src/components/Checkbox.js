@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Control from './Control';
 import controlActions from '../actions/controls';
 import {connect} from '../store';
-import {getValue} from '../store/reducers';
+import {getValue, hasError} from '../store/reducers';
 
 class Checkbox extends Control {
   static propTypes = {
@@ -16,15 +16,15 @@ class Checkbox extends Control {
   };
 
   render() {
-    const {id, className, style, value} = this.props;
+    const {id, style, value} = this.props;
     return (
       <input
         type="checkbox"
-        className={className}
+        className={this.getClassName()}
         style={style}
         id={id}
         checked={value || false}
-        onChange={e => this._onChange(e.target.checked)}
+        onChange={e => this.onChange(e.target.checked)}
       />
     );
   }
@@ -32,6 +32,7 @@ class Checkbox extends Control {
 
 const mapStateToProps = (state, props) => ({
   value: getValue(state, props.model),
+  hasError: hasError(state, props.model),
 });
 
 const mapDispatchToProps = {

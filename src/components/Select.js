@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Control from './Control';
 import controlActions from '../actions/controls';
 import {connect} from '../store';
-import {getValue} from '../store/reducers';
+import {getValue, hasError} from '../store/reducers';
 
 class Select extends Control {
   static propTypes = {
@@ -23,7 +23,7 @@ class Select extends Control {
   };
 
   render() {
-    const {options, value, className, id, style, placeholder} = this.props;
+    const {options, value, id, style, placeholder} = this.props;
     const mappedOptions = options.map(option => (
       <option key={option.value} value={option.value}>
         {option.name}
@@ -42,9 +42,9 @@ class Select extends Control {
       <select
         id={id}
         value={value || ''}
-        className={className}
+        className={this.getClassName()}
         style={style}
-        onChange={e => this._onChange(e.target.value)}
+        onChange={e => this.onChange(e.target.value)}
       >
         {mappedOptions}
       </select>
@@ -54,6 +54,7 @@ class Select extends Control {
 
 const mapStateToProps = (state, props) => ({
   value: getValue(state, props.model),
+  hasError: hasError(state, props.model),
 });
 
 const mapDispatchToProps = {

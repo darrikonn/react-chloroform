@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import controlActions from '../actions/controls';
 import formActions from '../actions/form';
 import {withNewLocalStore, connect} from '../store';
-import reducers, {getValues, getErrors, hasError} from '../store/reducers';
+import reducers, {getFormValues, getFormErrors, hasFormErrors} from '../store/reducers';
 
 class Form extends Component {
   static propTypes = {
@@ -19,7 +19,7 @@ class Form extends Component {
     resetForm: PropTypes.func.isRequired,
     errors: PropTypes.shape({}),
     values: PropTypes.shape({}),
-    hasError: PropTypes.bool,
+    hasFormErrors: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -61,9 +61,9 @@ class Form extends Component {
 }
 
 const mapStateToProps = state => ({
-  values: getValues(state),
-  errors: getErrors(state),
-  hasError: hasError(state),
+  values: getFormValues(state),
+  errors: getFormErrors(state),
+  hasFormErrors: hasFormErrors(state),
 });
 
 const mapDispatchToProps = {

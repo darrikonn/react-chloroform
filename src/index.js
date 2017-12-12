@@ -1,3 +1,4 @@
+export {default as Errors} from './components/Errors';
 export {default as Button} from './components/Button';
 export {default as Checkbox} from './components/Checkbox';
 export {default as Form} from './components/Form';

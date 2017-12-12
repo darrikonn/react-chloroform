@@ -32,13 +32,13 @@ export const getValue = (state, model) => state.getIn([model, 'value']);
 
 export const getValues = state => state.map(model => model.get('value'));
 
+export const getError = (state, model) => state.getIn([model, 'errors']);
+
 export const getErrors = state => state.map(model => model.get('errors'));
 
-export const hasError = state => state.filter(model => model.get('errors')).size > 0;
-
-export const getErrors2 = state => {
-  return state.reduce((lis, key) => {
-    const errors = state.getIn([key, 'errors']);
-    return [...lis, ...(errors ? errors : lis)];
-  }, []);
+export const hasError = (state, model) => {
+  const errors = state.getIn([model, 'errors']);
+  return errors !== undefined && !errors.isEmpty();
 };
+
+export const hasErrors = state => !state.filter(model => model.get('errors')).isEmpty();

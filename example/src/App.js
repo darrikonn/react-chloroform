@@ -56,10 +56,8 @@ class App extends Component {
               model="email"
               id="email"
               label="email"
-              validator={[
-                isEmail,
-                isRequired,
-              ]}
+              className={styles.textInput}
+              validator={[isEmail, isRequired]}
             />
             <div>
               <label htmlFor="name">Name: </label>
@@ -67,9 +65,12 @@ class App extends Component {
                 model="name"
                 id="name"
                 placeholder="name"
-                validator={[
-                  val => val === 'darri' && `Do not rump me with "${val}"`,
-                ]}
+                className={styles.textInput}
+                validator={[val => val === 'darri' && `Do not rump me with "${val}"`]}
+              />
+              <ChloroformError
+                model="name"
+                component={({error}) => <p className={styles.error}>{error}</p>}
               />
             </div>
             <label htmlFor="age">Age</label>

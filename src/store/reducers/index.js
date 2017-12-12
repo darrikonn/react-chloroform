@@ -17,8 +17,12 @@ export default combineReducers({
 
 export const getValue = (state, model) => fromControls.getValue(state.controls, model);
 
-export const getValues = state => fromControls.getValues(state.controls);
+export const getFormValues = state => fromControls.getValues(state.controls);
 
-export const getErrors = state => fromControls.getErrors(state.controls);
+export const getError = (state, model) => fromControls.getError(state.controls, model);
 
-export const hasError = state => fromControls.hasError(state.controls);
+export const getFormErrors = state => fromControls.getErrors(state.controls);
+
+export const hasError = (state, model) => fromControls.hasError(state.controls, model);
+
+export const hasFormErrors = state => fromControls.hasErrors(state.controls);

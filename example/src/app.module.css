@@ -1,7 +1,21 @@
 .root {
-  color: red;
+  color: black;
 }
 
-.button {
-  border-color: blue;
+.textInput {
+  color: blue;
+}
+
+:global(.error) {
+  outline: 2px solid red;
+}
+
+.error {
+  color: red;
+  font-size: 10px;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
