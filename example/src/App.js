@@ -1,16 +1,24 @@
 import React, {Component} from 'react';
 import classNames from 'classnames';
 
-import {Form, TextInput, RadioButton, Checkbox, Button, Select} from 'react-chloroform';
+import {
+  Form,
+  TextInput,
+  RadioButton,
+  Checkbox,
+  Button,
+  Select,
+  Errors as ChloroformError,
+} from 'react-chloroform';
 import styles from './app.module.css';
 
 class App extends Component {
-  do = () => {
-    return new Promise(resolve => setTimeout(resolve, 5000));
+  sleep = ms => {
+    return new Promise(resolve => setTimeout(resolve, ms));
   };
 
   handleSubmit = async model => {
-    await this.do();
+    await this.sleep(500);
     console.log(model);
   };
 
@@ -77,25 +85,17 @@ class App extends Component {
             <Checkbox model="age" id="age" />
             <div>
               <label htmlFor="darrmundur1">Yes</label>
-              <RadioButton model="darrmundur" id="darrmundur1" value="true" />
+              <RadioButton model="darrmundur" id="darrmundur1" value="true" validator={[isRequired]} />
             </div>
             <div>
               <label htmlFor="darrmundur2">No</label>
               <RadioButton model="darrmundur" id="darrmundur2" value="false" />
             </div>
             <div>
-              <Select
-                model="wabbalabbadubdub"
-                options={options}
-                placeholder="Choose your option"
-              />
+              <Select model="wabbalabbadubdub" options={options} placeholder="Choose your option" />
             </div>
             <div>
-              <Select
-                model="rickandmorty"
-                options={options}
-                initialValue="darri"
-              />
+              <Select model="rickandmorty" options={options} initialValue="darri" />
             </div>
             <Button type="submit" text="Submit" className={classNames(styles.root, styles.button)} />
           </Form>

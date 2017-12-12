@@ -19,7 +19,7 @@ Button.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  disabled: hasFormErrors(state), // check if the form has any errors
+  disabled: hasFormErrors(state),
 });
 
 export default connect(mapStateToProps)(Button);
