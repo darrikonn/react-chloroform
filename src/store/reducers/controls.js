@@ -41,7 +41,10 @@ export const hasError = (state, model) => {
   return errors !== undefined && !errors.isEmpty();
 };
 
-export const hasErrors = state => !state.filter(model => {
-  const errors = model.get('errors');
-  return errors !== undefined && !errors.isEmpty();
-}).isEmpty();
+export const hasErrors = state =>
+  !state
+    .filter(model => {
+      const errors = model.get('errors');
+      return errors !== undefined && !errors.isEmpty();
+    })
+    .isEmpty();
