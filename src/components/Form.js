@@ -33,10 +33,15 @@ class Form extends Component {
   handleSubmit = async e => {
     e.preventDefault();
 
-    const {values, errors} = this.props;
+    const {values, errors, hasFormErrors} = this.props;
+
+    if (hasFormErrors) {
+      console.log('here', errors.toJS(), hasFormErrors);
+      // this.props.showErrors();
+      return;
+    }
 
     // this.props.setPending(this.props.model);
-    console.log('here', errors.toJS(), this.props.hasError);
     try {
       this.props.setSubmitting();
       await this.props.onSubmit(values.toJS());
