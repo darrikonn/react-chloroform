@@ -26,6 +26,7 @@ class App extends Component {
     const initalState = {
       email: 'bla@bla.is',
       name: 'darri',
+      darrmundur: "true",
     };
 
     const options = [
@@ -85,14 +86,19 @@ class App extends Component {
             <Checkbox model="age" id="age" />
             <div>
               <label htmlFor="darrmundur1">Yes</label>
-              <RadioButton model="darrmundur" id="darrmundur1" value="true" validator={[isRequired]} />
+              <RadioButton model="darrmundur" id="darrmundur1" value="true" />
             </div>
             <div>
               <label htmlFor="darrmundur2">No</label>
               <RadioButton model="darrmundur" id="darrmundur2" value="false" />
             </div>
             <div>
-              <Select model="wabbalabbadubdub" options={options} placeholder="Choose your option" />
+              <Select
+                model="wabbalabbadubdub"
+                options={options}
+                validator={[isRequired]}
+                placeholder="Choose your option"
+              />
             </div>
             <div>
               <Select model="rickandmorty" options={options} initialValue="darri" />

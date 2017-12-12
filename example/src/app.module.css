@@ -1,5 +1,6 @@
 .root {
   color: black;
+  cursor: pointer;
 }
 
 .textInput {
@@ -18,4 +19,8 @@
 .button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+select {
+  margin: 10px 0;
 }
