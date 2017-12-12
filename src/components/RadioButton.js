@@ -16,6 +16,10 @@ class RadioButton extends Control {
     checked: PropTypes.string,
   };
 
+  componentDidMount() {}
+
+  componentDidUpdate() {}
+
   render() {
     const {id, value, style, checked} = this.props;
 
