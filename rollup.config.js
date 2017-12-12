@@ -19,6 +19,7 @@ var config = {
   plugins: [
     babel({
       exclude: '**/node_modules/**',
+      runtimeHelpers: true,
       plugins: ['external-helpers']
     }),
     nodeResolve({
