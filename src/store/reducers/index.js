@@ -15,6 +15,8 @@ export default combineReducers({
   form,
 });
 
+export const getGroupModels = (state, group) => fromControls.getGroupModels(state.controls, group);
+
 export const getValue = (state, model) => fromControls.getValue(state.controls, model);
 
 export const getFormValues = state => fromControls.getValues(state.controls);

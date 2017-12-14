@@ -32,8 +32,8 @@ class Control extends Component {
     }
   }
 
-  onChange = value => {
-    const {model, validator} = this.props;
+  onChange = (value, model = this.props.model) => {
+    const {validator} = this.props;
     this.props.setErrors(model, parseValidators(validator, value));
     this.props.setValue(model, value);
   };

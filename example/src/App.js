@@ -26,7 +26,7 @@ class App extends Component {
     const initalState = {
       email: 'bla@bla.is',
       name: 'darri',
-      darrmundur: "true",
+      darrmundur: 'true',
     };
 
     const options = [
@@ -84,6 +84,25 @@ class App extends Component {
             </div>
             <label htmlFor="age">Age</label>
             <Checkbox model="age" id="age" />
+            <div className={styles.checkboxes}>
+              <div>
+                <label htmlFor="all">All</label>
+                {/* `all` is a reserved model keyword */}
+                <Checkbox
+                  model="all"
+                  id="all"
+                  group="drinks"
+                />
+              </div>
+              <div>
+                <label htmlFor="cocacola">Coca Cola</label>
+                <Checkbox model="cocacola" id="cocacola" group="drinks" />
+              </div>
+              <div>
+                <label htmlFor="pepsi">Pepsi</label>
+                <Checkbox model="pepsi" id="pepsi" group="drinks" />
+              </div>
+            </div>
             <div>
               <label htmlFor="darrmundur1">Yes</label>
               <RadioButton model="darrmundur" id="darrmundur1" value="true" />
