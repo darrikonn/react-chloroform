@@ -27,6 +27,7 @@ class App extends Component {
       email: 'bla@bla.is',
       name: 'darri',
       darrmundur: 'true',
+      cocacola: true,
     };
 
     const options = [
