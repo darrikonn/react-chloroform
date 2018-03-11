@@ -80,10 +80,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   initializeState: controlActions.initializeState,
-  resetForm: controlActions.resetForm,
+  resetValues: controlActions.resetValues,
+  setPending: controlActions.setPending,
 
   resetSubmit: formActions.resetSubmit,
-  // setPending: formActions.setPending,
   setSubmitFailed: formActions.setSubmitFailed,
   setSubmitting: formActions.setSubmitting,
 };

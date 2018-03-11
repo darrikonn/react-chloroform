@@ -7,6 +7,7 @@ import {
   RadioButton,
   Checkbox,
   Button,
+  TextArea,
   Select,
   Errors as ChloroformError,
 } from 'react-chloroform';
@@ -23,11 +24,12 @@ class App extends Component {
   };
 
   render() {
-    const initalState = {
+    const initialState = {
       email: 'bla@bla.is',
       name: 'darri',
       darrmundur: 'true',
       cocacola: true,
+      rickandmorty: 'konn',
     };
 
     const options = [
@@ -60,7 +62,7 @@ class App extends Component {
       <div>
         <h1>React Chloroform</h1>
         <div>
-          <Form initialState={initalState} onSubmit={this.handleSubmit}>
+          <Form initialState={initialState} onSubmit={this.handleSubmit}>
             <label htmlFor="email">Email: </label>
             <FormInput
               model="email"
@@ -121,7 +123,10 @@ class App extends Component {
               />
             </div>
             <div>
-              <Select model="rickandmorty" options={options} initialValue="darri" />
+              <Select model="rickandmorty" options={options} />
+            </div>
+            <div>
+              <TextArea model="mynameisjeff" placeholder="Whuaa?" />
             </div>
             <Button type="submit" text="Submit" className={classNames(styles.root, styles.button)} />
             <Button type="reset" text="Reset" className={classNames(styles.root, styles.button)} />
