@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 import {
   DELETE_VALUE,
   INITIALIZE_STATE,
+  RESET_VALUES,
   SET_ERRORS,
   SET_GROUP,
   SET_PENDING,
@@ -25,20 +26,22 @@ export default (state = Immutable.Map(), action) => {
           ),
         ),
       );
+    case RESET_VALUES:
+      return state.map((model, key) => model.set('value', payload.state[key]));
     case SET_ERRORS:
       return state.setIn([payload.model, 'errors'], Immutable.fromJS(payload.errors));
     case SET_GROUP:
       return state.setIn([payload.model, 'group'], payload.group);
     case SET_PENDING:
-      return state.setIn([payload.model, 'pending'], payload.pending);
+      return state.updateIn([payload.model, 'pending'], isPending => !isPending);
     case SET_VALUE:
       return state.setIn([payload.model, 'value'], Immutable.fromJS(payload.value));
     case UPDATE_VALUE:
-      return state.updateIn([payload.model, 'value'], Immutable.List(), lis =>
+      return state.updateIn([payload.model, 'value'], (lis = Immutable.List()) =>
         lis.push(Immutable.fromJS(payload.value)),
       );
     case DELETE_VALUE: {
-      const index = state.getIn([payload.model, 'value'], Immutable.List()).indexOf(payload.value);
+      const index = (state.getIn([payload.model, 'value']) || Immutable.List()).indexOf(payload.value);
       return index > -1 ? state.deleteIn([payload.model, 'value', index]) : state;
     }
     default:

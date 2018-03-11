@@ -124,6 +124,7 @@ class App extends Component {
               <Select model="rickandmorty" options={options} initialValue="darri" />
             </div>
             <Button type="submit" text="Submit" className={classNames(styles.root, styles.button)} />
+            <Button type="reset" text="Reset" className={classNames(styles.root, styles.button)} />
           </Form>
         </div>
       </div>

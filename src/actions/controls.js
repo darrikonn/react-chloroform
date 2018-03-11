@@ -2,6 +2,7 @@ import createActions from '.';
 import {
   DELETE_VALUE,
   INITIALIZE_STATE,
+  RESET_VALUES,
   SET_ERRORS,
   SET_GROUP,
   SET_PENDING,
@@ -12,6 +13,7 @@ import {
 const actions = {
   [DELETE_VALUE]: (model, value) => ({model, value}),
   [INITIALIZE_STATE]: state => ({state}),
+  [RESET_VALUES]: state => ({state}),
   [SET_ERRORS]: (model, errors) => ({model, errors}),
   [SET_GROUP]: (model, group) => ({model, group}),
   [SET_PENDING]: (model, pending = true) => ({model, pending}),

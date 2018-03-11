@@ -9,21 +9,23 @@ import reducers, {getFormValues, getFormErrors, hasFormErrors} from '../store/re
 class Form extends Component {
   static propTypes = {
     children: PropTypes.node,
-    initialState: PropTypes.shape({}),
-    onSubmit: PropTypes.func.isRequired,
-    initializeState: PropTypes.func.isRequired,
-    // setPending: PropTypes.func.isRequired,
-    setSubmitting: PropTypes.func.isRequired,
-    setSubmitFailed: PropTypes.func.isRequired,
-    resetSubmit: PropTypes.func.isRequired,
-    resetForm: PropTypes.func.isRequired,
     errors: PropTypes.shape({}),
-    values: PropTypes.shape({}),
     hasFormErrors: PropTypes.bool,
+    initialState: PropTypes.shape({}),
+    initializeState: PropTypes.func.isRequired,
+    onReset: PropTypes.func,
+    onSubmit: PropTypes.func.isRequired,
+    resetSubmit: PropTypes.func.isRequired,
+    resetValues: PropTypes.func.isRequired,
+    setPending: PropTypes.func.isRequired,
+    setSubmitFailed: PropTypes.func.isRequired,
+    setSubmitting: PropTypes.func.isRequired,
+    values: PropTypes.shape({}),
   };
 
   static defaultProps = {
     initialState: {},
+    onReset: function() {},
   };
 
   componentDidMount() {
@@ -54,7 +56,12 @@ class Form extends Component {
     }
   };
 
-  handleReset = () => this.props.resetForm();
+  handleReset = async e => {
+    e.preventDefault();
+
+    this.props.resetValues(this.props.initialState);
+    this.props.onReset();
+  }
 
   render() {
     return (
