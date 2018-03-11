@@ -5,6 +5,7 @@ import {
   Form,
   FormInput,
   RadioButton,
+  DataList,
   Checkbox,
   Button,
   TextArea,
@@ -83,6 +84,13 @@ class App extends Component {
               <ChloroformError
                 model="name"
                 component={({error}) => <p className={styles.error}>{error}</p>}
+              />
+            </div>
+            <div>
+              <DataList
+                model="somedatalistyougotthere"
+                options={options}
+                placeholder="Choose from options"
               />
             </div>
             <label htmlFor="age">Age</label>
