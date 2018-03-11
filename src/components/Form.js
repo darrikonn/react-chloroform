@@ -17,7 +17,6 @@ class Form extends Component {
     onSubmit: PropTypes.func.isRequired,
     resetSubmit: PropTypes.func.isRequired,
     resetValues: PropTypes.func.isRequired,
-    setPending: PropTypes.func.isRequired,
     setSubmitFailed: PropTypes.func.isRequired,
     setSubmitting: PropTypes.func.isRequired,
     values: PropTypes.shape({}),
@@ -39,7 +38,7 @@ class Form extends Component {
 
     if (hasFormErrors) {
       console.log('here', errors.toJS(), hasFormErrors);
-      // this.props.showErrors();
+      // TODO: this.props.showErrors();
       return;
     }
 
@@ -61,7 +60,7 @@ class Form extends Component {
 
     this.props.resetValues(this.props.initialState);
     this.props.onReset();
-  }
+  };
 
   render() {
     return (
