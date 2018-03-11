@@ -6,7 +6,7 @@ import controlActions from '../actions/controls';
 import {connect} from '../store';
 import {getValue, hasError} from '../store/reducers';
 
-class TextInput extends Control {
+class FormInput extends Control {
   static propTypes = {
     className: PropTypes.string,
     id: PropTypes.string,
@@ -49,4 +49,4 @@ const mapDispatchToProps = {
   setValue: controlActions.setValue,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextInput);
+export default connect(mapStateToProps, mapDispatchToProps)(FormInput);

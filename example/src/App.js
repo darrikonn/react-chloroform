@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import {
   Form,
-  TextInput,
+  FormInput,
   RadioButton,
   Checkbox,
   Button,
@@ -62,7 +62,7 @@ class App extends Component {
         <div>
           <Form initialState={initalState} onSubmit={this.handleSubmit}>
             <label htmlFor="email">Email: </label>
-            <TextInput
+            <FormInput
               model="email"
               id="email"
               label="email"
@@ -71,7 +71,7 @@ class App extends Component {
             />
             <div>
               <label htmlFor="name">Name: </label>
-              <TextInput
+              <FormInput
                 model="name"
                 id="name"
                 placeholder="name"
