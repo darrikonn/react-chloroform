@@ -33,21 +33,46 @@ class App extends Component {
       rickandmorty: 'konn',
     };
 
-    const options = [
+    const selectOptions = [
       {
-        name: 'Darri',
+        name: 'darri',
         value: 'darri',
       },
       {
-        name: 'Steinn',
-        value: 'steinn',
+        name: 'Middle names',
+        group: [
+          {
+            name: 'steinn',
+            value: 'steinn',
+            disabled: true,
+          },
+          {
+            name: 'konn',
+            value: 'konn',
+          },
+        ],
       },
       {
-        name: 'Konn',
+        name: 'konradsson',
+        value: 'konradsson',
+      },
+    ];
+    const dataListOptions = [
+      {
+        name: 'darri',
+        value: 'darri',
+      },
+      {
+        name: 'steinn',
+        value: 'steinn',
+        disabled: true,
+      },
+      {
+        name: 'konn',
         value: 'konn',
       },
       {
-        name: 'Konradsson',
+        name: 'konradsson',
         value: 'konradsson',
       },
     ];
@@ -89,7 +114,7 @@ class App extends Component {
             <div>
               <DataList
                 model="somedatalistyougotthere"
-                options={options}
+                options={dataListOptions}
                 placeholder="Choose from options"
               />
             </div>
@@ -125,13 +150,13 @@ class App extends Component {
             <div>
               <Select
                 model="wabbalabbadubdub"
-                options={options}
+                options={selectOptions}
                 validator={[isRequired]}
                 placeholder="Choose your option"
               />
             </div>
             <div>
-              <Select model="rickandmorty" options={options} />
+              <Select model="rickandmorty" options={selectOptions} />
             </div>
             <div>
               <TextArea model="mynameisjeff" placeholder="Whuaa?" />

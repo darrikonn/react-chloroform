@@ -13,8 +13,9 @@ class DataList extends Control {
     model: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(
       PropTypes.shape({
-        name: PropTypes.string.isRequired,
+        name: PropTypes.string,
         value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+        disabled: PropTypes.boolean,
       }),
     ).isRequired,
     style: PropTypes.string,
@@ -38,7 +39,7 @@ class DataList extends Control {
         />
         <datalist id={model}>
           {options.map(option => (
-            <option key={option.value} value={option.value}>
+            <option key={option.value} value={option.value} disabled={option.disabled}>
               {option.name}
             </option>
           ))}
