@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import classNames from 'classnames';
-
 import {
   Form,
   FormInput,
@@ -12,6 +11,9 @@ import {
   Select,
   Errors as ChloroformError,
 } from 'react-chloroform';
+
+import MyInput from './MyInput';
+
 import styles from './app.module.css';
 
 class App extends Component {
@@ -31,6 +33,7 @@ class App extends Component {
       darrmundur: 'true',
       cocacola: true,
       rickandmorty: 'konn',
+      custominput: 'steinn',
     };
 
     const selectOptions = [
@@ -161,6 +164,9 @@ class App extends Component {
             <div>
               <TextArea model="mynameisjeff" placeholder="Whuaa?" />
             </div>
+
+            <MyInput model="custominput" validator={[isRequired]} />
+
             <Button type="submit" text="Submit" className={classNames(styles.root, styles.button)} />
             <Button type="reset" text="Reset" className={classNames(styles.root, styles.button)} />
           </Form>

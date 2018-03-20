@@ -7,3 +7,4 @@ export {default as Form} from './components/Form';
 export {default as RadioButton} from './components/RadioButton';
 export {default as Select} from './components/Select';
 export {default as TextArea} from './components/TextArea';
+export {default as withReactChloroform} from './components/CustomControl';
