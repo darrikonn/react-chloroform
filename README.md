@@ -3,10 +3,8 @@
 ---
 
 [![NPM Version](https://img.shields.io/npm/v/react-chloroform.svg?style=flat)](https://www.npmjs.com/package/react-chloroform)
-[![NPM Downloads](https://img.shields.io/npm/dm/react-chloroform.svg?style=flat)](https://npmcharts.com/compare/react-chloroform?minimal=true)
-[![Build Status](https://img.shields.io/travis/darrikonn/react-chloroform/v6.svg?style=flat)](https://travis-ci.org/darrikonn/react-chloroform)
-[![codecov.io](https://codecov.io/gh/darrikonn/react-chloroform/branch/master/graph/badge.svg)](https://codecov.io/gh/darrikonn/react-chloroform)
-[![Code Climate](https://codeclimate.com/github/darrikonn/react-chloroform/badges/gpa.svg)](https://codeclimate.com/github/darrikonn/react-chloroform)
+[![NPM Downloads](https://img.shields.io/npm/dt/react-chloroform.svg?style=flat)](https://npmcharts.com/compare/react-chloroform?minimal=true)
+[![Build Status](https://img.shields.io/travis/darrikonn/react-chloroform.svg?style=flat)](https://travis-ci.org/darrikonn/react-chloroform)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 ## Why
@@ -62,7 +60,7 @@ export default YourFormComponent;
 ```
 
 ## API
-Read the [api](https://github.com/darrikonn/react-chloroform/blob/master/API.md).
+Check out the [api](https://github.com/darrikonn/react-chloroform/blob/master/API.md).
 
 ## Contribution
 React-Chloroform is open for contributions by the community.
