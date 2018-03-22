@@ -4,13 +4,13 @@
 
 [![NPM Version](https://img.shields.io/npm/v/react-chloroform.svg?style=flat)](https://www.npmjs.com/package/react-chloroform)
 [![NPM Downloads](https://img.shields.io/npm/dm/react-chloroform.svg?style=flat)](https://npmcharts.com/compare/react-chloroform?minimal=true)
-[![Build Status](https://img.shields.io/travis/darrikonn/redux-form/v6.svg?style=flat)](https://travis-ci.org/darrikonn/react-chloroform)
-[![codecov.io](https://codecov.io/gh/darrikonn/redux-form/branch/master/graph/badge.svg)](https://codecov.io/gh/darrikonn/react-chloroform)
-[![Code Climate](https://codeclimate.com/github/darrikonn/redux-form/badges/gpa.svg)](https://codeclimate.com/github/erikras/redux-form)
+[![Build Status](https://img.shields.io/travis/darrikonn/react-chloroform/v6.svg?style=flat)](https://travis-ci.org/darrikonn/react-chloroform)
+[![codecov.io](https://codecov.io/gh/darrikonn/react-chloroform/branch/master/graph/badge.svg)](https://codecov.io/gh/darrikonn/react-chloroform)
+[![Code Climate](https://codeclimate.com/github/darrikonn/react-chloroform/badges/gpa.svg)](https://codeclimate.com/github/darrikonn/react-chloroform)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 ## Why
-"No hooking up, super lightweight, and easy to use".
+> "No hooking up, super lightweight, and easy to use".
 
 ## Install
 To install this package, run:
