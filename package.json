@@ -7,8 +7,11 @@
     "url": "git+https://github.com/darrikonn/react-chloroform.git"
   },
   "keywords": [
+    "form",
+    "form-validation",
     "react",
-    "form"
+    "react-chloroform",
+    "reactjs"
   ],
   "author": "Darri Steinn Konradsson",
   "license": "MIT",

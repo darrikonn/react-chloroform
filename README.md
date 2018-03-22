@@ -6,6 +6,7 @@
 [![NPM Downloads](https://img.shields.io/npm/dt/react-chloroform.svg?style=flat)](https://npmcharts.com/compare/react-chloroform?minimal=true)
 [![Build Status](https://img.shields.io/travis/darrikonn/react-chloroform.svg?style=flat)](https://travis-ci.org/darrikonn/react-chloroform)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![License](https://img.shields.io/github/license/darrikonn/react-chloroform.svg)](https://github.com/darrikonn/react-chloroform/blob/master/LICENSE)
 
 ## Why
 > "No hooking up, super lightweight, and easy to use".
@@ -68,11 +69,11 @@ Read the [contributing guidelines](https://github.com/darrikonn/react-chloroform
 
 ## Testing
 ```bash
-npm run build:es
+npm link react-chloroform
 ```
 
 ```bash
-npm link react-chloroform
+npm run build:es
 ```
 
 ## License
