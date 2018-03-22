@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withReactChloroform, Errors as ChloroformError} from 'react-chloroform';
+import {withReactChloroform, ChloroformError} from 'react-chloroform';
 
 const MyInput = ({model, value, onChange}) =>
   <div>

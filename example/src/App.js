@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import classNames from 'classnames';
 import {
+  Button,
+  Checkbox,
+  ChloroformError,
+  DataList,
   Form,
   FormInput,
   RadioButton,
-  DataList,
-  Checkbox,
-  Button,
-  TextArea,
   Select,
-  Errors as ChloroformError,
+  TextArea,
 } from 'react-chloroform';
 
 import MyInput from './MyInput';
