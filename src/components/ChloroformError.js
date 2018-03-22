@@ -15,10 +15,7 @@ const ChloroformError = ({error, showError, component}) => {
 
 ChloroformError.propTypes = {
   model: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
-  component: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.func,
-  ]).isRequired,
+  component: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
   error: PropTypes.instanceOf(Immutable.List),
   showError: PropTypes.bool,
 };

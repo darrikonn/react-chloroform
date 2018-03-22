@@ -12,10 +12,7 @@ class RadioButton extends Control {
     id: PropTypes.string,
     model: PropTypes.string.isRequired,
     style: PropTypes.string,
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]).isRequired,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     checked: PropTypes.string,
   };
 
