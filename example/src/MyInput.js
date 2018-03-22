@@ -2,6 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withReactChloroform, ChloroformError} from 'react-chloroform';
 
+class Errors extends React.Component {
+  static propTypes = {
+    error: PropTypes.object.isRequired,
+  };
+
+  render() {
+    const {error} = this.props;
+
+    return (
+      <p style={{color: 'red', fontSize: '10px'}}>{error}</p>
+    );
+  }
+}
+
 const MyInput = ({model, value, onChange}) =>
   <div>
     <label htmlFor="myInput">Custom Input: </label>
@@ -13,7 +27,7 @@ const MyInput = ({model, value, onChange}) =>
     />
     <ChloroformError
       model={model}
-      component={({error}) => <p style={{color: 'red', fontSize: '10px'}}>{error}</p>}
+      component={Errors}
     />
   </div>;
 
