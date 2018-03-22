@@ -148,11 +148,36 @@ text="Submit form"
 
 <hr />
 
+### ChloroformError
+`import {ChloroformError} from 'react-chloroform'`;
+
+This component renders the errors from your control validation.
+
+#### Attributes
+- **component**: a required node/func that will render your errors, e.g.
+  ```javascript
+  component={error => <p>{error}</p>}
+  ```
+
+#### Example
+```javascript
+<FormInput
+  model="name"
+  validator={[isRequired]}
+/>
+<ChloroformError
+  model="name"
+  component={({error}) => <p className={styles.error}>{error}</p>}
+/>
+```
+
+<hr />
+
 ### DataList
 `import {DataList} from 'react-chloroform';`
 
 #### Attributes
-- **options**: an array of options that will be rendered by the datalist. The options attributes are:
+- **options**: an array of options that will be rendered by the datalist. The option attributes are:
   - **name**: an optional string that further describes this option.
   - **value**: a required string or a number that determines the value of the option.
   - **disabled**: an optional boolean if this option should be disabled.
@@ -186,45 +211,208 @@ const options = [
 
 <hr />
 
-### Errors
-#### Attributes
-#### Example
-
-<hr />
-
 ### FormInput
+`import {FormInput} from 'react-chloroform';`
+
 #### Attributes
+- **placeholder**: an optional placeholder for the input, e.g.
+  ```javascript
+  placeholder="Write something..."
+  ```
+- **type**: your text input type, e.g.
+  ```javascript
+  type="password"
+  ```
 #### Example
+```javascript
+<FormInput
+  model="email"
+  type="email"
+  validator={[isEmail}]
+/>
+```
 
 <hr />
 
 ### Form
+`import {Form} from 'react-chloroform';`
+
+This is the wrapper form needed to collect the user input.
+
 #### Attributes
+- **initialState**: an optional object that allows you to initialise your state with prefilled values, e.g.
+  ```javascript
+  initialState={{email: 'react_chloroform@reactchloroform.com', jobTitle: 'developer'}}
+  ```
+- **onReset**: an optional function that allows you to catch the on reset event, e.g.
+  ```javascript
+  onReset={() => console.log('Form reset called')}
+  ```
+- **onSubmit**: a required function that allows you to catch the on submit event, e.g.
+  ```javascript
+  onSubmit={model => console.log(model)}
+  ```
 #### Example
+```javascript
+const initialState = {
+  name: 'Darri',
+  age: 1337,
+};
+
+const handleSubmit = model => console.log(model);
+
+<Form
+  initialState={initialState}
+  onSubmit={handleSubmit}
+>
+  ...
+</Form>
+```
 
 <hr />
 
 ### RadioButton
+`import {RadioButton} from 'react-chloroform';`
+
+All radio buttons in the same group need to share the same model name.
+
 #### Attributes
+- **value**: a required string/number representing the value of the radiobutton, e.g.
+  ```javascript
+  value="true"
+  ```
+
 #### Example
+```javascript
+<label htmlFor="pepsi_2">Pepsi</label>
+<RadioButton
+  id="pepsi_2"
+  model="drink"
+  value="pepsi"
+/>
+
+<label htmlFor="cocacola_2">Coca Cola</label>
+<RadioButton
+  id="cocacola_2"
+  model="drink"
+  value="coca cola"
+/>
+```
 
 <hr />
 
 ### Select
+`import {Select} from 'react-chloroform';`
+
 #### Attributes
+- **options**: an array of options that will be rendered by the select. The option attributes are:
+  - **name**: a required string that further describes this option.
+  - **value**: a required string or a number that determines the value of the option.
+  - **disabled**: an optional boolean if this option should be disabled.
+  ```javascript
+  options={[{name: 'Name', value: 'Value'}]}
+  ```
+  - The options can also be grouped together. The following are the attributes when grouping is needed:
+    - **name**: a required string that further describes this group.
+    - **disabled**: an optional boolean if this group should be disabled.
+    - **group**: a required array of options.
+    ```javascript
+    options={[{name: 'drinks', group: [{name: 'Pepsi', value: 'pepsi'}]}
+    ```
+- **placeholder**: an optional placeholder for the select, e.g.
+  ```javascript
+  placeholder="Choose your option"
+  ```
 #### Example
+```javascript
+const options = [
+  {
+    name: 'React',
+    value: 'react',
+  },
+  {
+    name: 'Other',
+    disabled: true,
+    group: [
+      {
+        name: 'Angular',
+        value: 'angular',
+      }
+    ],
+  },
+];
+
+<Select
+  options={options}
+  model="interests"
+  placeholder="What do you love the most?"
+/>
+```
 
 <hr />
 
 ### TextArea
+`import {TextArea} from 'react-chloroform';`
+
 #### Attributes
+- **cols**: an optional number specifying the width in avg character width, default 30, e.g.
+  ```javascript
+  cols={10}
+  ```
+- **rows**: an optional number specifying the height in lines, default 10, e.g.
+  ```javascript
+  rows={5}
+  ```
+- **placeholder**: an optional placeholder for the text area, e.g.
+  ```javascript
+  placeholder="Write here..."
+  ```
+
 #### Example
+```javascript
+<TextArea
+  model="details"
+  placeholder="Write some details..."
+  rows={300}
+/>
+```
 
 <hr />
 
 ### withReactChloroform
+`import {withReactChloroform} from 'react-chloroform';`
+
+A HOC allowing you to write your own component with react-chloroform support and behaviour.
+
 #### Attributes
+- **value**: a string/number that the HOC passes down as a prop, e.g.
+  ```javascript
+  value={value}
+  ```
+- **onChange**: a function that the HOC passes down as a prop, e.g.
+  ```javascript
+  onChange={e => onChange(e.target.value)}
+  ```
+
 #### Example
+```javascript
+---
+const MyInput = ({value, onChange}) =>
+  <div>
+    <input
+      value={value}
+      onChange={e => onChange(e.target.value)}
+  </div>;
+  
+export default withReactChloroform(MyInput);
+---
+
+// then use your custom component
+<MyInput
+  model="custom"  // don't forget the required model
+  validator={[isRequired]}
+/>
+```
 
 <hr />
 
