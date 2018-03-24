@@ -9,6 +9,8 @@ import reducers, {getFormValues, getFormErrors, hasFormErrors} from '../store/re
 class Form extends Component {
   static propTypes = {
     children: PropTypes.node,
+    className: PropTypes.string,
+    disabled: PropTypes.bool,
     errors: PropTypes.shape({}),
     hasFormErrors: PropTypes.bool,
     initialState: PropTypes.shape({}),
@@ -19,6 +21,7 @@ class Form extends Component {
     resetValues: PropTypes.func.isRequired,
     setSubmitFailed: PropTypes.func.isRequired,
     setSubmitting: PropTypes.func.isRequired,
+    style: PropTypes.string,
     values: PropTypes.shape({}),
   };
 
@@ -63,18 +66,26 @@ class Form extends Component {
   };
 
   render() {
+    const {children, className, disabled, style} = this.props;
+
     return (
-      <form onSubmit={this.handleSubmit} onReset={this.handleReset}>
-        {this.props.children}
+      <form
+        className={className}
+        disabled={disabled}
+        onReset={this.handleReset}
+        onSubmit={this.handleSubmit}
+        style={style}
+      >
+        {children}
       </form>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  values: getFormValues(state),
   errors: getFormErrors(state),
   hasFormErrors: hasFormErrors(state),
+  values: getFormValues(state),
 });
 
 const mapDispatchToProps = {

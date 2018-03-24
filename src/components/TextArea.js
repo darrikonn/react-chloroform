@@ -8,8 +8,8 @@ import {getValue, hasError} from '../store/reducers';
 
 class TextArea extends Control {
   static propTypes = {
-    className: PropTypes.string,
     cols: PropTypes.number,
+    disabled: PropTypes.bool,
     id: PropTypes.string,
     model: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
@@ -25,26 +25,27 @@ class TextArea extends Control {
   };
 
   render() {
-    const {id, placeholder, style, rows, cols, value} = this.props;
+    const {cols, disabled, id, placeholder, rows, style, value} = this.props;
 
     return (
       <textarea
-        placeholder={placeholder}
-        id={id}
         className={this.getClassName()}
-        style={style}
         cols={cols}
-        rows={rows}
-        value={value}
+        disabled={disabled}
+        id={id}
         onChange={e => this.onChange(e.target.value)}
+        placeholder={placeholder}
+        rows={rows}
+        style={style}
+        value={value}
       />
     );
   }
 }
 
 const mapStateToProps = (state, props) => ({
-  value: getValue(state, props.model),
   hasError: hasError(state, props.model),
+  value: getValue(state, props.model),
 });
 
 const mapDispatchToProps = {

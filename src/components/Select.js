@@ -8,36 +8,37 @@ import {getValue, hasError} from '../store/reducers';
 
 class Select extends Control {
   static propTypes = {
-    className: PropTypes.string,
+    disabled: PropTypes.bool,
     id: PropTypes.string,
     model: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(
       PropTypes.oneOfType([
         PropTypes.shape({
-          name: PropTypes.string.isRequired,
           disabled: PropTypes.boolean,
+          name: PropTypes.string.isRequired,
           value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
         }),
         PropTypes.shape({
-          name: PropTypes.string.isRequired,
           disabled: PropTypes.boolean,
           group: PropTypes.arrayOf(
             PropTypes.shape({
+              disabled: PropTypes.boolean,
               name: PropTypes.string.isRequired,
               value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-              disabled: PropTypes.boolean,
             }),
           ).isRequired,
+          name: PropTypes.string.isRequired,
         }),
       ]),
     ).isRequired,
-    style: PropTypes.string,
     placeholder: PropTypes.string,
+    style: PropTypes.string,
     value: PropTypes.string,
   };
 
   render() {
-    const {options, value, id, style, placeholder} = this.props;
+    const {disabled, id, options, placeholder, style, value} = this.props;
+
     const mappedOptions = options.map(option => {
       if ('group' in option) {
         return (
@@ -68,11 +69,12 @@ class Select extends Control {
 
     return (
       <select
-        id={id}
-        value={value || ''}
         className={this.getClassName()}
-        style={style}
+        disabled={disabled}
+        id={id}
         onChange={e => this.onChange(e.target.value)}
+        style={style}
+        value={value || ''}
       >
         {mappedOptions}
       </select>
@@ -81,8 +83,8 @@ class Select extends Control {
 }
 
 const mapStateToProps = (state, props) => ({
-  value: getValue(state, props.model),
   hasError: hasError(state, props.model),
+  value: getValue(state, props.model),
 });
 
 const mapDispatchToProps = {

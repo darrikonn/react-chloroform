@@ -25,8 +25,8 @@ const withReactChloroform = WrappedComponent => {
   }
 
   const mapStateToProps = (state, props) => ({
-    value: getValue(state, props.model),
     hasError: hasError(state, props.model),
+    value: getValue(state, props.model),
   });
 
   const mapDispatchToProps = {

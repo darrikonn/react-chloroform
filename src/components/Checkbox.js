@@ -11,25 +11,25 @@ const ALL = 'all';
 
 class Checkbox extends Control {
   static propTypes = {
-    className: PropTypes.string,
     deleteValue: PropTypes.func.isRequired,
+    disabled: PropTypes.bool,
     group: PropTypes.string,
     groupModels: PropTypes.instanceOf(Immutable.Map),
     id: PropTypes.string,
     model: PropTypes.string.isRequired,
     setGroup: PropTypes.func.isRequired,
     style: PropTypes.string,
-    value: PropTypes.bool,
     updateValue: PropTypes.func.isRequired,
+    value: PropTypes.bool,
   };
 
   componentDidMount() {
-    const {model, group} = this.props;
+    const {group, model} = this.props;
     this.props.setGroup(model, group);
   }
 
   componentDidUpdate(oldProps) {
-    const {value, model, group} = this.props;
+    const {group, model, value} = this.props;
     if (group && model !== ALL && oldProps.value !== value) {
       if (value) {
         this.props.updateValue(group, model);
@@ -65,24 +65,26 @@ class Checkbox extends Control {
   };
 
   render() {
-    const {id, style, value} = this.props;
+    const {disabled, id, style, value} = this.props;
+
     return (
       <input
-        type="checkbox"
-        className={this.getClassName()}
-        style={style}
-        id={id}
         checked={value || false}
+        className={this.getClassName()}
+        disabled={disabled}
+        id={id}
         onChange={this.handleOnChange}
+        style={style}
+        type="checkbox"
       />
     );
   }
 }
 
 const mapStateToProps = (state, props) => ({
-  value: getValue(state, props.model),
-  hasError: hasError(state, props.model),
   groupModels: props.group && getGroupModels(state, props.group),
+  hasError: hasError(state, props.model),
+  value: getValue(state, props.model),
 });
 
 const mapDispatchToProps = {

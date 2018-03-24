@@ -8,34 +8,35 @@ import {getValue, hasError} from '../store/reducers';
 
 class DataList extends Control {
   static propTypes = {
-    className: PropTypes.string,
+    disabled: PropTypes.bool,
     id: PropTypes.string,
     model: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(
       PropTypes.shape({
+        disabled: PropTypes.boolean,
         name: PropTypes.string,
         value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-        disabled: PropTypes.boolean,
       }),
     ).isRequired,
-    style: PropTypes.string,
     placeholder: PropTypes.string,
+    style: PropTypes.string,
     value: PropTypes.string,
   };
 
   render() {
-    const {model, options, value, id, style, placeholder} = this.props;
+    const {disabled, id, model, options, placeholder, style, value} = this.props;
 
     return (
       <div>
         <input
-          list={model}
-          id={id}
-          value={value || ''}
           className={this.getClassName()}
-          style={style}
+          disabled={disabled}
+          id={id}
+          list={model}
           onChange={e => this.onChange(e.target.value)}
           placeholder={placeholder}
+          style={style}
+          value={value || ''}
         />
         <datalist id={model}>
           {options.map(option => (
@@ -50,8 +51,8 @@ class DataList extends Control {
 }
 
 const mapStateToProps = (state, props) => ({
-  value: getValue(state, props.model),
   hasError: hasError(state, props.model),
+  value: getValue(state, props.model),
 });
 
 const mapDispatchToProps = {

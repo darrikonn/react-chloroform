@@ -8,12 +8,12 @@ import {getValue, hasError} from '../store/reducers';
 
 class RadioButton extends Control {
   static propTypes = {
-    className: PropTypes.string,
+    checked: PropTypes.string,
+    disabled: PropTypes.bool,
     id: PropTypes.string,
     model: PropTypes.string.isRequired,
     style: PropTypes.string,
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    checked: PropTypes.string,
   };
 
   componentDidMount() {}
@@ -21,17 +21,18 @@ class RadioButton extends Control {
   componentDidUpdate() {}
 
   render() {
-    const {id, value, style, checked} = this.props;
+    const {checked, disabled, id, style, value} = this.props;
 
     return (
       <input
-        type="radio"
-        id={id}
-        className={this.getClassName()}
-        style={style}
-        value={value}
         checked={checked === value}
+        disabled={disabled}
+        className={this.getClassName()}
+        id={id}
         onChange={e => this.onChange(e.target.value)}
+        style={style}
+        type="radio"
+        value={value}
       />
     );
   }

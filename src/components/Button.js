@@ -12,15 +12,15 @@ const Button = ({type = 'button', text, className, style, disabled, onClick}) =>
 
 Button.propTypes = {
   className: PropTypes.string,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
   style: PropTypes.string,
   text: PropTypes.string.isRequired,
   type: PropTypes.string,
-  disabled: PropTypes.bool,
-  onClick: PropTypes.func,
 };
 
-const mapStateToProps = (state, props) => ({
-  disabled: props.type === 'submit' && hasFormErrors(state),
+const mapStateToProps = (state, {type, disabled}) => ({
+  disabled: (type === 'submit' && hasFormErrors(state)) || disabled,
 });
 
 export default connect(mapStateToProps)(Button);

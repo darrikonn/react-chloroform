@@ -8,7 +8,7 @@ import {getValue, hasError} from '../store/reducers';
 
 class FormInput extends Control {
   static propTypes = {
-    className: PropTypes.string,
+    disabled: PropTypes.bool,
     id: PropTypes.string,
     model: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
@@ -23,25 +23,26 @@ class FormInput extends Control {
   };
 
   render() {
-    const {id, placeholder, style, type, value} = this.props;
+    const {disabled, id, placeholder, style, type, value} = this.props;
 
     return (
       <input
-        placeholder={placeholder}
-        id={id}
         className={this.getClassName()}
+        disabled={disabled}
+        id={id}
+        onChange={e => this.onChange(e.target.value)}
+        placeholder={placeholder}
         style={style}
         type={type}
         value={value}
-        onChange={e => this.onChange(e.target.value)}
       />
     );
   }
 }
 
 const mapStateToProps = (state, props) => ({
-  value: getValue(state, props.model),
   hasError: hasError(state, props.model),
+  value: getValue(state, props.model),
 });
 
 const mapDispatchToProps = {

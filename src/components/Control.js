@@ -5,7 +5,7 @@ import {parseValidators} from '../services/validators';
 
 class Control extends Component {
   static propTypes = {
-    className: PropTypes.string.isRequired,
+    className: PropTypes.string,
     hasError: PropTypes.bool,
     model: PropTypes.string.isRequired,
     setErrors: PropTypes.func.isRequired,
