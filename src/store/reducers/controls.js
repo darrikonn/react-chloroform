@@ -15,6 +15,10 @@ import {
 export default (state = Immutable.Map(), action) => {
   const {payload} = action;
   switch (action.type) {
+    case DELETE_VALUE: {
+      const index = (state.getIn([payload.model, 'value']) || Immutable.List()).indexOf(payload.value);
+      return index > -1 ? state.deleteIn([payload.model, 'value', index]) : state;
+    }
     case INITIALIZE_STATE:
       return state.mergeDeep(
         Immutable.fromJS(
@@ -43,14 +47,14 @@ export default (state = Immutable.Map(), action) => {
       return state.updateIn([payload.model, 'value'], (lis = Immutable.List()) =>
         lis.push(Immutable.fromJS(payload.value)),
       );
-    case DELETE_VALUE: {
-      const index = (state.getIn([payload.model, 'value']) || Immutable.List()).indexOf(payload.value);
-      return index > -1 ? state.deleteIn([payload.model, 'value', index]) : state;
-    }
     default:
       return state;
   }
 };
+
+export const getError = (state, model) => state.getIn([model, 'errors']);
+
+export const getErrors = state => state.map(model => model.get('errors'));
 
 export const getGroupModels = (state, group) => state.filter(model => model.get('group') === group);
 
