@@ -19,6 +19,10 @@ All controls share the following properties:
   validator={[val => (val && val.length > 0) || 'This field is required']}
   ```
   Since the validator prop accepts an array of validators, you can have multiple validators per control.
+- **validateOn**: an optional enum (`blur`, `focus`, `input`, `mount`) that detirmines at what point the validator starts to validate. Default is `mount`, e.g.
+  ```javascript
+  validateOn="blur"
+  ```
 - **className**: optional for class style and compatible with CSS modules, e.g.
   ```javascript
   className={styles.button}

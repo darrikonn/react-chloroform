@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Control from './Control';
 import controlActions from '../actions/controls';
 import {connect} from '../store';
-import {getValue, hasError} from '../store/reducers';
+import {getValue, hasBeenValidated, hasError} from '../store/reducers';
 
 const withReactChloroform = WrappedComponent => {
   class CustomControl extends Control {
@@ -24,12 +24,14 @@ const withReactChloroform = WrappedComponent => {
     }
   }
 
-  const mapStateToProps = (state, props) => ({
-    hasError: hasError(state, props.model),
-    value: getValue(state, props.model),
+  const mapStateToProps = (state, {model}) => ({
+    hasError: hasError(state, model),
+    isValidated: hasBeenValidated(state, model),
+    value: getValue(state, model),
   });
 
   const mapDispatchToProps = {
+    markValidated: controlActions.markValidated,
     setErrors: controlActions.setErrors,
     setValue: controlActions.setValue,
   };

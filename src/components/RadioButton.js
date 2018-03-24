@@ -44,6 +44,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = {
+  markValidated: controlActions.markValidated,
   setErrors: controlActions.setErrors,
   setValue: controlActions.setValue,
 };

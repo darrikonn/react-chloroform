@@ -50,12 +50,14 @@ class DataList extends Control {
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  hasError: hasError(state, props.model),
-  value: getValue(state, props.model),
+const mapStateToProps = (state, {model}) => ({
+  hasError: hasError(state, model),
+  isValidated: hasBeenValidated(state, model),
+  value: getValue(state, model),
 });
 
 const mapDispatchToProps = {
+  markValidated: controlActions.markValidated,
   setErrors: controlActions.setErrors,
   setValue: controlActions.setValue,
 };

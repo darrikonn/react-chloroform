@@ -4,15 +4,11 @@ import PropTypes from 'prop-types';
 import Control from './Control';
 import controlActions from '../actions/controls';
 import {connect} from '../store';
-import {getValue, hasError} from '../store/reducers';
+import {getValue, hasBeenValidated, hasError} from '../store/reducers';
 
 class FormInput extends Control {
   static propTypes = {
-    disabled: PropTypes.bool,
-    id: PropTypes.string,
-    model: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
-    style: PropTypes.string,
     type: PropTypes.oneOf(['text', 'email']),
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   };
@@ -40,12 +36,14 @@ class FormInput extends Control {
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  hasError: hasError(state, props.model),
-  value: getValue(state, props.model),
+const mapStateToProps = (state, {model}) => ({
+  hasError: hasError(state, model),
+  isValidated: hasBeenValidated(state, model),
+  value: getValue(state, model),
 });
 
 const mapDispatchToProps = {
+  markValidated: controlActions.markValidated,
   setErrors: controlActions.setErrors,
   setValue: controlActions.setValue,
 };

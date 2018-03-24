@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 import {
   DELETE_VALUE,
   INITIALIZE_STATE,
+  MARK_VALIDATED,
   RESET_VALUES,
   SET_ERRORS,
   SET_GROUP,
@@ -26,6 +27,8 @@ export default (state = Immutable.Map(), action) => {
           ),
         ),
       );
+    case MARK_VALIDATED:
+      return state.setIn([payload.model, 'validated'], true);
     case RESET_VALUES:
       return state.map((model, key) => model.set('value', payload.state[key]));
     case SET_ERRORS:
@@ -55,9 +58,7 @@ export const getValue = (state, model) => state.getIn([model, 'value']);
 
 export const getValues = state => state.map(model => model.get('value'));
 
-export const getError = (state, model) => state.getIn([model, 'errors']);
-
-export const getErrors = state => state.map(model => model.get('errors'));
+export const hasBeenValidated = (state, model) => state.getIn([model, 'validated']);
 
 export const hasError = (state, model) => {
   const errors = state.getIn([model, 'errors']);

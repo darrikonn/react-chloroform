@@ -1,5 +1,6 @@
 export const DELETE_VALUE = 'DELETE_VALUE';
 export const INITIALIZE_STATE = 'INITIALIZE_STATE';
+export const MARK_VALIDATED = 'MARK_VALIDATED';
 export const RESET_SUBMIT = 'RESET_SUBMIT';
 export const RESET_VALUES = 'RESET_VALUES';
 export const SET_ERRORS = 'SET_ERRORS';

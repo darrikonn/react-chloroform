@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 
 import {connect} from '../store';
-import {getError} from '../store/reducers';
+import {getError, hasBeenValidated} from '../store/reducers';
 
 const ChloroformError = ({error, showError, component}) => {
   if (!error || error.size === 0 || !showError) {
@@ -22,7 +22,7 @@ ChloroformError.propTypes = {
 
 const mapStateToProps = (state, {model}) => ({
   error: getError(state, model),
-  showError: true,
+  showError: hasBeenValidated(state, model),
 });
 
 export default connect(mapStateToProps)(ChloroformError);

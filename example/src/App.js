@@ -108,6 +108,7 @@ class App extends Component {
                 placeholder="name"
                 className={styles.textInput}
                 validator={[val => val === 'darri' && `Do not rump me with "${val}"`]}
+                validateOn="focus"
               />
               <ChloroformError
                 model="name"

@@ -89,6 +89,7 @@ const mapStateToProps = (state, props) => ({
 
 const mapDispatchToProps = {
   deleteValue: controlActions.deleteValue,
+  markValidated: controlActions.markValidated,
   setErrors: controlActions.setErrors,
   setGroup: controlActions.setGroup,
   setValue: controlActions.setValue,
