@@ -12,13 +12,10 @@ const ALL = 'all';
 class Checkbox extends Control {
   static propTypes = {
     deleteValue: PropTypes.func.isRequired,
-    disabled: PropTypes.bool,
     group: PropTypes.string,
     groupModels: PropTypes.instanceOf(Immutable.Map),
-    id: PropTypes.string,
     model: PropTypes.string.isRequired,
     setGroup: PropTypes.func.isRequired,
-    style: PropTypes.string,
     updateValue: PropTypes.func.isRequired,
     value: PropTypes.bool,
   };
@@ -65,26 +62,16 @@ class Checkbox extends Control {
   };
 
   render() {
-    const {disabled, id, style, value} = this.props;
+    const {value} = this.props;
 
-    return (
-      <input
-        checked={value || false}
-        className={this.getClassName()}
-        disabled={disabled}
-        id={id}
-        onChange={this.handleOnChange}
-        style={style}
-        type="checkbox"
-      />
-    );
+    return <input checked={value || false} onChange={this.handleOnChange} type="checkbox" {...this.properties()} />;
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  groupModels: props.group && getGroupModels(state, props.group),
-  hasError: hasError(state, props.model),
-  value: getValue(state, props.model),
+const mapStateToProps = (state, {group, model}) => ({
+  groupModels: group && getGroupModels(state, group),
+  hasError: hasError(state, model),
+  value: getValue(state, model),
 });
 
 const mapDispatchToProps = {

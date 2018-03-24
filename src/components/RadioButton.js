@@ -9,10 +9,6 @@ import {getValue, hasError} from '../store/reducers';
 class RadioButton extends Control {
   static propTypes = {
     checked: PropTypes.string,
-    disabled: PropTypes.bool,
-    id: PropTypes.string,
-    model: PropTypes.string.isRequired,
-    style: PropTypes.string,
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   };
 
@@ -21,26 +17,23 @@ class RadioButton extends Control {
   componentDidUpdate() {}
 
   render() {
-    const {checked, disabled, id, style, value} = this.props;
+    const {checked, value} = this.props;
 
     return (
       <input
         checked={checked === value}
-        disabled={disabled}
-        className={this.getClassName()}
-        id={id}
         onChange={e => this.onChange(e.target.value)}
-        style={style}
         type="radio"
         value={value}
+        {...this.properties()}
       />
     );
   }
 }
 
-const mapStateToProps = (state, props) => ({
-  checked: getValue(state, props.model),
-  hasError: hasError(state, props.model),
+const mapStateToProps = (state, {model}) => ({
+  checked: getValue(state, model),
+  hasError: hasError(state, model),
 });
 
 const mapDispatchToProps = {

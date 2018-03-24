@@ -7,6 +7,7 @@ import {parseValidators} from '../services/validators';
 class Control extends Component {
   static propTypes = {
     className: PropTypes.string,
+    disabled: PropTypes.bool,
     hasError: PropTypes.bool,
     id: PropTypes.string,
     isValidated: PropTypes.bool,

@@ -9,12 +9,8 @@ import {getValue, hasBeenValidated, hasError} from '../store/reducers';
 class TextArea extends Control {
   static propTypes = {
     cols: PropTypes.number,
-    disabled: PropTypes.bool,
-    id: PropTypes.string,
-    model: PropTypes.string.isRequired,
     placeholder: PropTypes.string,
     rows: PropTypes.number,
-    style: PropTypes.string,
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   };
 
@@ -25,19 +21,16 @@ class TextArea extends Control {
   };
 
   render() {
-    const {cols, disabled, id, placeholder, rows, style, value} = this.props;
+    const {cols, placeholder, rows, value} = this.props;
 
     return (
       <textarea
-        className={this.getClassName()}
         cols={cols}
-        disabled={disabled}
-        id={id}
         onChange={e => this.onChange(e.target.value)}
         placeholder={placeholder}
         rows={rows}
-        style={style}
         value={value}
+        {...this.properties()}
       />
     );
   }

@@ -8,9 +8,6 @@ import {getValue, hasBeenValidated, hasError} from '../store/reducers';
 
 class Select extends Control {
   static propTypes = {
-    disabled: PropTypes.bool,
-    id: PropTypes.string,
-    model: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(
       PropTypes.oneOfType([
         PropTypes.shape({
@@ -32,12 +29,11 @@ class Select extends Control {
       ]),
     ).isRequired,
     placeholder: PropTypes.string,
-    style: PropTypes.string,
     value: PropTypes.string,
   };
 
   render() {
-    const {disabled, id, options, placeholder, style, value} = this.props;
+    const {options, placeholder, value} = this.props;
 
     const mappedOptions = options.map(option => {
       if ('group' in option) {
@@ -68,14 +64,7 @@ class Select extends Control {
     }
 
     return (
-      <select
-        className={this.getClassName()}
-        disabled={disabled}
-        id={id}
-        onChange={e => this.onChange(e.target.value)}
-        style={style}
-        value={value || ''}
-      >
+      <select onChange={e => this.onChange(e.target.value)} value={value || ''} {...this.properties()}>
         {mappedOptions}
       </select>
     );

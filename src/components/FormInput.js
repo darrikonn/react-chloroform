@@ -19,18 +19,15 @@ class FormInput extends Control {
   };
 
   render() {
-    const {disabled, id, placeholder, style, type, value} = this.props;
+    const {placeholder, type, value} = this.props;
 
     return (
       <input
-        className={this.getClassName()}
-        disabled={disabled}
-        id={id}
         onChange={e => this.onChange(e.target.value)}
         placeholder={placeholder}
-        style={style}
         type={type}
         value={value}
+        {...this.properties()}
       />
     );
   }

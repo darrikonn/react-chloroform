@@ -35,6 +35,10 @@ All controls share the following properties:
   ```javascript
   id="age_1337"
   ```
+- **disabled**: optional boolean if the control should be disabled, e.g.
+  ```javascript
+  disabled={true}
+  ```
 
 <hr />
 
