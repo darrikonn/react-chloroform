@@ -206,6 +206,11 @@ This is the wrapper form needed to collect the user input.
   ```javascript
   onSubmit={model => console.log(model)}
   ```
+- **onChange**: an optional function that allows you to catch the on change event, e.g.
+  ```javascript
+  onChange={model => console.log(model)}
+  ```
+
 #### Example
 ```javascript
 const initialState = {

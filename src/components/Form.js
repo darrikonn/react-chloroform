@@ -14,6 +14,7 @@ class Form extends Component {
     hasFormErrors: PropTypes.bool,
     initialState: PropTypes.shape({}),
     initializeState: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
     onReset: PropTypes.func,
     onSubmit: PropTypes.func.isRequired,
     resetSubmit: PropTypes.func.isRequired,
@@ -26,12 +27,17 @@ class Form extends Component {
 
   static defaultProps = {
     initialState: {},
+    onChange: function() {},
     onReset: function() {},
   };
 
   componentDidMount() {
     this.props.initializeState(this.props.initialState);
   }
+
+  handleChange = e => {
+    this.props.onChange(e);
+  };
 
   handleSubmit = async e => {
     e.preventDefault();
@@ -70,6 +76,7 @@ class Form extends Component {
     return (
       <form
         className={className}
+        onChange={this.handleChange}
         onReset={this.handleReset}
         onSubmit={this.handleSubmit}
         style={style}
