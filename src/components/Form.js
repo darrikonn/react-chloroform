@@ -10,7 +10,6 @@ class Form extends Component {
   static propTypes = {
     children: PropTypes.node,
     className: PropTypes.string,
-    disabled: PropTypes.bool,
     errors: PropTypes.shape({}),
     hasFormErrors: PropTypes.bool,
     initialState: PropTypes.shape({}),
@@ -66,12 +65,11 @@ class Form extends Component {
   };
 
   render() {
-    const {children, className, disabled, style} = this.props;
+    const {children, className, style} = this.props;
 
     return (
       <form
         className={className}
-        disabled={disabled}
         onReset={this.handleReset}
         onSubmit={this.handleSubmit}
         style={style}
