@@ -9,6 +9,7 @@ import {
   SET_GROUP,
   SET_PENDING,
   SET_VALUE,
+  SHOW_ERRORS,
   UPDATE_VALUE,
 } from '../action-types';
 
@@ -43,6 +44,8 @@ export default (state = Immutable.Map(), action) => {
       return state.updateIn([payload.model, 'pending'], isPending => !isPending);
     case SET_VALUE:
       return state.setIn([payload.model, 'value'], Immutable.fromJS(payload.value));
+    case SHOW_ERRORS:
+      return state.map(model => model.set('validated', true));
     case UPDATE_VALUE:
       return state.updateIn([payload.model, 'value'], (lis = Immutable.List()) =>
         lis.push(Immutable.fromJS(payload.value)),

@@ -9,4 +9,5 @@ export const SET_PENDING = 'SET_PENDING';
 export const SET_SUBMITTING = 'SET_SUBMITTING';
 export const SET_SUBMIT_FAILED = 'SET_SUBMIT_FAILED';
 export const SET_VALUE = 'SET_VALUE';
+export const SHOW_ERRORS = 'SHOW_ERRORS';
 export const UPDATE_VALUE = 'UPDATE_VALUE';

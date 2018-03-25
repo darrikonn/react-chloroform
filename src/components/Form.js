@@ -4,13 +4,12 @@ import PropTypes from 'prop-types';
 import controlActions from '../actions/controls';
 import formActions from '../actions/form';
 import {withNewLocalStore, connect} from '../store';
-import reducers, {getFormValues, getFormErrors, hasFormErrors} from '../store/reducers';
+import reducers, {getFormValues, hasFormErrors} from '../store/reducers';
 
 class Form extends Component {
   static propTypes = {
     children: PropTypes.node,
     className: PropTypes.string,
-    errors: PropTypes.shape({}),
     hasFormErrors: PropTypes.bool,
     initialState: PropTypes.shape({}),
     initializeState: PropTypes.func.isRequired,
@@ -22,6 +21,7 @@ class Form extends Component {
     resetValues: PropTypes.func.isRequired,
     setSubmitFailed: PropTypes.func.isRequired,
     setSubmitting: PropTypes.func.isRequired,
+    showErrors: PropTypes.func.isRequired,
     style: PropTypes.string,
     values: PropTypes.shape({}),
   };
@@ -44,11 +44,10 @@ class Form extends Component {
   handleSubmit = async e => {
     e.preventDefault();
 
-    const {values, errors, hasFormErrors} = this.props;
+    const {values, hasFormErrors} = this.props;
 
     if (hasFormErrors) {
-      console.log('here', errors.toJS(), hasFormErrors);
-      // TODO: this.props.showErrors();
+      this.props.showErrors();
       return;
     }
 
@@ -89,7 +88,6 @@ class Form extends Component {
 }
 
 const mapStateToProps = state => ({
-  errors: getFormErrors(state),
   hasFormErrors: hasFormErrors(state),
   values: getFormValues(state),
 });
@@ -98,6 +96,7 @@ const mapDispatchToProps = {
   initializeState: controlActions.initializeState,
   resetValues: controlActions.resetValues,
   setPending: controlActions.setPending,
+  showErrors: controlActions.showErrors,
 
   resetSubmit: formActions.resetSubmit,
   setSubmitFailed: formActions.setSubmitFailed,

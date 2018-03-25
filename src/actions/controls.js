@@ -8,6 +8,7 @@ import {
   SET_GROUP,
   SET_PENDING,
   SET_VALUE,
+  SHOW_ERRORS,
   UPDATE_VALUE,
 } from '../store/action-types';
 
@@ -20,6 +21,7 @@ const actions = {
   [SET_GROUP]: (model, group) => ({model, group}),
   [SET_PENDING]: (model, pending = true) => ({model, pending}),
   [SET_VALUE]: (model, value) => ({model, value}),
+  [SHOW_ERRORS]: () => {},
   [UPDATE_VALUE]: (model, value) => ({model, value}),
 };
 
