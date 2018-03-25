@@ -20,7 +20,7 @@ Button.propTypes = {
 };
 
 const mapStateToProps = (state, {type, disabled}) => ({
-  disabled: (type === 'submit' && hasFormErrors(state)) || disabled,
+  disabled: (type === 'submit' && hasFormErrors(state) && disabled !== false) || disabled,
 });
 
 export default connect(mapStateToProps)(Button);
