@@ -55,7 +55,8 @@ class Checkbox extends Control {
     } else if (groupModels.get(ALL)) {
       this.onChange(
         isChecked &&
-          groupModels.filter((m, key) => key !== ALL && key !== model && m.get('value')).size === groupModels.size - 2,
+          groupModels.filter((m, key) => key !== ALL && key !== model && m.get('value')).size ===
+            groupModels.size - 2,
         ALL,
       );
     }
@@ -64,7 +65,14 @@ class Checkbox extends Control {
   render() {
     const {value} = this.props;
 
-    return <input checked={value || false} onChange={this.handleOnChange} type="checkbox" {...this.properties()} />;
+    return (
+      <input
+        checked={value || false}
+        onChange={this.handleOnChange}
+        type="checkbox"
+        {...this.properties()}
+      />
+    );
   }
 }
 

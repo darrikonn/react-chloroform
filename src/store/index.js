@@ -90,7 +90,13 @@ export const connect = (stateToProps, dispatchToProps) => WrappedComponent => {
         : {};
 
     render() {
-      return <WrappedComponent {...this.props} {...this.mapStateToProps()} {...this.mapDispatchToProps()} />;
+      return (
+        <WrappedComponent
+          {...this.props}
+          {...this.mapStateToProps()}
+          {...this.mapDispatchToProps()}
+        />
+      );
     }
   };
 };

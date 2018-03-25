@@ -40,7 +40,11 @@ class Select extends Control {
         return (
           <optgroup key={option.name} label={option.name} disabled={option.disabled}>
             {option.group.map(groupOption => (
-              <option key={groupOption.value} value={groupOption.value} disabled={groupOption.disabled}>
+              <option
+                key={groupOption.value}
+                value={groupOption.value}
+                disabled={groupOption.disabled}
+              >
                 {groupOption.name}
               </option>
             ))}
@@ -64,7 +68,11 @@ class Select extends Control {
     }
 
     return (
-      <select onChange={e => this.onChange(e.target.value)} value={value || ''} {...this.properties()}>
+      <select
+        onChange={e => this.onChange(e.target.value)}
+        value={value || ''}
+        {...this.properties()}
+      >
         {mappedOptions}
       </select>
     );

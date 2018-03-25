@@ -9,6 +9,7 @@
   "parser": "babel-eslint",
   "plugins": [
       "react",
+      "import",
       "prettier"
   ],
   "parserOptions": {
@@ -28,10 +29,10 @@
     "arrow-body-style": "off",
     "arrow-parens": "off",
     "comma-dangle": ["error", "always-multiline"],
-    "spaced-comment": 1,
+    "spaced-comment": "warn",
     "global-require": "off",
     "new-cap": "off",
-    "no-console": "off",
+    "no-console": "warn",
     "no-mixed-operators": "off",
     "no-underscore-dangle": "off",
     "function-paren-newline": "off",
@@ -49,7 +50,7 @@
       "singleQuote": true,
       "bracketSpacing": false,
       "trailingComma": "all",
-      "printWidth": 120
+      "printWidth": 100
     }]
   }
 }

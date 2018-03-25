@@ -17,7 +17,9 @@ export default (state = Immutable.Map(), action) => {
   const {payload} = action;
   switch (action.type) {
     case DELETE_VALUE: {
-      const index = (state.getIn([payload.model, 'value']) || Immutable.List()).indexOf(payload.value);
+      const index = (state.getIn([payload.model, 'value']) || Immutable.List()).indexOf(
+        payload.value,
+      );
       return index > -1 ? state.deleteIn([payload.model, 'value', index]) : state;
     }
     case INITIALIZE_STATE:

@@ -25,7 +25,8 @@ export const getGroupModels = (state, group) => fromControls.getGroupModels(stat
 
 export const getValue = (state, model) => fromControls.getValue(state.controls, model);
 
-export const hasBeenValidated = (state, model) => fromControls.hasBeenValidated(state.controls, model);
+export const hasBeenValidated = (state, model) =>
+  fromControls.hasBeenValidated(state.controls, model);
 
 export const hasError = (state, model) => fromControls.hasError(state.controls, model);
 
