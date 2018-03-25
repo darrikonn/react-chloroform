@@ -352,15 +352,20 @@ A HOC allowing you to write your own component with react-chloroform support and
   ```javascript
   onChange={e => onChange(e.target.value)}
   ```
+- **startValidating**: you can optionally bind the startValidating function to an event handler. By default, the validation will be done on mount, e.g.
+  ```javascript
+  onBlur={startValidating}
+  ```
 
 #### Example
 ```javascript
 ---
-const MyInput = ({value, onChange}) =>
+const MyInput = ({value, onChange, startValidating}) =>
   <div>
     <input
       value={value}
       onChange={e => onChange(e.target.value)}
+      onFocus={startValidating}
   </div>;
   
 export default withReactChloroform(MyInput);

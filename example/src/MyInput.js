@@ -16,7 +16,7 @@ class Errors extends React.Component {
   }
 }
 
-const MyInput = ({model, value, onChange}) =>
+const MyInput = ({model, value, onChange, startValidating}) =>
   <div>
     <label htmlFor="myInput">Custom Input: </label>
     <input
@@ -24,6 +24,7 @@ const MyInput = ({model, value, onChange}) =>
       id="myInput"
       value={value}
       onChange={e => onChange(e.target.value)}
+      onBlur={startValidating}
     />
     <ChloroformError
       model={model}
@@ -33,6 +34,7 @@ const MyInput = ({model, value, onChange}) =>
 
 MyInput.propTypes = {
   onChange: PropTypes.func.isRequired,
+  startValidating: PropTypes.func.isRequired,
   value: PropTypes.string,
   model: PropTypes.string.isRequired,
 };

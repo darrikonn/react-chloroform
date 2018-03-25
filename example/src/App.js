@@ -33,7 +33,6 @@ class App extends Component {
       darrmundur: 'true',
       cocacola: true,
       rickandmorty: 'konn',
-      custominput: 'steinn',
     };
 
     const selectOptions = [

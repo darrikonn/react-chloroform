@@ -20,7 +20,14 @@ const withReactChloroform = WrappedComponent => {
     render() {
       const {value} = this.props;
 
-      return <WrappedComponent {...this.props} onChange={this.onChange} value={value} />;
+      return (
+        <WrappedComponent
+          {...this.props}
+          onChange={this.onChange}
+          startValidating={this.markValidated}
+          value={value}
+        />
+      );
     }
   }
 
