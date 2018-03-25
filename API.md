@@ -206,6 +206,10 @@ This is the wrapper form needed to collect the user input.
   ```javascript
   onSubmit={model => console.log(model)}
   ```
+- **onSubmitFailed**: an optional function that allows you to catch if the form submit fails, e.g.
+  ```javascript
+  onSubmitFailed={error => console.log(error)}
+  ```
 - **onChange**: an optional function that allows you to catch the on change event, e.g.
   ```javascript
   onChange={model => console.log(model)}

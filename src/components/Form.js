@@ -17,6 +17,7 @@ class Form extends Component {
     onChange: PropTypes.func,
     onReset: PropTypes.func,
     onSubmit: PropTypes.func.isRequired,
+    onSubmitFailed: PropTypes.func,
     resetSubmit: PropTypes.func.isRequired,
     resetValues: PropTypes.func.isRequired,
     setSubmitFailed: PropTypes.func.isRequired,
@@ -29,6 +30,7 @@ class Form extends Component {
     initialState: {},
     onChange: function() {},
     onReset: function() {},
+    onSubmitFailed: function() {},
   };
 
   componentDidMount() {
@@ -55,11 +57,10 @@ class Form extends Component {
       this.props.setSubmitting();
       await this.props.onSubmit(values.toJS());
     } catch (err) {
-      console.log(err);
       this.props.setSubmitFailed();
+      this.props.onSubmitFailed(err);
     } finally {
       this.props.resetSubmit();
-      console.log('finally');
     }
   };
 
