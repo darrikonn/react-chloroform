@@ -1,11 +1,11 @@
 ## API
 All controls share the following properties:
 - **model**: a required string that will determine the name of your control, e.g.
-  ```javascript
+  ```jsx
   model="username"
   ```
 - **validator**: an optional array of validator functions that will validate your input. Every validator must return a string when the validation fails e.g.
-  ```javascript
+  ```jsx
   // multi line
   const isRequired = val => {
     if (val && val.length > 0) {
@@ -20,23 +20,23 @@ All controls share the following properties:
   ```
   Since the validator prop accepts an array of validators, you can have multiple validators per control.
 - **validateOn**: an optional enum (`blur`, `focus`, `input`, `mount`) that detirmines at what point the validator starts to validate. Default is `mount`, e.g.
-  ```javascript
+  ```jsx
   validateOn="blur"
   ```
 - **className**: optional for class style and compatible with CSS modules, e.g.
-  ```javascript
+  ```jsx
   className={styles.button}
   ```
 - **style**: optional for inline style, e.g.
-  ```javascript
+  ```jsx
   style={{color: 'red'}}
   ```
 - **id**: optional string to attach a label to the control, e.g.
-  ```javascript
+  ```jsx
   id="age_1337"
   ```
 - **disabled**: optional boolean if the control should be disabled, e.g.
-  ```javascript
+  ```jsx
   disabled={true}
   ```
 
@@ -47,20 +47,20 @@ All controls share the following properties:
 
 #### Attributes
 - **type**: optional string descriping the button type, default `button`, e.g.
-  ```javascript
+  ```jsx
   type="submit"
   ```
 - **text**: required string for the button text, e.g.
-```javascript
+```jsx
 text="Submit form"
 ```
 - **onClick**: optional event handler function to catch when the button was clicked, e.g.
-  ```javascript
+  ```jsx
   onClick={() => console.log('Button was clicked')}
   ```
 
 #### Example
-  ```javascript
+  ```jsx
   <Button
     type="submit"
     text="Submit"
@@ -80,11 +80,11 @@ text="Submit form"
 
 #### Attributes
 - **group**: an optional string for when you want to group checkboxes together with the reserved `all` checkbox, e.g.
-  ```javascript
+  ```jsx
   group="drinks"
   ```
   - **validation**: grouped checkboxes offer a validation. The validation must be set on the reserved `all` checkbox, e.g.
-    ```javascript
+    ```jsx
     <label htmlFor="all_1">All</label>
     <Checkbox
       model="all"
@@ -95,7 +95,7 @@ text="Submit form"
     />
     ```
 #### Example
-```javascript
+```jsx
 <label htmlFor="cocacola_1">Coca Cola</label>
 <Checkbox
   model="cocacola"
@@ -120,12 +120,12 @@ This component renders the errors from your control validation.
 
 #### Attributes
 - **component**: a required node/func that will render your errors, e.g.
-  ```javascript
+  ```jsx
   component={error => <p>{error}</p>}
   ```
 
 #### Example
-```javascript
+```jsx
 <FormInput
   model="name"
   validator={[isRequired]}
@@ -146,15 +146,15 @@ This component renders the errors from your control validation.
   - **name**: an optional string that further describes this option.
   - **value**: a required string or a number that determines the value of the option.
   - **disabled**: an optional boolean if this option should be disabled.
-  ```javascript
+  ```jsx
   options={[{name: 'Name', value: 'Value'}]}
   ```
 - **placeholder**: an optional placeholder for the input, e.g.
-  ```javascript
+  ```jsx
   placeholder="Select gender"
   ```
 #### Example
-```javascript
+```jsx
 const options = [
   {
     name: 'React',
@@ -181,15 +181,15 @@ const options = [
 
 #### Attributes
 - **placeholder**: an optional placeholder for the input, e.g.
-  ```javascript
+  ```jsx
   placeholder="Write something..."
   ```
 - **type**: your text input type, e.g.
-  ```javascript
+  ```jsx
   type="password"
   ```
 #### Example
-```javascript
+```jsx
 <FormInput
   model="email"
   type="email"
@@ -206,28 +206,28 @@ This is the wrapper form needed to collect the user input.
 
 #### Attributes
 - **initialState**: an optional object that allows you to initialise your state with prefilled values, e.g.
-  ```javascript
+  ```jsx
   initialState={{email: 'react_chloroform@reactchloroform.com', jobTitle: 'developer'}}
   ```
 - **onReset**: an optional function that allows you to catch the on reset event, e.g.
-  ```javascript
+  ```jsx
   onReset={() => console.log('Form reset called')}
   ```
 - **onSubmit**: a required function that allows you to catch the on submit event, e.g.
-  ```javascript
+  ```jsx
   onSubmit={model => console.log(model)}
   ```
 - **onSubmitFailed**: an optional function that allows you to catch if the form submit fails, e.g.
-  ```javascript
+  ```jsx
   onSubmitFailed={error => console.log(error)}
   ```
 - **onChange**: an optional function that allows you to catch the on change event, e.g.
-  ```javascript
+  ```jsx
   onChange={model => console.log(model)}
   ```
 
 #### Example
-```javascript
+```jsx
 const initialState = {
   name: 'Darri',
   age: 1337,
@@ -252,12 +252,12 @@ All radio buttons in the same group need to share the same model name.
 
 #### Attributes
 - **value**: a required string/number representing the value of the radiobutton, e.g.
-  ```javascript
+  ```jsx
   value="true"
   ```
 
 #### Example
-```javascript
+```jsx
 <label htmlFor="pepsi_2">Pepsi</label>
 <RadioButton
   id="pepsi_2"
@@ -283,22 +283,22 @@ All radio buttons in the same group need to share the same model name.
   - **name**: a required string that further describes this option.
   - **value**: a required string or a number that determines the value of the option.
   - **disabled**: an optional boolean if this option should be disabled.
-  ```javascript
+  ```jsx
   options={[{name: 'Name', value: 'Value'}]}
   ```
   - The options can also be grouped together. The following are the attributes when grouping is needed:
     - **name**: a required string that further describes this group.
     - **disabled**: an optional boolean if this group should be disabled.
     - **group**: a required array of options.
-    ```javascript
+    ```jsx
     options={[{name: 'drinks', group: [{name: 'Pepsi', value: 'pepsi'}]}
     ```
 - **placeholder**: an optional placeholder for the select, e.g.
-  ```javascript
+  ```jsx
   placeholder="Choose your option"
   ```
 #### Example
-```javascript
+```jsx
 const options = [
   {
     name: 'React',
@@ -330,20 +330,20 @@ const options = [
 
 #### Attributes
 - **cols**: an optional number specifying the width in avg character width, default 30, e.g.
-  ```javascript
+  ```jsx
   cols={10}
   ```
 - **rows**: an optional number specifying the height in lines, default 10, e.g.
-  ```javascript
+  ```jsx
   rows={5}
   ```
 - **placeholder**: an optional placeholder for the text area, e.g.
-  ```javascript
+  ```jsx
   placeholder="Write here..."
   ```
 
 #### Example
-```javascript
+```jsx
 <TextArea
   model="details"
   placeholder="Write some details..."
@@ -360,20 +360,20 @@ A HOC allowing you to write your own component with react-chloroform support and
 
 #### Attributes
 - **value**: a string/number that the HOC passes down as a prop, e.g.
-  ```javascript
+  ```jsx
   value={value}
   ```
 - **onChange**: a function that the HOC passes down as a prop, e.g.
-  ```javascript
+  ```jsx
   onChange={e => onChange(e.target.value)}
   ```
 - **startValidating**: you can optionally bind the startValidating function to an event handler. By default, the validation will be done on mount, e.g.
-  ```javascript
+  ```jsx
   onBlur={startValidating}
   ```
 
 #### Example
-```javascript
+```jsx
 ---
 const MyInput = ({value, onChange, startValidating}) =>
   <div>

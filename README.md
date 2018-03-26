@@ -23,7 +23,7 @@ yarn add react-chloroform
 ```
 
 ## Example
-```javascript
+```jsx
 import React from 'react';
 import {Form, FormInput, Button, ChloroformError} from 'react-chloroform';
 
