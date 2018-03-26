@@ -45,8 +45,6 @@ class Control extends Component {
   }
 
   onChange = (value, model = this.props.model) => {
-    const {validator} = this.props;
-    this.props.setErrors(model, parseValidators(validator, value));
     this.props.setValue(model, value);
   };
 
@@ -57,7 +55,6 @@ class Control extends Component {
 
   markValidated = () => {
     const {model} = this.props;
-
     this.props.markValidated(model);
   };
 
