@@ -23,6 +23,10 @@ export const getFormValues = state => fromControls.getValues(state.controls);
 
 export const getGroupModels = (state, group) => fromControls.getGroupModels(state.controls, group);
 
+export const getValidateOn = (state, model) => fromControls.getValidateOn(state.controls, model);
+
+export const getValidator = (state, model) => fromControls.getValidator(state.controls, model);
+
 export const getValue = (state, model) => fromControls.getValue(state.controls, model);
 
 export const hasBeenValidated = (state, model) =>

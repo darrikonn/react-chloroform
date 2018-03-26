@@ -8,6 +8,8 @@ import {
   SET_ERRORS,
   SET_GROUP,
   SET_PENDING,
+  SET_VALIDATE_ON,
+  SET_VALIDATOR,
   SET_VALUE,
   SHOW_ERRORS,
   UPDATE_VALUE,
@@ -44,6 +46,10 @@ export default (state = Immutable.Map(), action) => {
       return state.setIn([payload.model, 'group'], payload.group);
     case SET_PENDING:
       return state.updateIn([payload.model, 'pending'], isPending => !isPending);
+    case SET_VALIDATE_ON:
+      return state.setIn([payload.model, 'validateOn'], payload.validateOn);
+    case SET_VALIDATOR:
+      return state.setIn([payload.model, 'validator'], payload.validator);
     case SET_VALUE:
       return state.setIn([payload.model, 'value'], Immutable.fromJS(payload.value));
     case SHOW_ERRORS:
@@ -62,6 +68,10 @@ export const getError = (state, model) => state.getIn([model, 'errors']);
 export const getErrors = state => state.map(model => model.get('errors'));
 
 export const getGroupModels = (state, group) => state.filter(model => model.get('group') === group);
+
+export const getValidateOn = (state, model) => state.getIn([model, 'validateOn']);
+
+export const getValidator = (state, model) => state.getIn([model, 'validator']);
 
 export const getValue = (state, model) => state.getIn([model, 'value']);
 

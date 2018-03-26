@@ -83,6 +83,17 @@ text="Submit form"
   ```javascript
   group="drinks"
   ```
+  - **validation**: grouped checkboxes offer a validation. The validation must be set on the reserved `all` checkbox, e.g.
+    ```javascript
+    <label htmlFor="all_1">All</label>
+    <Checkbox
+      model="all"
+      id="all_1"
+      group="drinks"
+      validator={[isRequired]}
+      validateOn="input"
+    />
+    ```
 #### Example
 ```javascript
 <label htmlFor="cocacola_1">Coca Cola</label>

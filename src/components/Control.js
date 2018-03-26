@@ -76,8 +76,12 @@ class Control extends Component {
     };
   };
 
-  _validateModel = () => {
-    const {model, validator, value} = this.props;
+  _validateModel = (model = this.props.model, value = this.props.value) => {
+    this.validateModel(model, value);
+  };
+
+  validateModel = (model, value) => {
+    const {validator} = this.props;
     this.props.setErrors(model, parseValidators(validator, value));
   };
 }
