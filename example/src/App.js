@@ -131,6 +131,11 @@ class App extends Component {
                   model="all"
                   id="all"
                   group="drinks"
+                  validator={[val => {
+                    if (val && val.length > 0) return;
+                    return 'NEIIII';
+                  }]}
+                  validateOn="input"
                 />
               </div>
               <div>
@@ -141,6 +146,10 @@ class App extends Component {
                 <label htmlFor="pepsi">Pepsi</label>
                 <Checkbox model="pepsi" id="pepsi" group="drinks" />
               </div>
+              <ChloroformError
+                model="drinks"
+                component={({error}) => <p className={styles.error}>{error}</p>}
+              />
             </div>
             <div>
               <label htmlFor="darrmundur1">Yes</label>
