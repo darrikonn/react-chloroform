@@ -381,6 +381,7 @@ const MyInput = ({value, onChange, startValidating}) =>
       value={value}
       onChange={e => onChange(e.target.value)}
       onFocus={startValidating}
+    />
   </div>;
   
 export default withReactChloroform(MyInput);
