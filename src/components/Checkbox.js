@@ -7,7 +7,14 @@ import controlActions from '../actions/controls';
 import {ALL} from '../constants/keywords';
 import {BLUR, FOCUS, INPUT, MOUNT} from '../constants/events';
 import {connect} from '../store';
-import {getValidateOn, getValidator, getValue, getGroupModels, hasError} from '../store/reducers';
+import {
+  getGroupModels,
+  getValidateOn,
+  getValidator,
+  getValue,
+  hasBeenValidated,
+  hasError,
+} from '../store/reducers';
 
 class Checkbox extends Control {
   static propTypes = {
@@ -114,6 +121,7 @@ const mapStateToProps = (state, {group, model, validateOn, validator}) => ({
   groupValidator: validator,
   groupValue: getValue(state, group) || Immutable.List(),
   hasError: hasError(state, group),
+  isValidated: hasBeenValidated(state, group),
   validateOn: getValidateOn(state, group) || validateOn,
   validator: getValidator(state, group) || validator,
   value: getValue(state, model),
