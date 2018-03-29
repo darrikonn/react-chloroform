@@ -41,7 +41,7 @@ class Form extends Component {
     this.props.onChange(e);
   };
 
-  handleSubmit = async e => {
+  handleSubmit = e => {
     e.preventDefault();
 
     const {values, hasFormErrors} = this.props;
@@ -52,18 +52,17 @@ class Form extends Component {
     }
 
     // this.props.setPending(this.props.model);
-    try {
-      this.props.setSubmitting();
-      await this.props.onSubmit(values.toJS());
-    } catch (err) {
-      this.props.setSubmitFailed();
-      this.props.onSubmitFailed(err);
-    } finally {
-      this.props.resetSubmit();
-    }
+    this.props.setSubmitting();
+    Promise.resolve()
+      .then(() => this.props.onSubmit(values.toJS()))
+      .catch(err => {
+        this.props.setSubmitFailed();
+        this.props.onSubmitFailed(err);
+      })
+      .finally(() => this.props.resetSubmit());
   };
 
-  handleReset = async e => {
+  handleReset = e => {
     e.preventDefault();
 
     this.props.resetValues(this.props.initialState);
