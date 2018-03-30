@@ -15,79 +15,159 @@ import {
   UPDATE_VALUE,
 } from '../action-types';
 
-export default (state = Immutable.Map(), action) => {
+export default (state = {}, action) => {
   const {payload} = action;
   switch (action.type) {
     case DELETE_VALUE: {
-      const index = (state.getIn([payload.model, 'value']) || Immutable.List()).indexOf(
-        payload.value,
-      );
-      return index > -1 ? state.deleteIn([payload.model, 'value', index]) : state;
+      const previousValue = getValue(state, payload.model) || [];
+
+      return {
+        ...state,
+        [payload.model]: {
+          ...state[payload.model],
+          value: previousValue.filter(value => value !== payload.value),
+        },
+      };
     }
     case INITIALIZE_STATE:
-      return state.mergeDeep(
-        Immutable.fromJS(
-          Object.keys(payload.state).reduce(
-            (obj, k) => ({
-              ...obj,
-              [k]: {value: payload.state[k]},
-            }),
-            {},
-          ),
+      return {
+        ...state,
+        ...Object.keys(payload.state).reduce(
+          (accumulator, model) => ({
+            ...accumulator,
+            [model]: {
+              ...state[model],
+              value: payload.state[model],
+            },
+          }),
+          {},
         ),
-      );
+      };
     case MARK_VALIDATED:
-      return state.setIn([payload.model, 'validated'], true);
+      return {
+        ...state,
+        [payload.model]: {
+          ...state[payload.model],
+          validated: true,
+        },
+      };
     case RESET_VALUES:
-      return state.map((model, key) => model.set('value', payload.state[key]));
+      return {
+        ...Object.keys(state).reduce(
+          (accumulator, model) => ({
+            ...accumulator,
+            [model]: {
+              ...state[model],
+              value: payload.state[model],
+            },
+          }),
+          {},
+        ),
+      };
     case SET_ERRORS:
-      return state.setIn([payload.model, 'errors'], Immutable.fromJS(payload.errors));
+      return {
+        ...state,
+        [payload.model]: {
+          ...state[payload.model],
+          errors: payload.errors,
+        },
+      };
     case SET_GROUP:
-      return state.setIn([payload.model, 'group'], payload.group);
-    case SET_PENDING:
-      return state.updateIn([payload.model, 'pending'], isPending => !isPending);
+      return {
+        ...state,
+        [payload.model]: {
+          ...state[payload.model],
+          group: payload.group,
+        },
+      };
     case SET_VALIDATE_ON:
-      return state.setIn([payload.model, 'validateOn'], payload.validateOn);
+      return {
+        ...state,
+        [payload.model]: {
+          ...state[payload.model],
+          validateOn: payload.validateOn,
+        },
+      };
     case SET_VALIDATOR:
-      return state.setIn([payload.model, 'validator'], payload.validator);
+      return {
+        ...state,
+        [payload.model]: {
+          ...state[payload.model],
+          validator: payload.validator,
+        },
+      };
     case SET_VALUE:
-      return state.setIn([payload.model, 'value'], Immutable.fromJS(payload.value));
+      return {
+        ...state,
+        [payload.model]: {
+          ...state[payload.model],
+          value: payload.value,
+        },
+      };
     case SHOW_ERRORS:
-      return state.map(model => model.set('validated', true));
-    case UPDATE_VALUE:
-      return state.updateIn([payload.model, 'value'], (lis = Immutable.List()) =>
-        lis.push(Immutable.fromJS(payload.value)),
-      );
+      return {
+        ...Object.keys(state).reduce(
+          (accumulator, model) => ({
+            ...accumulator,
+            [model]: {
+              ...state[model],
+              validated: true,
+            },
+          }),
+          {},
+        ),
+      };
+    case UPDATE_VALUE: {
+      const previousValue = getValue(state, payload.model) || [];
+
+      return {
+        ...state,
+        [payload.model]: {
+          ...state[payload.model],
+          value: [...previousValue, payload.value],
+        },
+      };
+    }
     default:
       return state;
   }
 };
 
-export const getError = (state, model) => state.getIn([model, 'errors']);
+export const getError = (state, model) => (state[model] || {}).errors;
 
-export const getErrors = state => state.map(model => model.get('errors'));
+export const getGroupModels = (state, group) =>
+  Object.keys(state).reduce(
+    (accumulator, model) =>
+      state[model].group === group
+        ? {
+            ...accumulator,
+            [model]: state[model].value,
+          }
+        : accumulator,
+    {},
+  );
 
-export const getGroupModels = (state, group) => state.filter(model => model.get('group') === group);
+export const getValidateOn = (state, model) => (state[model] || {}).validateOn;
 
-export const getValidateOn = (state, model) => state.getIn([model, 'validateOn']);
+export const getValidator = (state, model) => (state[model] || {}).validator;
 
-export const getValidator = (state, model) => state.getIn([model, 'validator']);
+export const getValue = (state, model) => (state[model] || {}).value;
 
-export const getValue = (state, model) => state.getIn([model, 'value']);
+export const getValues = state =>
+  Object.keys(state).reduce(
+    (accumulator, model) => ({
+      ...accumulator,
+      [model]: state[model].value,
+    }),
+    {},
+  );
 
-export const getValues = state => state.map(model => model.get('value'));
-
-export const hasBeenValidated = (state, model) => state.getIn([model, 'validated']);
+export const hasBeenValidated = (state, model) => (state[model] || {}).validated;
 
 export const hasError = (state, model) => {
-  const errors = state.getIn([model, 'errors']);
-  return errors !== undefined && !errors.isEmpty();
+  const errors = getError(state, model);
+  return errors !== undefined && errors.length > 0;
 };
 
 export const hasErrors = state =>
-  !state
-    .filter(model => {
-      const errors = model.get('errors');
-      return errors !== undefined && !errors.isEmpty();
-    })
-    .isEmpty();
+  Object.keys(state).filter(model => hasError(state, model)).length > 0;
