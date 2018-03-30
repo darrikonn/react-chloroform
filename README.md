@@ -44,12 +44,12 @@ const YourFormComponent = () => {
       <div>
         <label htmlFor="email_1">Email: </label>
         <FormInput model="email" id="email_1" validator={[isRequired]} />
-        <ChloroformError model="email" component={error => <p>{error}</p>} />
+        <ChloroformError model="email" component={({error}) => <p>{error}</p>} />
       </div>
 
       <div>
         <label htmlFor="name_1">Name: </label>
-        <FormInput name="name" id="name_1" />
+        <FormInput model="name" id="name_1" />
       </div>
 
       <div>

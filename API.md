@@ -121,7 +121,7 @@ This component renders the errors from your control validation.
 #### Attributes
 - **component**: a required node/func that will render your errors, e.g.
   ```jsx
-  component={error => <p>{error}</p>}
+  component={({error}) => <p>{error}</p>}
   ```
 
 #### Example
