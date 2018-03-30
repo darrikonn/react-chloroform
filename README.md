@@ -11,6 +11,8 @@
 ## Why
 > "No hooking up, super lightweight, and easy to use".
 
+A form validation library with only `react` and `prop-types` as its dependency.
+
 ## Install
 To install this package, run:
 ```

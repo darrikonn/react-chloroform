@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Immutable from 'immutable';
 
 import {connect} from '../store';
 import {getError, hasBeenValidated} from '../store/reducers';
@@ -15,7 +14,7 @@ const ChloroformError = ({error, showError, component}) => {
 
 ChloroformError.propTypes = {
   component: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired,
-  error: PropTypes.instanceOf(Immutable.List),
+  error: PropTypes.arrayOf(PropTypes.string),
   model: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
   showError: PropTypes.bool,
 };

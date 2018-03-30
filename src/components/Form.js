@@ -54,7 +54,7 @@ class Form extends Component {
     // this.props.setPending(this.props.model);
     this.props.setSubmitting();
     Promise.resolve()
-      .then(() => this.props.onSubmit(values.toJS()))
+      .then(() => this.props.onSubmit(values))
       .catch(err => {
         this.props.setSubmitFailed();
         this.props.onSubmitFailed(err);

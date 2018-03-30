@@ -1,5 +1,3 @@
-import Immutable from 'immutable';
-
 import {
   DELETE_VALUE,
   INITIALIZE_STATE,

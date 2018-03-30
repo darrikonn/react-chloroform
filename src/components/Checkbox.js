@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Immutable from 'immutable';
 
 import Control from './Control';
 import controlActions from '../actions/controls';
@@ -20,10 +19,10 @@ class Checkbox extends Control {
   static propTypes = {
     deleteValue: PropTypes.func.isRequired,
     group: PropTypes.string,
-    groupModels: PropTypes.instanceOf(Immutable.Map),
+    groupModels: PropTypes.shape({}),
     groupValidateOn: PropTypes.string,
     groupValidator: PropTypes.arrayOf(PropTypes.func),
-    groupValue: PropTypes.instanceOf(Immutable.List),
+    groupValue: PropTypes.arrayOf(PropTypes.string),
     markValidated: PropTypes.func.isRequired,
     model: PropTypes.string.isRequired,
     setGroup: PropTypes.func.isRequired,
@@ -66,7 +65,7 @@ class Checkbox extends Control {
 
   _validateModel = () => {
     const {group, groupValue} = this.props;
-    this.validateModel(group, groupValue.toJS());
+    this.validateModel(group, groupValue);
   };
 
   markValidated = () => {
@@ -87,13 +86,14 @@ class Checkbox extends Control {
 
   handleOnGroupChange = isChecked => {
     const {groupModels, model} = this.props;
+    const groupModelKeys = Object.keys(groupModels);
     if (model === ALL) {
-      groupModels.keySeq().forEach(m => this.onChange(isChecked, m));
-    } else if (groupModels.get(ALL)) {
+      groupModelKeys.forEach(m => this.onChange(isChecked, m));
+    } else if (ALL in groupModels) {
       this.onChange(
         isChecked &&
-          groupModels.filter((m, key) => key !== ALL && key !== model && m.get('value')).size ===
-            groupModels.size - 2,
+          groupModelKeys.filter(m => m !== ALL && m !== model && groupModels[m]).length ===
+            groupModelKeys.length - 2,
         ALL,
       );
     }
@@ -119,7 +119,7 @@ const mapStateToProps = (state, {group, model, validateOn, validator}) => ({
   groupModels: getGroupModels(state, group),
   groupValidateOn: validateOn,
   groupValidator: validator,
-  groupValue: getValue(state, group) || Immutable.List(),
+  groupValue: getValue(state, group),
   hasError: hasError(state, group),
   isValidated: hasBeenValidated(state, group),
   validateOn: getValidateOn(state, group) || validateOn,
