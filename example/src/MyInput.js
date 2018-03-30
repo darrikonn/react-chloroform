@@ -4,7 +4,7 @@ import {withReactChloroform, ChloroformError} from 'react-chloroform';
 
 class Errors extends React.Component {
   static propTypes = {
-    error: PropTypes.object.isRequired,
+    error: PropTypes.arrayOf(PropTypes.string).isRequired,
   };
 
   render() {
