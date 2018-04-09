@@ -1,0 +1,22 @@
+body {
+  background: #20262E;
+  padding: 20px;
+  font-family: Helvetica;
+}
+
+#root {
+  background: #fff;
+  border-radius: 4px;
+  padding: 20px;
+  transition: all 0.2s;
+}
+
+.fieldError {
+  color: #a94442;
+}
+
+.error {
+  border-color: #a94442 !important;
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0,0,0,.075) !important;
+  box-shadow: 0 0 0 0.2rem rgba(0,0,0,.075) !important;
+}

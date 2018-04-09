@@ -24,7 +24,9 @@ npm install --save react-chloroform
 yarn add react-chloroform
 ```
 
-## Example
+## Examples
+
+### Quick Start
 ```jsx
 import React from 'react';
 import {Form, FormInput, Button, ChloroformError} from 'react-chloroform';
@@ -61,6 +63,9 @@ const YourFormComponent = () => {
 
 export default YourFormComponent;
 ```
+
+### Fiddles
+- https://jsfiddle.net/xz5049a5/
 
 ## API
 Check out the [api](https://github.com/darrikonn/react-chloroform/blob/master/API.md).
