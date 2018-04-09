@@ -24,9 +24,19 @@ npm install --save react-chloroform
 yarn add react-chloroform
 ```
 
+You can also use the `UMD` build:
+```
+<script src="path-to-react-chloroform/dist/react-chloroform.min.js"></script>
+```
+
+Or alternatively the `es5 commonjs` build:
+```
+<script src="path-to-react-chloroform/lib/react-chloroform.js"></script>
+```
+
 ## Examples
 
-### Quick Start
+### Quick start
 ```jsx
 import React from 'react';
 import {Form, FormInput, Button, ChloroformError} from 'react-chloroform';
@@ -65,7 +75,9 @@ export default YourFormComponent;
 ```
 
 ### Fiddles
-- https://jsfiddle.net/xz5049a5/
+All source code for the examples can be found [here](https://github.com/darrikonn/react-chloroform/tree/master/examples).
+
+- [Example 1](https://jsfiddle.net/xz5049a5/)
 
 ## API
 Check out the [api](https://github.com/darrikonn/react-chloroform/blob/master/API.md).
