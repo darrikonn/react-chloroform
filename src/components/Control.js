@@ -49,8 +49,15 @@ class Control extends Component {
   };
 
   getClassName = () => {
-    const {className, hasError, isValidated} = this.props;
-    return [className, hasError && isValidated ? 'error' : undefined].join(' ').trim();
+    const {className, hasError, isValidated, model} = this.props;
+    return [
+      className,
+      hasError && isValidated
+        ? `react-chloroform-error ${model}-react-chloroform-error`
+        : undefined,
+    ]
+      .join(' ')
+      .trim();
   };
 
   markValidated = () => {

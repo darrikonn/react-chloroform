@@ -7,7 +7,7 @@
   color: blue;
 }
 
-:global(.error) {
+:global(.react-chloroform-error) {
   outline: 2px solid red;
 }
 
