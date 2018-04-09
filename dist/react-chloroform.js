@@ -2847,9 +2847,10 @@ var Control = function (_Component) {
       var _this$props = _this.props,
           className = _this$props.className,
           hasError = _this$props.hasError,
-          isValidated = _this$props.isValidated;
+          isValidated = _this$props.isValidated,
+          model = _this$props.model;
 
-      return [className, hasError && isValidated ? 'error' : undefined].join(' ').trim();
+      return [className, hasError && isValidated ? 'react-chloroform-error ' + model + '-react-chloroform-error' : undefined].join(' ').trim();
     };
 
     _this.markValidated = function () {
@@ -3703,11 +3704,16 @@ var withReactChloroform = function withReactChloroform(WrappedComponent) {
     _createClass(CustomControl, [{
       key: 'render',
       value: function render() {
-        var value = this.props.value;
+        var _props = this.props,
+            error = _props.error,
+            isValidated = _props.isValidated,
+            value = _props.value;
 
 
         return React__default.createElement(WrappedComponent, _extends$1({}, this.props, {
+          error: error,
           onChange: this.onChange,
+          showError: isValidated,
           startValidating: this.markValidated,
           value: value
         }));
@@ -3718,6 +3724,8 @@ var withReactChloroform = function withReactChloroform(WrappedComponent) {
   }(Control);
 
   CustomControl.propTypes = {
+    error: propTypes.arrayOf(propTypes.string),
+    isValidated: propTypes.bool,
     model: propTypes.string.isRequired,
     value: propTypes.oneOfType([propTypes.string, propTypes.number])
   };
@@ -3729,6 +3737,7 @@ var withReactChloroform = function withReactChloroform(WrappedComponent) {
   var mapStateToProps = function mapStateToProps(state, _ref) {
     var model = _ref.model;
     return {
+      error: getError(state, model),
       hasError: hasError(state, model),
       isValidated: hasBeenValidated(state, model),
       value: getValue(state, model)
