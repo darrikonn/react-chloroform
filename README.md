@@ -77,7 +77,7 @@ export default YourFormComponent;
 ### Fiddles
 All source code for the examples can be found [here](https://github.com/darrikonn/react-chloroform/tree/master/examples).
 
-- [Example 1](https://jsfiddle.net/xz5049a5/)
+- [Example 1](https://jsfiddle.net/cp23evbm/)
 
 ## API
 Check out the [api](https://github.com/darrikonn/react-chloroform/blob/master/API.md).
