@@ -57,6 +57,4 @@ typings/
 .DS_Store
 
 .idea
-dist
-lib
 es
