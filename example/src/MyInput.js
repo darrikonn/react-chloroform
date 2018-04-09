@@ -1,22 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withReactChloroform, ChloroformError} from 'react-chloroform';
+import {withReactChloroform} from 'react-chloroform';
 
-class Errors extends React.Component {
-  static propTypes = {
-    error: PropTypes.arrayOf(PropTypes.string).isRequired,
-  };
-
-  render() {
-    const {error} = this.props;
-
-    return (
-      <p style={{color: 'red', fontSize: '10px'}}>{error}</p>
-    );
-  }
-}
-
-const MyInput = ({model, value, onChange, startValidating}) =>
+const MyInput = ({model, value, onChange, startValidating, showError, error}) =>
   <div>
     <label htmlFor="myInput">Custom Input: </label>
     <input
@@ -26,13 +12,14 @@ const MyInput = ({model, value, onChange, startValidating}) =>
       onChange={e => onChange(e.target.value)}
       onBlur={startValidating}
     />
-    <ChloroformError
-      model={model}
-      component={Errors}
-    />
+    {showError && error && <div>
+      <p style={{color: 'red', fontSize: '10px'}}>{error}</p>
+    </div>}
   </div>;
 
 MyInput.propTypes = {
+  error: PropTypes.arrayOf(PropTypes.string),
+  showError: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   startValidating: PropTypes.func.isRequired,
   value: PropTypes.string,

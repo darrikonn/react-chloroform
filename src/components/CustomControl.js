@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 import Control from './Control';
 import controlActions from '../actions/controls';
 import {connect} from '../store';
-import {getValue, hasBeenValidated, hasError} from '../store/reducers';
+import {getError, getValue, hasBeenValidated, hasError} from '../store/reducers';
 
 const withReactChloroform = WrappedComponent => {
   class CustomControl extends Control {
     static propTypes = {
+      error: PropTypes.arrayOf(PropTypes.string),
+      isValidated: PropTypes.bool,
       model: PropTypes.string.isRequired,
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     };
@@ -18,12 +20,14 @@ const withReactChloroform = WrappedComponent => {
     };
 
     render() {
-      const {value} = this.props;
+      const {error, isValidated, value} = this.props;
 
       return (
         <WrappedComponent
           {...this.props}
+          error={error}
           onChange={this.onChange}
+          showError={isValidated}
           startValidating={this.markValidated}
           value={value}
         />
@@ -32,6 +36,7 @@ const withReactChloroform = WrappedComponent => {
   }
 
   const mapStateToProps = (state, {model}) => ({
+    error: getError(state, model),
     hasError: hasError(state, model),
     isValidated: hasBeenValidated(state, model),
     value: getValue(state, model),
