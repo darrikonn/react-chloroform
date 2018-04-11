@@ -14,14 +14,8 @@ class TextArea extends Control {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   };
 
-  static defaultProps = {
-    cols: 30,
-    rows: 10,
-    value: '',
-  };
-
   render() {
-    const {cols, placeholder, rows, value} = this.props;
+    const {cols = 30, placeholder, rows = 10, value = ''} = this.props;
 
     return (
       <textarea

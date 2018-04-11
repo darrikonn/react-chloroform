@@ -13,13 +13,8 @@ class FormInput extends Control {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   };
 
-  static defaultProps = {
-    type: 'text',
-    value: '',
-  };
-
   render() {
-    const {placeholder, type, value} = this.props;
+    const {placeholder, type = 'text', value = ''} = this.props;
 
     return (
       <input

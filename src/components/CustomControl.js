@@ -15,12 +15,8 @@ const withReactChloroform = WrappedComponent => {
       value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     };
 
-    static defaultProps = {
-      value: '',
-    };
-
     render() {
-      const {error, isValidated, value} = this.props;
+      const {error, isValidated, value = ''} = this.props;
 
       return (
         <WrappedComponent

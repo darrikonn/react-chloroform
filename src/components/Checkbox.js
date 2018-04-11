@@ -32,8 +32,6 @@ class Checkbox extends Control {
     value: PropTypes.bool,
   };
 
-  static defaultProps = {};
-
   componentDidMount() {
     const {group, groupValidateOn = MOUNT, groupValidator, model} = this.props;
     this.props.setGroup(model, group);
