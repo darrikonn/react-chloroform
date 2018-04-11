@@ -39,6 +39,10 @@ All controls share the following properties:
   ```jsx
   disabled={true}
   ```
+- **onChange**: an optional function that allows you to catch the on change event, e.g.
+  ```jsx
+  onChange={(model, value) => console.log(model, value)}
+  ```
 
 <hr />
 

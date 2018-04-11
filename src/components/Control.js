@@ -13,6 +13,7 @@ class Control extends Component {
     isValidated: PropTypes.bool,
     markValidated: PropTypes.func.isRequired,
     model: PropTypes.string.isRequired,
+    onChange: PropTypes.func,
     setErrors: PropTypes.func.isRequired,
     setValue: PropTypes.func.isRequired,
     style: PropTypes.string,
@@ -22,6 +23,7 @@ class Control extends Component {
   };
 
   static defaultProps = {
+    onChange: function() {},
     validator: [],
   };
 
@@ -46,6 +48,7 @@ class Control extends Component {
 
   onChange = (value, model = this.props.model) => {
     this.props.setValue(model, value);
+    this.props.onChange(model, value);
   };
 
   getClassName = () => {
