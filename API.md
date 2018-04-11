@@ -205,6 +205,10 @@ const options = [
 This is the wrapper form needed to collect the user input.
 
 #### Attributes
+- **afterSubmitState**: an optional object that allows you to re-initialise your state with prefilled values after submit, e.g.
+  ```jsx
+  afterSubmitState={{email: '', jobTitle: 'developer'}}
+  ```
 - **initialState**: an optional object that allows you to initialise your state with prefilled values, e.g.
   ```jsx
   initialState={{email: 'react_chloroform@reactchloroform.com', jobTitle: 'developer'}}

@@ -8,6 +8,7 @@ import reducers, {getFormValues, hasFormErrors} from '../store/reducers';
 
 class Form extends Component {
   static propTypes = {
+    afterSubmitState: PropTypes.shape({}),
     children: PropTypes.node,
     className: PropTypes.string,
     hasFormErrors: PropTypes.bool,
@@ -27,6 +28,7 @@ class Form extends Component {
   };
 
   static defaultProps = {
+    afterSubmitState: {},
     initialState: {},
     onChange: function() {},
     onReset: function() {},
@@ -44,7 +46,7 @@ class Form extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const {values, hasFormErrors} = this.props;
+    const {afterSubmitState, values, hasFormErrors} = this.props;
 
     if (hasFormErrors) {
       this.props.showErrors();
@@ -55,6 +57,7 @@ class Form extends Component {
     this.props.setSubmitting();
     Promise.resolve()
       .then(() => this.props.onSubmit(values))
+      .then(() => this.props.initializeState(afterSubmitState))
       .catch(err => {
         this.props.setSubmitFailed();
         this.props.onSubmitFailed(err);
