@@ -23,11 +23,10 @@ class Checkbox extends Control {
     groupValidateOn: PropTypes.string,
     groupValidator: PropTypes.arrayOf(PropTypes.func),
     groupValue: PropTypes.arrayOf(PropTypes.string),
+    initializeGroup: PropTypes.func.isRequired,
     markValidated: PropTypes.func.isRequired,
     model: PropTypes.string.isRequired,
     setGroup: PropTypes.func.isRequired,
-    setValidateOn: PropTypes.func.isRequired,
-    setValidator: PropTypes.func.isRequired,
     updateValue: PropTypes.func.isRequired,
     validateOn: PropTypes.oneOf([BLUR, FOCUS, INPUT, MOUNT]),
     value: PropTypes.bool,
@@ -40,8 +39,7 @@ class Checkbox extends Control {
     this.props.setGroup(model, group);
 
     if (group && model === ALL) {
-      this.props.setValidator(group, groupValidator);
-      this.props.setValidateOn(group, groupValidateOn);
+      this.props.initializeGroup(group, groupValidator, groupValidateOn);
 
       super.componentDidMount();
     }
@@ -129,11 +127,10 @@ const mapStateToProps = (state, {group, model, validateOn, validator}) => ({
 
 const mapDispatchToProps = {
   deleteValue: controlActions.deleteValue,
+  initializeGroup: controlActions.initializeGroup,
   markValidated: controlActions.markValidated,
   setErrors: controlActions.setErrors,
   setGroup: controlActions.setGroup,
-  setValidateOn: controlActions.setValidateOn,
-  setValidator: controlActions.setValidator,
   setValue: controlActions.setValue,
   updateValue: controlActions.updateValue,
 };

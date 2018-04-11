@@ -1,12 +1,11 @@
 import {
   DELETE_VALUE,
+  INITIALIZE_GROUP,
   INITIALIZE_STATE,
   MARK_VALIDATED,
   RESET_VALUES,
   SET_ERRORS,
   SET_GROUP,
-  SET_VALIDATE_ON,
-  SET_VALIDATOR,
   SET_VALUE,
   SHOW_ERRORS,
   UPDATE_VALUE,
@@ -26,6 +25,16 @@ export default (state = {}, action) => {
         },
       };
     }
+    case INITIALIZE_GROUP:
+      return {
+        ...state,
+        [payload.group]: {
+          skipReset: true,
+          validateOn: payload.validateOn,
+          validator: payload.validator,
+          value: [],
+        },
+      };
     case INITIALIZE_STATE:
       return {
         ...state,
@@ -55,7 +64,7 @@ export default (state = {}, action) => {
             ...accumulator,
             [model]: {
               ...state[model],
-              value: payload.state[model],
+              value: state[model].skipReset ? state[model].value : payload.state[model],
             },
           }),
           {},
@@ -75,22 +84,6 @@ export default (state = {}, action) => {
         [payload.model]: {
           ...state[payload.model],
           group: payload.group,
-        },
-      };
-    case SET_VALIDATE_ON:
-      return {
-        ...state,
-        [payload.model]: {
-          ...state[payload.model],
-          validateOn: payload.validateOn,
-        },
-      };
-    case SET_VALIDATOR:
-      return {
-        ...state,
-        [payload.model]: {
-          ...state[payload.model],
-          validator: payload.validator,
         },
       };
     case SET_VALUE:
