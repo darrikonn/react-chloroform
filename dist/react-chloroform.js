@@ -2484,6 +2484,7 @@ exports.default = function (arr) {
 var _toConsumableArray = unwrapExports(toConsumableArray);
 
 var DELETE_VALUE = 'DELETE_VALUE';
+var INITIALIZE_GROUP = 'INITIALIZE_GROUP';
 var INITIALIZE_STATE = 'INITIALIZE_STATE';
 var MARK_VALIDATED = 'MARK_VALIDATED';
 var RESET_SUBMIT = 'RESET_SUBMIT';
@@ -2492,8 +2493,6 @@ var SET_ERRORS = 'SET_ERRORS';
 var SET_GROUP = 'SET_GROUP';
 var SET_SUBMITTING = 'SET_SUBMITTING';
 var SET_SUBMIT_FAILED = 'SET_SUBMIT_FAILED';
-var SET_VALIDATE_ON = 'SET_VALIDATE_ON';
-var SET_VALIDATOR = 'SET_VALIDATOR';
 var SET_VALUE = 'SET_VALUE';
 var SHOW_ERRORS = 'SHOW_ERRORS';
 var UPDATE_VALUE = 'UPDATE_VALUE';
@@ -2514,6 +2513,13 @@ var controls = (function () {
           })
         })));
       }
+    case INITIALIZE_GROUP:
+      return _extends$1({}, state, _defineProperty({}, payload.group, {
+        skipReset: true,
+        validateOn: payload.validateOn,
+        validator: payload.validator,
+        value: []
+      }));
     case INITIALIZE_STATE:
       return _extends$1({}, state, Object.keys(payload.state).reduce(function (accumulator, model) {
         return _extends$1({}, accumulator, _defineProperty({}, model, _extends$1({}, state[model], {
@@ -2527,7 +2533,7 @@ var controls = (function () {
     case RESET_VALUES:
       return _extends$1({}, Object.keys(state).reduce(function (accumulator, model) {
         return _extends$1({}, accumulator, _defineProperty({}, model, _extends$1({}, state[model], {
-          value: payload.state[model]
+          value: state[model].skipReset ? state[model].value : payload.state[model]
         })));
       }, {}));
     case SET_ERRORS:
@@ -2537,14 +2543,6 @@ var controls = (function () {
     case SET_GROUP:
       return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
         group: payload.group
-      })));
-    case SET_VALIDATE_ON:
-      return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
-        validateOn: payload.validateOn
-      })));
-    case SET_VALIDATOR:
-      return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
-        validator: payload.validator
       })));
     case SET_VALUE:
       return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
@@ -2841,6 +2839,7 @@ var Control = function (_Component) {
       var model = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _this.props.model;
 
       _this.props.setValue(model, value);
+      _this.props.onChange(model, value);
     };
 
     _this.getClassName = function () {
@@ -2861,6 +2860,7 @@ var Control = function (_Component) {
 
     _this.properties = function () {
       var _this$props2 = _this.props,
+          autoFocus = _this$props2.autoFocus,
           disabled = _this$props2.disabled,
           id = _this$props2.id,
           style = _this$props2.style,
@@ -2868,6 +2868,7 @@ var Control = function (_Component) {
 
 
       return {
+        autoFocus: autoFocus,
         className: _this.getClassName(),
         disabled: disabled,
         id: id,
@@ -2920,6 +2921,7 @@ var Control = function (_Component) {
 }(React.Component);
 
 Control.propTypes = {
+  autoFocus: propTypes.bool,
   className: propTypes.string,
   disabled: propTypes.bool,
   hasError: propTypes.bool,
@@ -2927,6 +2929,7 @@ Control.propTypes = {
   isValidated: propTypes.bool,
   markValidated: propTypes.func.isRequired,
   model: propTypes.string.isRequired,
+  onChange: propTypes.func,
   setErrors: propTypes.func.isRequired,
   setValue: propTypes.func.isRequired,
   style: propTypes.string,
@@ -2935,6 +2938,7 @@ Control.propTypes = {
   value: propTypes.oneOfType([propTypes.string, propTypes.number])
 };
 Control.defaultProps = {
+  onChange: function onChange() {},
   validator: []
 };
 
@@ -2967,6 +2971,8 @@ var _actions;
 
 var actions = (_actions = {}, _defineProperty(_actions, DELETE_VALUE, function (model, value) {
   return { model: model, value: value };
+}), _defineProperty(_actions, INITIALIZE_GROUP, function (group, validator, validateOn) {
+  return { group: group, validator: validator, validateOn: validateOn };
 }), _defineProperty(_actions, INITIALIZE_STATE, function (state) {
   return { state: state };
 }), _defineProperty(_actions, MARK_VALIDATED, function (model) {
@@ -2977,10 +2983,6 @@ var actions = (_actions = {}, _defineProperty(_actions, DELETE_VALUE, function (
   return { model: model, errors: errors };
 }), _defineProperty(_actions, SET_GROUP, function (model, group) {
   return { model: model, group: group };
-}), _defineProperty(_actions, SET_VALIDATE_ON, function (model, validateOn) {
-  return { model: model, validateOn: validateOn };
-}), _defineProperty(_actions, SET_VALIDATOR, function (model, validator) {
-  return { model: model, validator: validator };
 }), _defineProperty(_actions, SET_VALUE, function (model, value) {
   return { model: model, value: value };
 }), _defineProperty(_actions, SHOW_ERRORS, function () {}), _defineProperty(_actions, UPDATE_VALUE, function (model, value) {
@@ -3058,8 +3060,7 @@ var Checkbox = function (_Control) {
       this.props.setGroup(model, group);
 
       if (group && model === ALL) {
-        this.props.setValidator(group, groupValidator);
-        this.props.setValidateOn(group, groupValidateOn);
+        this.props.initializeGroup(group, groupValidator, groupValidateOn);
 
         _get(Checkbox.prototype.__proto__ || Object.getPrototypeOf(Checkbox.prototype), 'componentDidMount', this).call(this);
       }
@@ -3115,16 +3116,14 @@ Checkbox.propTypes = {
   groupValidateOn: propTypes.string,
   groupValidator: propTypes.arrayOf(propTypes.func),
   groupValue: propTypes.arrayOf(propTypes.string),
+  initializeGroup: propTypes.func.isRequired,
   markValidated: propTypes.func.isRequired,
   model: propTypes.string.isRequired,
   setGroup: propTypes.func.isRequired,
-  setValidateOn: propTypes.func.isRequired,
-  setValidator: propTypes.func.isRequired,
   updateValue: propTypes.func.isRequired,
   validateOn: propTypes.oneOf([BLUR, FOCUS, INPUT, MOUNT]),
   value: propTypes.bool
 };
-Checkbox.defaultProps = {};
 
 
 var mapStateToProps$1 = function mapStateToProps(state, _ref2) {
@@ -3147,11 +3146,10 @@ var mapStateToProps$1 = function mapStateToProps(state, _ref2) {
 
 var mapDispatchToProps = {
   deleteValue: controlActions.deleteValue,
+  initializeGroup: controlActions.initializeGroup,
   markValidated: controlActions.markValidated,
   setErrors: controlActions.setErrors,
   setGroup: controlActions.setGroup,
-  setValidateOn: controlActions.setValidateOn,
-  setValidator: controlActions.setValidator,
   setValue: controlActions.setValue,
   updateValue: controlActions.updateValue
 };
@@ -3282,8 +3280,10 @@ var FormInput = function (_Control) {
 
       var _props = this.props,
           placeholder = _props.placeholder,
-          type = _props.type,
-          value = _props.value;
+          _props$type = _props.type,
+          type = _props$type === undefined ? 'text' : _props$type,
+          _props$value = _props.value,
+          value = _props$value === undefined ? '' : _props$value;
 
 
       return React__default.createElement('input', _extends$1({
@@ -3304,10 +3304,6 @@ FormInput.propTypes = {
   placeholder: propTypes.string,
   type: propTypes.oneOf(['text', 'email']),
   value: propTypes.oneOfType([propTypes.string, propTypes.number])
-};
-FormInput.defaultProps = {
-  type: 'text',
-  value: ''
 };
 
 
@@ -3354,6 +3350,7 @@ var Form = function (_Component) {
       e.preventDefault();
 
       var _this$props = _this.props,
+          afterSubmitState = _this$props.afterSubmitState,
           values = _this$props.values,
           hasFormErrors$$1 = _this$props.hasFormErrors;
 
@@ -3367,6 +3364,8 @@ var Form = function (_Component) {
       _this.props.setSubmitting();
       Promise.resolve().then(function () {
         return _this.props.onSubmit(values);
+      }).then(function () {
+        return _this.props.initializeState(afterSubmitState);
       }).catch(function (err) {
         _this.props.setSubmitFailed();
         _this.props.onSubmitFailed(err);
@@ -3413,6 +3412,7 @@ var Form = function (_Component) {
 }(React.Component);
 
 Form.propTypes = {
+  afterSubmitState: propTypes.shape({}),
   children: propTypes.node,
   className: propTypes.string,
   hasFormErrors: propTypes.bool,
@@ -3431,6 +3431,7 @@ Form.propTypes = {
   values: propTypes.shape({})
 };
 Form.defaultProps = {
+  afterSubmitState: {},
   initialState: {},
   onChange: function onChange() {},
   onReset: function onReset() {},
@@ -3640,10 +3641,13 @@ var TextArea = function (_Control) {
       var _this2 = this;
 
       var _props = this.props,
-          cols = _props.cols,
+          _props$cols = _props.cols,
+          cols = _props$cols === undefined ? 30 : _props$cols,
           placeholder = _props.placeholder,
-          rows = _props.rows,
-          value = _props.value;
+          _props$rows = _props.rows,
+          rows = _props$rows === undefined ? 10 : _props$rows,
+          _props$value = _props.value,
+          value = _props$value === undefined ? '' : _props$value;
 
 
       return React__default.createElement('textarea', _extends$1({
@@ -3666,11 +3670,6 @@ TextArea.propTypes = {
   placeholder: propTypes.string,
   rows: propTypes.number,
   value: propTypes.oneOfType([propTypes.string, propTypes.number])
-};
-TextArea.defaultProps = {
-  cols: 30,
-  rows: 10,
-  value: ''
 };
 
 
@@ -3707,7 +3706,8 @@ var withReactChloroform = function withReactChloroform(WrappedComponent) {
         var _props = this.props,
             error = _props.error,
             isValidated = _props.isValidated,
-            value = _props.value;
+            _props$value = _props.value,
+            value = _props$value === undefined ? '' : _props$value;
 
 
         return React__default.createElement(WrappedComponent, _extends$1({}, this.props, {
@@ -3728,9 +3728,6 @@ var withReactChloroform = function withReactChloroform(WrappedComponent) {
     isValidated: propTypes.bool,
     model: propTypes.string.isRequired,
     value: propTypes.oneOfType([propTypes.string, propTypes.number])
-  };
-  CustomControl.defaultProps = {
-    value: ''
   };
 
 
