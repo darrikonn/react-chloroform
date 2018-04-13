@@ -35,7 +35,7 @@ Or alternatively the `es5 commonjs` build:
 ```
 
 ## Examples
-All source code for the examples can be found [here](https://github.com/darrikonn/react-chloroform/tree/master/examples).
+Refer to [`/examples`](https://github.com/darrikonn/react-chloroform/tree/master/examples) for all example source code.
 
 ### Quick start
 ```jsx
@@ -76,14 +76,14 @@ export default YourFormComponent;
 ```
 
 ### Fiddles
-- [Example 1](https://jsfiddle.net/cp23evbm/)
+- [`Example 1`](https://jsfiddle.net/cp23evbm/)
 
 ## API
-Check out the [api](https://github.com/darrikonn/react-chloroform/blob/master/API.md).
+Check out the [`api`](https://github.com/darrikonn/react-chloroform/blob/master/API.md).
 
 ## Contribution
 React-Chloroform is open for contributions by the community.
-Read the [contributing guidelines](https://github.com/darrikonn/react-chloroform/blob/master/CONTRIBUTING.md).
+Read the [`contributing guidelines`](https://github.com/darrikonn/react-chloroform/blob/master/CONTRIBUTING.md).
 
 ## Testing
 ```bash

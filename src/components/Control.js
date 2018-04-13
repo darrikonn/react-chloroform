@@ -6,6 +6,7 @@ import {parseValidators} from '../services/validators';
 
 class Control extends Component {
   static propTypes = {
+    autoFocus: PropTypes.bool,
     className: PropTypes.string,
     disabled: PropTypes.bool,
     hasError: PropTypes.bool,
@@ -69,9 +70,10 @@ class Control extends Component {
   };
 
   properties = () => {
-    const {disabled, id, style, validateOn} = this.props;
+    const {autoFocus, disabled, id, style, validateOn} = this.props;
 
     return {
+      autoFocus,
       className: this.getClassName(),
       disabled,
       id,
