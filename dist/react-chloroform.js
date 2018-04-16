@@ -2493,6 +2493,7 @@ var SET_ERRORS = 'SET_ERRORS';
 var SET_GROUP = 'SET_GROUP';
 var SET_SUBMITTING = 'SET_SUBMITTING';
 var SET_SUBMIT_FAILED = 'SET_SUBMIT_FAILED';
+var SET_SUBMIT_SUCCESSFUL = 'SET_SUBMIT_SUCCESSFUL';
 var SET_VALUE = 'SET_VALUE';
 var SHOW_ERRORS = 'SHOW_ERRORS';
 var UPDATE_VALUE = 'UPDATE_VALUE';
@@ -2610,9 +2611,12 @@ var hasErrors = function hasErrors(state) {
   }).length > 0;
 };
 
+var FAILED = 'failed';
+var SUBMITTING = 'submitting';
+var SUCCESSFUL = 'successful';
+
 var initialState = {
-  submitting: false,
-  submitFailed: false
+  status: undefined
 };
 
 var form = (function () {
@@ -2621,15 +2625,21 @@ var form = (function () {
 
   switch (action.type) {
     case SET_SUBMITTING:
-      return _extends$1({}, state, { submitting: true });
+      return _extends$1({}, state, { status: SUBMITTING });
     case SET_SUBMIT_FAILED:
-      return _extends$1({}, state, { submitFailed: true });
+      return _extends$1({}, state, { status: FAILED });
+    case SET_SUBMIT_SUCCESSFUL:
+      return _extends$1({}, state, { status: SUCCESSFUL });
     case RESET_SUBMIT:
       return initialState;
     default:
       return state;
   }
 });
+
+var getStatus = function getStatus(state) {
+  return state.status;
+};
 
 var combineReducers = function combineReducers(reducers) {
   return function () {
@@ -2646,6 +2656,16 @@ var reducers = combineReducers({
   form: form
 });
 
+/*
+ * Form
+ */
+var getFormStatus = function getFormStatus(state) {
+  return getStatus(state.form);
+};
+
+/*
+ * Controls
+ */
 var getError = function getError(state, model) {
   return getError$1(state.controls, model);
 };
@@ -3365,7 +3385,8 @@ var Form = function (_Component) {
       Promise.resolve().then(function () {
         return _this.props.onSubmit(values);
       }).then(function () {
-        return _this.props.initializeState(afterSubmitState);
+        _this.props.initializeState(afterSubmitState);
+        _this.props.setSubmitSuccessful();
       }).catch(function (err) {
         _this.props.setSubmitFailed();
         _this.props.onSubmitFailed(err);
@@ -3375,7 +3396,12 @@ var Form = function (_Component) {
     }, _this.handleReset = function (e) {
       e.preventDefault();
 
-      _this.props.resetValues(_this.props.initialState);
+      var _this$props2 = _this.props,
+          initialState = _this$props2.initialState,
+          onResetState = _this$props2.onResetState;
+
+
+      _this.props.resetValues(onResetState || initialState);
       _this.props.onReset();
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
@@ -3420,11 +3446,13 @@ Form.propTypes = {
   initializeState: propTypes.func.isRequired,
   onChange: propTypes.func,
   onReset: propTypes.func,
+  onResetState: propTypes.shape({}),
   onSubmit: propTypes.func.isRequired,
   onSubmitFailed: propTypes.func,
   resetSubmit: propTypes.func.isRequired,
   resetValues: propTypes.func.isRequired,
   setSubmitFailed: propTypes.func.isRequired,
+  setSubmitSuccessful: propTypes.func.isRequired,
   setSubmitting: propTypes.func.isRequired,
   showErrors: propTypes.func.isRequired,
   style: propTypes.string,
@@ -3454,6 +3482,7 @@ var mapDispatchToProps$3 = {
 
   resetSubmit: formActions.resetSubmit,
   setSubmitFailed: formActions.setSubmitFailed,
+  setSubmitSuccessful: formActions.setSubmitSuccessful,
   setSubmitting: formActions.setSubmitting
 };
 
@@ -3705,6 +3734,7 @@ var withReactChloroform = function withReactChloroform(WrappedComponent) {
       value: function render() {
         var _props = this.props,
             error = _props.error,
+            formStatus = _props.formStatus,
             isValidated = _props.isValidated,
             _props$value = _props.value,
             value = _props$value === undefined ? '' : _props$value;
@@ -3715,6 +3745,7 @@ var withReactChloroform = function withReactChloroform(WrappedComponent) {
           onChange: this.onChange,
           showError: isValidated,
           startValidating: this.markValidated,
+          chloroformStatus: formStatus,
           value: value
         }));
       }
@@ -3725,6 +3756,7 @@ var withReactChloroform = function withReactChloroform(WrappedComponent) {
 
   CustomControl.propTypes = {
     error: propTypes.arrayOf(propTypes.string),
+    formStatus: propTypes.string,
     isValidated: propTypes.bool,
     model: propTypes.string.isRequired,
     value: propTypes.oneOfType([propTypes.string, propTypes.number])
@@ -3735,6 +3767,7 @@ var withReactChloroform = function withReactChloroform(WrappedComponent) {
     var model = _ref.model;
     return {
       error: getError(state, model),
+      formStatus: getFormStatus(state),
       hasError: hasError(state, model),
       isValidated: hasBeenValidated(state, model),
       value: getValue(state, model)
