@@ -8,6 +8,7 @@ export const SET_ERRORS = 'SET_ERRORS';
 export const SET_GROUP = 'SET_GROUP';
 export const SET_SUBMITTING = 'SET_SUBMITTING';
 export const SET_SUBMIT_FAILED = 'SET_SUBMIT_FAILED';
+export const SET_SUBMIT_SUCCESSFUL = 'SET_SUBMIT_SUCCESSFUL';
 export const SET_VALUE = 'SET_VALUE';
 export const SHOW_ERRORS = 'SHOW_ERRORS';
 export const UPDATE_VALUE = 'UPDATE_VALUE';

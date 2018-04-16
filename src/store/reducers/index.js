@@ -1,5 +1,5 @@
 import controls, * as fromControls from './controls';
-import form from './form';
+import form, * as fromForm from './form';
 
 const combineReducers = reducers => (state = {}, action) =>
   Object.keys(reducers).reduce(
@@ -15,6 +15,14 @@ export default combineReducers({
   form,
 });
 
+/*
+ * Form
+ */
+export const getFormStatus = state => fromForm.getStatus(state.form);
+
+/*
+ * Controls
+ */
 export const getError = (state, model) => fromControls.getError(state.controls, model);
 
 export const getFormValues = state => fromControls.getValues(state.controls);

@@ -22,6 +22,7 @@ class Form extends Component {
     resetSubmit: PropTypes.func.isRequired,
     resetValues: PropTypes.func.isRequired,
     setSubmitFailed: PropTypes.func.isRequired,
+    setSubmitSuccessful: PropTypes.func.isRequired,
     setSubmitting: PropTypes.func.isRequired,
     showErrors: PropTypes.func.isRequired,
     style: PropTypes.string,
@@ -58,7 +59,10 @@ class Form extends Component {
     this.props.setSubmitting();
     Promise.resolve()
       .then(() => this.props.onSubmit(values))
-      .then(() => this.props.initializeState(afterSubmitState))
+      .then(() => {
+        this.props.initializeState(afterSubmitState);
+        this.props.setSubmitSuccessful();
+      })
       .catch(err => {
         this.props.setSubmitFailed();
         this.props.onSubmitFailed(err);
@@ -105,6 +109,7 @@ const mapDispatchToProps = {
 
   resetSubmit: formActions.resetSubmit,
   setSubmitFailed: formActions.setSubmitFailed,
+  setSubmitSuccessful: formActions.setSubmitSuccessful,
   setSubmitting: formActions.setSubmitting,
 };
 
