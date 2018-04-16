@@ -16,6 +16,7 @@ class Form extends Component {
     initializeState: PropTypes.func.isRequired,
     onChange: PropTypes.func,
     onReset: PropTypes.func,
+    onResetState: PropTypes.shape({}),
     onSubmit: PropTypes.func.isRequired,
     onSubmitFailed: PropTypes.func,
     resetSubmit: PropTypes.func.isRequired,
@@ -68,7 +69,9 @@ class Form extends Component {
   handleReset = e => {
     e.preventDefault();
 
-    this.props.resetValues(this.props.initialState);
+    const {initialState, onResetState} = this.props;
+
+    this.props.resetValues(onResetState || initialState);
     this.props.onReset();
   };
 

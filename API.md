@@ -221,6 +221,10 @@ This is the wrapper form needed to collect the user input.
   ```jsx
   onReset={() => console.log('Form reset called')}
   ```
+- **onResetState**: an optional object that allows you reset your state to a predefined object. The default is the initialState, e.g.
+  ```jsx
+  onResetState={{}}
+  ```
 - **onSubmit**: a required function that allows you to catch the on submit event, e.g.
   ```jsx
   onSubmit={model => console.log(model)}
