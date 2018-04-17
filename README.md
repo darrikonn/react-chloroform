@@ -76,7 +76,7 @@ export default YourFormComponent;
 ```
 
 ### Fiddles
-- [`Example 1`](https://jsfiddle.net/cp23evbm/)
+- [`Example 1`](https://jsfiddle.net/cxgu0kb6/)
 
 ## API
 Check out the [`api`](https://github.com/darrikonn/react-chloroform/blob/master/API.md).
