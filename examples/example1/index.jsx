@@ -21,7 +21,7 @@ class App extends Component {
     };
 
     return (
-      <div className="container col-md-1" style={{ marginTop: "20px" }}>
+      <div className="container col-md-12" style={{ marginTop: "20px" }}>
         <Form
           initialState={initialState}
           onSubmit={this.handleSubmit}
