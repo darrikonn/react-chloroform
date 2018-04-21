@@ -2325,6 +2325,11 @@ var connect = function connect(stateToProps, dispatchToProps) {
   };
 };
 
+var FAILED = 'failed';
+var SUBMIT = 'submit';
+var SUBMITTED = 'submitted';
+var SUBMITTING = 'submitting';
+
 // call something on iterator step with safe closing on error
 
 var _iterCall = function (iterator, fn, value, entries) {
@@ -2491,9 +2496,9 @@ var RESET_SUBMIT = 'RESET_SUBMIT';
 var RESET_VALUES = 'RESET_VALUES';
 var SET_ERRORS = 'SET_ERRORS';
 var SET_GROUP = 'SET_GROUP';
+var SET_SUBMITTED = 'SET_SUBMITTED';
 var SET_SUBMITTING = 'SET_SUBMITTING';
 var SET_SUBMIT_FAILED = 'SET_SUBMIT_FAILED';
-var SET_SUBMIT_SUCCESSFUL = 'SET_SUBMIT_SUCCESSFUL';
 var SET_VALUE = 'SET_VALUE';
 var SHOW_ERRORS = 'SHOW_ERRORS';
 var UPDATE_VALUE = 'UPDATE_VALUE';
@@ -2611,10 +2616,6 @@ var hasErrors = function hasErrors(state) {
   }).length > 0;
 };
 
-var FAILED = 'failed';
-var SUBMITTING = 'submitting';
-var SUCCESSFUL = 'successful';
-
 var initialState = {
   status: undefined
 };
@@ -2624,12 +2625,12 @@ var form = (function () {
   var action = arguments[1];
 
   switch (action.type) {
+    case SET_SUBMITTED:
+      return _extends$1({}, state, { status: SUBMITTED });
     case SET_SUBMITTING:
       return _extends$1({}, state, { status: SUBMITTING });
     case SET_SUBMIT_FAILED:
       return _extends$1({}, state, { status: FAILED });
-    case SET_SUBMIT_SUCCESSFUL:
-      return _extends$1({}, state, { status: SUCCESSFUL });
     case RESET_SUBMIT:
       return initialState;
     default:
@@ -2661,6 +2662,10 @@ var reducers = combineReducers({
  */
 var getFormStatus = function getFormStatus(state) {
   return getStatus(state.form);
+};
+
+var canBeSubmitted = function canBeSubmitted(state, type) {
+  return type === SUBMIT && (hasFormErrors(state) || getFormStatus(state) === SUBMITTING);
 };
 
 /*
@@ -2730,7 +2735,7 @@ var mapStateToProps = function mapStateToProps(state, _ref2) {
   var type = _ref2.type,
       disabled = _ref2.disabled;
   return {
-    disabled: type === 'submit' && hasFormErrors(state) && disabled !== false || disabled
+    disabled: disabled === undefined ? canBeSubmitted(state, type) : disabled
   };
 };
 
@@ -3346,7 +3351,7 @@ var FormInput$1 = connect(mapStateToProps$4, mapDispatchToProps$2)(FormInput);
 
 var _actions$1;
 
-var actions$1 = (_actions$1 = {}, _defineProperty(_actions$1, RESET_SUBMIT, function () {}), _defineProperty(_actions$1, SET_SUBMITTING, function () {}), _defineProperty(_actions$1, SET_SUBMIT_FAILED, function () {}), _actions$1);
+var actions$1 = (_actions$1 = {}, _defineProperty(_actions$1, RESET_SUBMIT, function () {}), _defineProperty(_actions$1, SET_SUBMITTED, function () {}), _defineProperty(_actions$1, SET_SUBMITTING, function () {}), _defineProperty(_actions$1, SET_SUBMIT_FAILED, function () {}), _actions$1);
 
 var formActions = createActions(actions$1);
 
@@ -3386,7 +3391,7 @@ var Form = function (_Component) {
         return _this.props.onSubmit(values);
       }).then(function () {
         _this.props.initializeState(afterSubmitState);
-        _this.props.setSubmitSuccessful();
+        _this.props.setSubmitted();
       }).catch(function (err) {
         _this.props.setSubmitFailed();
         _this.props.onSubmitFailed(err);
@@ -3452,7 +3457,7 @@ Form.propTypes = {
   resetSubmit: propTypes.func.isRequired,
   resetValues: propTypes.func.isRequired,
   setSubmitFailed: propTypes.func.isRequired,
-  setSubmitSuccessful: propTypes.func.isRequired,
+  setSubmitted: propTypes.func.isRequired,
   setSubmitting: propTypes.func.isRequired,
   showErrors: propTypes.func.isRequired,
   style: propTypes.string,
@@ -3482,7 +3487,7 @@ var mapDispatchToProps$3 = {
 
   resetSubmit: formActions.resetSubmit,
   setSubmitFailed: formActions.setSubmitFailed,
-  setSubmitSuccessful: formActions.setSubmitSuccessful,
+  setSubmitted: formActions.setSubmitted,
   setSubmitting: formActions.setSubmitting
 };
 
