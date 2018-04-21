@@ -912,7 +912,11 @@ var propTypes = createCommonjsModule(function (module) {
 });
 
 var FAILED = 'failed';
+<<<<<<< HEAD
 var HAS_ERRORS = 'has_errors';
+=======
+var HAS_ERRORS = 'hasErrors';
+>>>>>>> Published 0.1.3
 var SUBMIT = 'submit';
 var SUBMITTED = 'submitted';
 var SUBMITTING = 'submitting';
