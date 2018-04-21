@@ -911,6 +911,12 @@ var propTypes = createCommonjsModule(function (module) {
 }
 });
 
+var FAILED = 'failed';
+var HAS_ERRORS = 'has_errors';
+var SUBMIT = 'submit';
+var SUBMITTED = 'submitted';
+var SUBMITTING = 'submitting';
+
 var _global = createCommonjsModule(function (module) {
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 var global = module.exports = typeof window != 'undefined' && window.Math == Math
@@ -1349,52 +1355,6 @@ exports.default = _assign2.default || function (target) {
 
 var _extends$1 = unwrapExports(_extends);
 
-var classCallCheck = createCommonjsModule(function (module, exports) {
-"use strict";
-
-exports.__esModule = true;
-
-exports.default = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-});
-
-var _classCallCheck = unwrapExports(classCallCheck);
-
-var createClass = createCommonjsModule(function (module, exports) {
-"use strict";
-
-exports.__esModule = true;
-
-
-
-var _defineProperty2 = _interopRequireDefault(defineProperty$1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      (0, _defineProperty2.default)(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-});
-
-var _createClass = unwrapExports(createClass);
-
 // true  -> String#at
 // false -> String#codePointAt
 var _stringAt = function (TO_STRING) {
@@ -1610,6 +1570,429 @@ _iterDefine(String, 'String', function (iterated) {
   this._i += point.length;
   return { value: point, done: false };
 });
+
+// call something on iterator step with safe closing on error
+
+var _iterCall = function (iterator, fn, value, entries) {
+  try {
+    return entries ? fn(_anObject(value)[0], value[1]) : fn(value);
+  // 7.4.6 IteratorClose(iterator, completion)
+  } catch (e) {
+    var ret = iterator['return'];
+    if (ret !== undefined) _anObject(ret.call(iterator));
+    throw e;
+  }
+};
+
+// check on default Array iterator
+
+var ITERATOR$1 = _wks('iterator');
+var ArrayProto = Array.prototype;
+
+var _isArrayIter = function (it) {
+  return it !== undefined && (_iterators.Array === it || ArrayProto[ITERATOR$1] === it);
+};
+
+'use strict';
+
+
+
+var _createProperty = function (object, index, value) {
+  if (index in object) _objectDp.f(object, index, _propertyDesc(0, value));
+  else object[index] = value;
+};
+
+// getting tag from 19.1.3.6 Object.prototype.toString()
+
+var TAG$1 = _wks('toStringTag');
+// ES3 wrong here
+var ARG = _cof(function () { return arguments; }()) == 'Arguments';
+
+// fallback for IE11 Script Access Denied error
+var tryGet = function (it, key) {
+  try {
+    return it[key];
+  } catch (e) { /* empty */ }
+};
+
+var _classof = function (it) {
+  var O, T, B;
+  return it === undefined ? 'Undefined' : it === null ? 'Null'
+    // @@toStringTag case
+    : typeof (T = tryGet(O = Object(it), TAG$1)) == 'string' ? T
+    // builtinTag case
+    : ARG ? _cof(O)
+    // ES3 arguments fallback
+    : (B = _cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+};
+
+var ITERATOR$2 = _wks('iterator');
+
+var core_getIteratorMethod = _core.getIteratorMethod = function (it) {
+  if (it != undefined) return it[ITERATOR$2]
+    || it['@@iterator']
+    || _iterators[_classof(it)];
+};
+
+var ITERATOR$3 = _wks('iterator');
+var SAFE_CLOSING = false;
+
+try {
+  var riter = [7][ITERATOR$3]();
+  riter['return'] = function () { SAFE_CLOSING = true; };
+  // eslint-disable-next-line no-throw-literal
+  
+} catch (e) { /* empty */ }
+
+var _iterDetect = function (exec, skipClosing) {
+  if (!skipClosing && !SAFE_CLOSING) return false;
+  var safe = false;
+  try {
+    var arr = [7];
+    var iter = arr[ITERATOR$3]();
+    iter.next = function () { return { done: safe = true }; };
+    arr[ITERATOR$3] = function () { return iter; };
+    exec(arr);
+  } catch (e) { /* empty */ }
+  return safe;
+};
+
+'use strict';
+
+
+
+
+
+
+
+
+
+_export(_export.S + _export.F * !_iterDetect(function (iter) {  }), 'Array', {
+  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
+  from: function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
+    var O = _toObject(arrayLike);
+    var C = typeof this == 'function' ? this : Array;
+    var aLen = arguments.length;
+    var mapfn = aLen > 1 ? arguments[1] : undefined;
+    var mapping = mapfn !== undefined;
+    var index = 0;
+    var iterFn = core_getIteratorMethod(O);
+    var length, result, step, iterator;
+    if (mapping) mapfn = _ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
+    // if object isn't iterable or it's array with default iterator - use simple case
+    if (iterFn != undefined && !(C == Array && _isArrayIter(iterFn))) {
+      for (iterator = iterFn.call(O), result = new C(); !(step = iterator.next()).done; index++) {
+        _createProperty(result, index, mapping ? _iterCall(iterator, mapfn, [step.value, index], true) : step.value);
+      }
+    } else {
+      length = _toLength(O.length);
+      for (result = new C(length); length > index; index++) {
+        _createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
+      }
+    }
+    result.length = index;
+    return result;
+  }
+});
+
+var from$2 = _core.Array.from;
+
+var from = createCommonjsModule(function (module) {
+module.exports = { "default": from$2, __esModule: true };
+});
+
+unwrapExports(from);
+
+var toConsumableArray = createCommonjsModule(function (module, exports) {
+"use strict";
+
+exports.__esModule = true;
+
+
+
+var _from2 = _interopRequireDefault(from);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return (0, _from2.default)(arr);
+  }
+};
+});
+
+var _toConsumableArray = unwrapExports(toConsumableArray);
+
+var DELETE_VALUE = 'DELETE_VALUE';
+var INITIALIZE_GROUP = 'INITIALIZE_GROUP';
+var INITIALIZE_STATE = 'INITIALIZE_STATE';
+var MARK_VALIDATED = 'MARK_VALIDATED';
+var RESET_SUBMIT = 'RESET_SUBMIT';
+var RESET_VALUES = 'RESET_VALUES';
+var SET_ERRORS = 'SET_ERRORS';
+var SET_GROUP = 'SET_GROUP';
+var SET_SUBMITTED = 'SET_SUBMITTED';
+var SET_SUBMITTING = 'SET_SUBMITTING';
+var SET_SUBMIT_FAILED = 'SET_SUBMIT_FAILED';
+var SET_VALUE = 'SET_VALUE';
+var SHOW_ERRORS = 'SHOW_ERRORS';
+var UPDATE_VALUE = 'UPDATE_VALUE';
+
+var controls = (function () {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
+  var payload = action.payload;
+
+  switch (action.type) {
+    case DELETE_VALUE:
+      {
+        var previousValue = getValue$1(state, payload.model) || [];
+
+        return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
+          value: previousValue.filter(function (value) {
+            return value !== payload.value;
+          })
+        })));
+      }
+    case INITIALIZE_GROUP:
+      return _extends$1({}, state, _defineProperty({}, payload.group, {
+        skipReset: true,
+        validateOn: payload.validateOn,
+        validator: payload.validator,
+        value: []
+      }));
+    case INITIALIZE_STATE:
+      return _extends$1({}, state, Object.keys(payload.state).reduce(function (accumulator, model) {
+        return _extends$1({}, accumulator, _defineProperty({}, model, _extends$1({}, state[model], {
+          value: payload.state[model]
+        })));
+      }, {}));
+    case MARK_VALIDATED:
+      return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
+        validated: true
+      })));
+    case RESET_VALUES:
+      return _extends$1({}, Object.keys(state).reduce(function (accumulator, model) {
+        return _extends$1({}, accumulator, _defineProperty({}, model, _extends$1({}, state[model], {
+          value: state[model].skipReset ? state[model].value : payload.state[model]
+        })));
+      }, {}));
+    case SET_ERRORS:
+      return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
+        errors: payload.errors
+      })));
+    case SET_GROUP:
+      return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
+        group: payload.group
+      })));
+    case SET_VALUE:
+      return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
+        value: payload.value
+      })));
+    case SHOW_ERRORS:
+      return _extends$1({}, Object.keys(state).reduce(function (accumulator, model) {
+        return _extends$1({}, accumulator, _defineProperty({}, model, _extends$1({}, state[model], {
+          validated: true
+        })));
+      }, {}));
+    case UPDATE_VALUE:
+      {
+        var _previousValue = getValue$1(state, payload.model) || [];
+
+        return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
+          value: [].concat(_toConsumableArray(_previousValue), [payload.value])
+        })));
+      }
+    default:
+      return state;
+  }
+});
+
+var getError$1 = function getError(state, model) {
+  return (state[model] || {}).errors;
+};
+
+var getGroupModels$1 = function getGroupModels(state, group) {
+  return Object.keys(state).reduce(function (accumulator, model) {
+    return state[model].group === group ? _extends$1({}, accumulator, _defineProperty({}, model, state[model].value)) : accumulator;
+  }, {});
+};
+
+var getValidateOn$1 = function getValidateOn(state, model) {
+  return (state[model] || {}).validateOn;
+};
+
+var getValidator$1 = function getValidator(state, model) {
+  return (state[model] || {}).validator;
+};
+
+var getValue$1 = function getValue(state, model) {
+  return (state[model] || {}).value;
+};
+
+var getValues = function getValues(state) {
+  return Object.keys(state).reduce(function (accumulator, model) {
+    return _extends$1({}, accumulator, _defineProperty({}, model, state[model].value));
+  }, {});
+};
+
+var hasBeenValidated$1 = function hasBeenValidated(state, model) {
+  return (state[model] || {}).validated;
+};
+
+var hasError$1 = function hasError(state, model) {
+  var errors = getError$1(state, model);
+  return errors !== undefined && errors.length > 0;
+};
+
+var hasErrors = function hasErrors(state) {
+  return Object.keys(state).filter(function (model) {
+    return hasError$1(state, model);
+  }).length > 0;
+};
+
+var initialState = {
+  status: undefined
+};
+
+var form = (function () {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments[1];
+
+  switch (action.type) {
+    case SET_SUBMITTED:
+      return _extends$1({}, state, { status: SUBMITTED });
+    case SET_SUBMITTING:
+      return _extends$1({}, state, { status: SUBMITTING });
+    case SET_SUBMIT_FAILED:
+      return _extends$1({}, state, { status: FAILED });
+    case RESET_SUBMIT:
+      return initialState;
+    default:
+      return state;
+  }
+});
+
+var getStatus = function getStatus(state, hasFormErrors) {
+  return state.status || (hasFormErrors ? HAS_ERRORS : undefined);
+};
+
+var combineReducers = function combineReducers(reducers) {
+  return function () {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+    return Object.keys(reducers).reduce(function (nextState, key) {
+      return _extends$1({}, nextState, _defineProperty({}, key, reducers[key](state[key], action)));
+    }, {});
+  };
+};
+
+var reducers = combineReducers({
+  controls: controls,
+  form: form
+});
+
+/*
+ * Form
+ */
+var getFormStatus = function getFormStatus(state) {
+  return getStatus(state.form, hasFormErrors(state));
+};
+
+var canBeSubmitted = function canBeSubmitted(state) {
+  return [HAS_ERRORS, SUBMITTING].includes(getFormStatus(state));
+};
+
+/*
+ * Controls
+ */
+var getError = function getError(state, model) {
+  return getError$1(state.controls, model);
+};
+
+var getFormValues = function getFormValues(state) {
+  return getValues(state.controls);
+};
+
+var getGroupModels = function getGroupModels(state, group) {
+  return getGroupModels$1(state.controls, group);
+};
+
+var getValidateOn = function getValidateOn(state, model) {
+  return getValidateOn$1(state.controls, model);
+};
+
+var getValidator = function getValidator(state, model) {
+  return getValidator$1(state.controls, model);
+};
+
+var getValue = function getValue(state, model) {
+  return getValue$1(state.controls, model);
+};
+
+var hasBeenValidated = function hasBeenValidated(state, model) {
+  return hasBeenValidated$1(state.controls, model);
+};
+
+var hasError = function hasError(state, model) {
+  return hasError$1(state.controls, model);
+};
+
+var hasFormErrors = function hasFormErrors(state) {
+  return hasErrors(state.controls);
+};
+
+var classCallCheck = createCommonjsModule(function (module, exports) {
+"use strict";
+
+exports.__esModule = true;
+
+exports.default = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+});
+
+var _classCallCheck = unwrapExports(classCallCheck);
+
+var createClass = createCommonjsModule(function (module, exports) {
+"use strict";
+
+exports.__esModule = true;
+
+
+
+var _defineProperty2 = _interopRequireDefault(defineProperty$1);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      (0, _defineProperty2.default)(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+});
+
+var _createClass = unwrapExports(createClass);
 
 var _iterStep = function (done, value) {
   return { value: value, done: !!done };
@@ -1881,8 +2264,8 @@ var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function (it)
   return it instanceof $Symbol;
 };
 
-var $defineProperty$1 = function defineProperty(it, key, D) {
-  if (it === ObjectProto$1) $defineProperty$1(OPSymbols, key, D);
+var $defineProperty = function defineProperty(it, key, D) {
+  if (it === ObjectProto$1) $defineProperty(OPSymbols, key, D);
   _anObject(it);
   key = _toPrimitive(key, true);
   _anObject(D);
@@ -1902,7 +2285,7 @@ var $defineProperties = function defineProperties(it, P) {
   var i = 0;
   var l = keys.length;
   var key;
-  while (l > i) $defineProperty$1(it, key = keys[i++], P[key]);
+  while (l > i) $defineProperty(it, key = keys[i++], P[key]);
   return it;
 };
 var $create = function create(it, P) {
@@ -1959,7 +2342,7 @@ if (!USE_NATIVE) {
   });
 
   _objectGopd.f = $getOwnPropertyDescriptor;
-  _objectDp.f = $defineProperty$1;
+  _objectDp.f = $defineProperty;
   _objectGopn.f = _objectGopnExt.f = $getOwnPropertyNames;
   _objectPie.f = $propertyIsEnumerable;
   _objectGops.f = $getOwnPropertySymbols;
@@ -2002,7 +2385,7 @@ _export(_export.S + _export.F * !USE_NATIVE, 'Object', {
   // 19.1.2.2 Object.create(O [, Properties])
   create: $create,
   // 19.1.2.4 Object.defineProperty(O, P, Attributes)
-  defineProperty: $defineProperty$1,
+  defineProperty: $defineProperty,
   // 19.1.2.3 Object.defineProperties(O, Properties)
   defineProperties: $defineProperties,
   // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
@@ -2325,388 +2708,6 @@ var connect = function connect(stateToProps, dispatchToProps) {
   };
 };
 
-var FAILED = 'failed';
-var SUBMIT = 'submit';
-var SUBMITTED = 'submitted';
-var SUBMITTING = 'submitting';
-
-// call something on iterator step with safe closing on error
-
-var _iterCall = function (iterator, fn, value, entries) {
-  try {
-    return entries ? fn(_anObject(value)[0], value[1]) : fn(value);
-  // 7.4.6 IteratorClose(iterator, completion)
-  } catch (e) {
-    var ret = iterator['return'];
-    if (ret !== undefined) _anObject(ret.call(iterator));
-    throw e;
-  }
-};
-
-// check on default Array iterator
-
-var ITERATOR$1 = _wks('iterator');
-var ArrayProto = Array.prototype;
-
-var _isArrayIter = function (it) {
-  return it !== undefined && (_iterators.Array === it || ArrayProto[ITERATOR$1] === it);
-};
-
-'use strict';
-
-
-
-var _createProperty = function (object, index, value) {
-  if (index in object) _objectDp.f(object, index, _propertyDesc(0, value));
-  else object[index] = value;
-};
-
-// getting tag from 19.1.3.6 Object.prototype.toString()
-
-var TAG$1 = _wks('toStringTag');
-// ES3 wrong here
-var ARG = _cof(function () { return arguments; }()) == 'Arguments';
-
-// fallback for IE11 Script Access Denied error
-var tryGet = function (it, key) {
-  try {
-    return it[key];
-  } catch (e) { /* empty */ }
-};
-
-var _classof = function (it) {
-  var O, T, B;
-  return it === undefined ? 'Undefined' : it === null ? 'Null'
-    // @@toStringTag case
-    : typeof (T = tryGet(O = Object(it), TAG$1)) == 'string' ? T
-    // builtinTag case
-    : ARG ? _cof(O)
-    // ES3 arguments fallback
-    : (B = _cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-};
-
-var ITERATOR$2 = _wks('iterator');
-
-var core_getIteratorMethod = _core.getIteratorMethod = function (it) {
-  if (it != undefined) return it[ITERATOR$2]
-    || it['@@iterator']
-    || _iterators[_classof(it)];
-};
-
-var ITERATOR$3 = _wks('iterator');
-var SAFE_CLOSING = false;
-
-try {
-  var riter = [7][ITERATOR$3]();
-  riter['return'] = function () { SAFE_CLOSING = true; };
-  // eslint-disable-next-line no-throw-literal
-  
-} catch (e) { /* empty */ }
-
-var _iterDetect = function (exec, skipClosing) {
-  if (!skipClosing && !SAFE_CLOSING) return false;
-  var safe = false;
-  try {
-    var arr = [7];
-    var iter = arr[ITERATOR$3]();
-    iter.next = function () { return { done: safe = true }; };
-    arr[ITERATOR$3] = function () { return iter; };
-    exec(arr);
-  } catch (e) { /* empty */ }
-  return safe;
-};
-
-'use strict';
-
-
-
-
-
-
-
-
-
-_export(_export.S + _export.F * !_iterDetect(function (iter) {  }), 'Array', {
-  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
-  from: function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
-    var O = _toObject(arrayLike);
-    var C = typeof this == 'function' ? this : Array;
-    var aLen = arguments.length;
-    var mapfn = aLen > 1 ? arguments[1] : undefined;
-    var mapping = mapfn !== undefined;
-    var index = 0;
-    var iterFn = core_getIteratorMethod(O);
-    var length, result, step, iterator;
-    if (mapping) mapfn = _ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
-    // if object isn't iterable or it's array with default iterator - use simple case
-    if (iterFn != undefined && !(C == Array && _isArrayIter(iterFn))) {
-      for (iterator = iterFn.call(O), result = new C(); !(step = iterator.next()).done; index++) {
-        _createProperty(result, index, mapping ? _iterCall(iterator, mapfn, [step.value, index], true) : step.value);
-      }
-    } else {
-      length = _toLength(O.length);
-      for (result = new C(length); length > index; index++) {
-        _createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
-      }
-    }
-    result.length = index;
-    return result;
-  }
-});
-
-var from$2 = _core.Array.from;
-
-var from = createCommonjsModule(function (module) {
-module.exports = { "default": from$2, __esModule: true };
-});
-
-unwrapExports(from);
-
-var toConsumableArray = createCommonjsModule(function (module, exports) {
-"use strict";
-
-exports.__esModule = true;
-
-
-
-var _from2 = _interopRequireDefault(from);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-      arr2[i] = arr[i];
-    }
-
-    return arr2;
-  } else {
-    return (0, _from2.default)(arr);
-  }
-};
-});
-
-var _toConsumableArray = unwrapExports(toConsumableArray);
-
-var DELETE_VALUE = 'DELETE_VALUE';
-var INITIALIZE_GROUP = 'INITIALIZE_GROUP';
-var INITIALIZE_STATE = 'INITIALIZE_STATE';
-var MARK_VALIDATED = 'MARK_VALIDATED';
-var RESET_SUBMIT = 'RESET_SUBMIT';
-var RESET_VALUES = 'RESET_VALUES';
-var SET_ERRORS = 'SET_ERRORS';
-var SET_GROUP = 'SET_GROUP';
-var SET_SUBMITTED = 'SET_SUBMITTED';
-var SET_SUBMITTING = 'SET_SUBMITTING';
-var SET_SUBMIT_FAILED = 'SET_SUBMIT_FAILED';
-var SET_VALUE = 'SET_VALUE';
-var SHOW_ERRORS = 'SHOW_ERRORS';
-var UPDATE_VALUE = 'UPDATE_VALUE';
-
-var controls = (function () {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var action = arguments[1];
-  var payload = action.payload;
-
-  switch (action.type) {
-    case DELETE_VALUE:
-      {
-        var previousValue = getValue$1(state, payload.model) || [];
-
-        return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
-          value: previousValue.filter(function (value) {
-            return value !== payload.value;
-          })
-        })));
-      }
-    case INITIALIZE_GROUP:
-      return _extends$1({}, state, _defineProperty({}, payload.group, {
-        skipReset: true,
-        validateOn: payload.validateOn,
-        validator: payload.validator,
-        value: []
-      }));
-    case INITIALIZE_STATE:
-      return _extends$1({}, state, Object.keys(payload.state).reduce(function (accumulator, model) {
-        return _extends$1({}, accumulator, _defineProperty({}, model, _extends$1({}, state[model], {
-          value: payload.state[model]
-        })));
-      }, {}));
-    case MARK_VALIDATED:
-      return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
-        validated: true
-      })));
-    case RESET_VALUES:
-      return _extends$1({}, Object.keys(state).reduce(function (accumulator, model) {
-        return _extends$1({}, accumulator, _defineProperty({}, model, _extends$1({}, state[model], {
-          value: state[model].skipReset ? state[model].value : payload.state[model]
-        })));
-      }, {}));
-    case SET_ERRORS:
-      return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
-        errors: payload.errors
-      })));
-    case SET_GROUP:
-      return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
-        group: payload.group
-      })));
-    case SET_VALUE:
-      return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
-        value: payload.value
-      })));
-    case SHOW_ERRORS:
-      return _extends$1({}, Object.keys(state).reduce(function (accumulator, model) {
-        return _extends$1({}, accumulator, _defineProperty({}, model, _extends$1({}, state[model], {
-          validated: true
-        })));
-      }, {}));
-    case UPDATE_VALUE:
-      {
-        var _previousValue = getValue$1(state, payload.model) || [];
-
-        return _extends$1({}, state, _defineProperty({}, payload.model, _extends$1({}, state[payload.model], {
-          value: [].concat(_toConsumableArray(_previousValue), [payload.value])
-        })));
-      }
-    default:
-      return state;
-  }
-});
-
-var getError$1 = function getError(state, model) {
-  return (state[model] || {}).errors;
-};
-
-var getGroupModels$1 = function getGroupModels(state, group) {
-  return Object.keys(state).reduce(function (accumulator, model) {
-    return state[model].group === group ? _extends$1({}, accumulator, _defineProperty({}, model, state[model].value)) : accumulator;
-  }, {});
-};
-
-var getValidateOn$1 = function getValidateOn(state, model) {
-  return (state[model] || {}).validateOn;
-};
-
-var getValidator$1 = function getValidator(state, model) {
-  return (state[model] || {}).validator;
-};
-
-var getValue$1 = function getValue(state, model) {
-  return (state[model] || {}).value;
-};
-
-var getValues = function getValues(state) {
-  return Object.keys(state).reduce(function (accumulator, model) {
-    return _extends$1({}, accumulator, _defineProperty({}, model, state[model].value));
-  }, {});
-};
-
-var hasBeenValidated$1 = function hasBeenValidated(state, model) {
-  return (state[model] || {}).validated;
-};
-
-var hasError$1 = function hasError(state, model) {
-  var errors = getError$1(state, model);
-  return errors !== undefined && errors.length > 0;
-};
-
-var hasErrors = function hasErrors(state) {
-  return Object.keys(state).filter(function (model) {
-    return hasError$1(state, model);
-  }).length > 0;
-};
-
-var initialState = {
-  status: undefined
-};
-
-var form = (function () {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-  var action = arguments[1];
-
-  switch (action.type) {
-    case SET_SUBMITTED:
-      return _extends$1({}, state, { status: SUBMITTED });
-    case SET_SUBMITTING:
-      return _extends$1({}, state, { status: SUBMITTING });
-    case SET_SUBMIT_FAILED:
-      return _extends$1({}, state, { status: FAILED });
-    case RESET_SUBMIT:
-      return initialState;
-    default:
-      return state;
-  }
-});
-
-var getStatus = function getStatus(state) {
-  return state.status;
-};
-
-var combineReducers = function combineReducers(reducers) {
-  return function () {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var action = arguments[1];
-    return Object.keys(reducers).reduce(function (nextState, key) {
-      return _extends$1({}, nextState, _defineProperty({}, key, reducers[key](state[key], action)));
-    }, {});
-  };
-};
-
-var reducers = combineReducers({
-  controls: controls,
-  form: form
-});
-
-/*
- * Form
- */
-var getFormStatus = function getFormStatus(state) {
-  return getStatus(state.form);
-};
-
-var canBeSubmitted = function canBeSubmitted(state, type) {
-  return type === SUBMIT && (hasFormErrors(state) || getFormStatus(state) === SUBMITTING);
-};
-
-/*
- * Controls
- */
-var getError = function getError(state, model) {
-  return getError$1(state.controls, model);
-};
-
-var getFormValues = function getFormValues(state) {
-  return getValues(state.controls);
-};
-
-var getGroupModels = function getGroupModels(state, group) {
-  return getGroupModels$1(state.controls, group);
-};
-
-var getValidateOn = function getValidateOn(state, model) {
-  return getValidateOn$1(state.controls, model);
-};
-
-var getValidator = function getValidator(state, model) {
-  return getValidator$1(state.controls, model);
-};
-
-var getValue = function getValue(state, model) {
-  return getValue$1(state.controls, model);
-};
-
-var hasBeenValidated = function hasBeenValidated(state, model) {
-  return hasBeenValidated$1(state.controls, model);
-};
-
-var hasError = function hasError(state, model) {
-  return hasError$1(state.controls, model);
-};
-
-var hasFormErrors = function hasFormErrors(state) {
-  return hasErrors(state.controls);
-};
-
 var Button = function Button(_ref) {
   var _ref$type = _ref.type,
       type = _ref$type === undefined ? 'button' : _ref$type,
@@ -2735,7 +2736,7 @@ var mapStateToProps = function mapStateToProps(state, _ref2) {
   var type = _ref2.type,
       disabled = _ref2.disabled;
   return {
-    disabled: disabled === undefined ? canBeSubmitted(state, type) : disabled
+    disabled: disabled === undefined ? type === SUBMIT && canBeSubmitted(state) : disabled
   };
 };
 
