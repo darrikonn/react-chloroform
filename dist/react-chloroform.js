@@ -3747,11 +3747,11 @@ var withReactChloroform = function withReactChloroform(WrappedComponent) {
 
 
         return React__default.createElement(WrappedComponent, _extends$1({}, this.props, {
+          chloroformStatus: formStatus,
           error: error,
           onChange: this.onChange,
           showError: isValidated,
           startValidating: this.markValidated,
-          chloroformStatus: formStatus,
           value: value
         }));
       }
