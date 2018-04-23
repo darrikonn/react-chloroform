@@ -1,3 +1,5 @@
+import {HAS_ERRORS, SUBMITTING} from '../../constants/form';
+
 import controls, * as fromControls from './controls';
 import form, * as fromForm from './form';
 
@@ -18,7 +20,9 @@ export default combineReducers({
 /*
  * Form
  */
-export const getFormStatus = state => fromForm.getStatus(state.form);
+export const getFormStatus = state => fromForm.getStatus(state.form, hasFormErrors(state));
+
+export const canBeSubmitted = state => [HAS_ERRORS, SUBMITTING].includes(getFormStatus(state));
 
 /*
  * Controls

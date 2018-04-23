@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import {SUBMIT} from '../constants/form';
+import {canBeSubmitted} from '../store/reducers';
 import {connect} from '../store';
-import {hasFormErrors} from '../store/reducers';
 
 const Button = ({type = 'button', text, className, style, disabled, onClick}) => (
   <button type={type} className={className} style={style} disabled={disabled} onClick={onClick}>
@@ -20,7 +21,7 @@ Button.propTypes = {
 };
 
 const mapStateToProps = (state, {type, disabled}) => ({
-  disabled: (type === 'submit' && hasFormErrors(state) && disabled !== false) || disabled,
+  disabled: disabled === undefined ? type === SUBMIT && canBeSubmitted(state) : disabled,
 });
 
 export default connect(mapStateToProps)(Button);

@@ -20,4 +20,5 @@ export default (state = initialState, action) => {
   }
 };
 
-export const getStatus = state => state.status;
+export const getStatus = (state, hasFormErrors) =>
+  state.status || (hasFormErrors ? HAS_ERRORS : undefined);
