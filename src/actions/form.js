@@ -1,8 +1,14 @@
 import createActions from '.';
-import {RESET_SUBMIT, SET_SUBMITTING, SET_SUBMIT_FAILED} from '../store/action-types';
+import {
+  RESET_SUBMIT,
+  SET_SUBMITTED,
+  SET_SUBMITTING,
+  SET_SUBMIT_FAILED,
+} from '../store/action-types';
 
 const actions = {
   [RESET_SUBMIT]: () => {},
+  [SET_SUBMITTED]: () => {},
   [SET_SUBMITTING]: () => {},
   [SET_SUBMIT_FAILED]: () => {},
 };

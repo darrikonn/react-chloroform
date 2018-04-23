@@ -1,10 +1,5 @@
-import {FAILED, SUBMITTING, SUCCESSFUL} from '../../constants/form';
-import {
-  SET_SUBMITTING,
-  SET_SUBMIT_FAILED,
-  SET_SUBMIT_SUCCESSFUL,
-  RESET_SUBMIT,
-} from '../action-types';
+import {FAILED, HAS_ERRORS, SUBMITTED, SUBMITTING} from '../../constants/form';
+import {RESET_SUBMIT, SET_SUBMITTED, SET_SUBMITTING, SET_SUBMIT_FAILED} from '../action-types';
 
 const initialState = {
   status: undefined,
@@ -12,12 +7,12 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case SET_SUBMITTED:
+      return {...state, status: SUBMITTED};
     case SET_SUBMITTING:
       return {...state, status: SUBMITTING};
     case SET_SUBMIT_FAILED:
       return {...state, status: FAILED};
-    case SET_SUBMIT_SUCCESSFUL:
-      return {...state, status: SUCCESSFUL};
     case RESET_SUBMIT:
       return initialState;
     default:
