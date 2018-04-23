@@ -1,0 +1,52 @@
+body {
+  background: #20262E;
+  padding: 20px;
+  font-family: Helvetica;
+}
+
+label {
+  margin-right: 5px;
+}
+
+#root {
+  background: #fff;
+  border-radius: 4px;
+  padding: 20px;
+  transition: all 0.2s;
+}
+
+.fieldError {
+  color: #a94442;
+}
+
+.react-chloroform-error {
+  border-color: #a94442 !important;
+}
+
+.submitButton {
+  transition: all ease 1.8s;
+}
+
+.loading:after {
+  content: ' .';
+  animation: dots 1s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%,
+  20% {
+    color: rgba(0, 0, 0, 0);
+    text-shadow: .25em 0 0 rgba(0, 0, 0, 0), .5em 0 0 rgba(0, 0, 0, 0);
+  }
+  40% {
+    color: white;
+    text-shadow: .25em 0 0 rgba(0, 0, 0, 0), .5em 0 0 rgba(0, 0, 0, 0);
+  }
+  60% {
+    text-shadow: .25em 0 0 white, .5em 0 0 rgba(0, 0, 0, 0);
+  }
+  80%,
+  100% {
+    text-shadow: .25em 0 0 white, .5em 0 0 white;
+  }
+}
