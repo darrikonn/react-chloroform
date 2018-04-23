@@ -22,11 +22,11 @@ const withReactChloroform = WrappedComponent => {
       return (
         <WrappedComponent
           {...this.props}
+          chloroformStatus={formStatus}
           error={error}
           onChange={this.onChange}
           showError={isValidated}
           startValidating={this.markValidated}
-          chloroformStatus={formStatus}
           value={value}
         />
       );

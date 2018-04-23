@@ -371,6 +371,19 @@ const options = [
 A HOC allowing you to write your own component with react-chloroform support and behaviour.
 
 #### Attributes
+- **chloroformStatus**: a string representing the status of the form. The status is `undefined` when nothing is occurring. Otherwise it's one of:
+  - **submitted**: when the form is submitting
+  - **submitting**: if submission succeeded
+  - **failed**: if submission failed
+  - **hasErrors**: if the form has errors
+  e.g.
+  ```jsx
+  <button>{chloroformStatus === 'submitting' ? <Loading /> : 'Submit'}</button>
+  ```
+- **error**: contains the errors from your validation, e.g.
+  ```jsx
+  {error && <p>{error}</p>}
+  ```
 - **value**: a string/number that the HOC passes down as a prop, e.g.
   ```jsx
   value={value}
@@ -382,6 +395,10 @@ A HOC allowing you to write your own component with react-chloroform support and
 - **startValidating**: you can optionally bind the startValidating function to an event handler. By default, the validation will be done on mount, e.g.
   ```jsx
   onBlur={startValidating}
+  ```
+- **showError**: a boolean representing if your component should show the error. This depends on the startValidating property, e.g.
+  ```jsx
+  {showError && error && <p>{error}</p>}
   ```
 
 #### Example
