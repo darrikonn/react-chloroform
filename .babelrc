@@ -1,20 +1,11 @@
 {
-  "presets": ["react", ["es2015", {"modules": false}], "stage-0"],
+  "presets": ["@babel/react", "@babel/env"],
+  "plugins": ["@babel/proposal-class-properties"],
   "env": {
-    "commonjs": {
-      "plugins": [
-        ["transform-es2015-modules-commonjs", { "loose": true }]
-      ],
-    },
-    "es": {
-      "plugins": [
-        ["transform-runtime", {
-          "polyfill": false,
-          "regenerator": true
-        }],
-        "./build/babel-lodash-es",
-        "transform-class-properties"
-      ],
-    }
+    "commonjs": {},
+
+    "umd": {},
+
+    "es": {}
   }
 }
