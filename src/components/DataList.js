@@ -14,7 +14,7 @@ class DataList extends Control {
         disabled: PropTypes.boolean,
         name: PropTypes.string,
         value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      }),
+      })
     ).isRequired,
     placeholder: PropTypes.string,
     value: PropTypes.string,
@@ -56,4 +56,7 @@ const mapDispatchToProps = {
   setValue: controlActions.setValue,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataList);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DataList);

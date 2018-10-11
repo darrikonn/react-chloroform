@@ -22,11 +22,11 @@ class Select extends Control {
               disabled: PropTypes.boolean,
               name: PropTypes.string.isRequired,
               value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-            }),
+            })
           ).isRequired,
           name: PropTypes.string.isRequired,
         }),
-      ]),
+      ])
     ).isRequired,
     placeholder: PropTypes.string,
     value: PropTypes.string,
@@ -63,7 +63,7 @@ class Select extends Control {
       mappedOptions.unshift(
         <option key={placeholder} value="" disabled>
           {placeholder}
-        </option>,
+        </option>
       );
     }
 
@@ -91,4 +91,7 @@ const mapDispatchToProps = {
   setValue: controlActions.setValue,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Select);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Select);

@@ -12,7 +12,7 @@ const createActions = actions =>
       ...createdActions,
       [camelCase(type)]: (...args) => actionCreator({type, payload: actions[type](...args)}),
     }),
-    {},
+    {}
   );
 
 export default createActions;

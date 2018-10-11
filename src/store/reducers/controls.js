@@ -46,7 +46,7 @@ export default (state = {}, action) => {
               value: payload.state[model],
             },
           }),
-          {},
+          {}
         ),
       };
     case MARK_VALIDATED:
@@ -67,7 +67,7 @@ export default (state = {}, action) => {
               value: state[model].skipReset ? state[model].value : payload.state[model],
             },
           }),
-          {},
+          {}
         ),
       };
     case SET_ERRORS:
@@ -104,7 +104,7 @@ export default (state = {}, action) => {
               validated: true,
             },
           }),
-          {},
+          {}
         ),
       };
     case UPDATE_VALUE: {
@@ -134,7 +134,7 @@ export const getGroupModels = (state, group) =>
             [model]: state[model].value,
           }
         : accumulator,
-    {},
+    {}
   );
 
 export const getValidateOn = (state, model) => (state[model] || {}).validateOn;
@@ -149,7 +149,7 @@ export const getValues = state =>
       ...accumulator,
       [model]: state[model].value,
     }),
-    {},
+    {}
   );
 
 export const hasBeenValidated = (state, model) => (state[model] || {}).validated;

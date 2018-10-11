@@ -9,7 +9,7 @@ const combineReducers = reducers => (state = {}, action) =>
       ...nextState,
       [key]: reducers[key](state[key], action),
     }),
-    {},
+    {}
   );
 
 export default combineReducers({

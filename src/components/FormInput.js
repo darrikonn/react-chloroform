@@ -9,7 +9,7 @@ import {getValue, hasBeenValidated, hasError} from '../store/reducers';
 class FormInput extends Control {
   static propTypes = {
     placeholder: PropTypes.string,
-    type: PropTypes.oneOf(['text', 'email']),
+    type: PropTypes.oneOf(['text', 'email', 'password', 'number']),
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   };
 
@@ -40,4 +40,7 @@ const mapDispatchToProps = {
   setValue: controlActions.setValue,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormInput);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FormInput);

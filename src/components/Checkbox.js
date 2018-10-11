@@ -90,7 +90,7 @@ class Checkbox extends Control {
         isChecked &&
           groupModelKeys.filter(m => m !== ALL && m !== model && groupModels[m]).length ===
             groupModelKeys.length - 2,
-        ALL,
+        ALL
       );
     }
   };
@@ -133,4 +133,7 @@ const mapDispatchToProps = {
   updateValue: controlActions.updateValue,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Checkbox);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Checkbox);

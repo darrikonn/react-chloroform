@@ -42,4 +42,7 @@ const mapDispatchToProps = {
   setValue: controlActions.setValue,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextArea);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TextArea);

@@ -85,7 +85,7 @@ export const connect = (stateToProps, dispatchToProps) => WrappedComponent => {
               ...obj,
               [f]: (...args) => dispatchToProps[f](...args)(this.store.dispatch),
             }),
-            {},
+            {}
           )
         : {};
 

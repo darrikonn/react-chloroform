@@ -113,4 +113,9 @@ const mapDispatchToProps = {
   setSubmitting: formActions.setSubmitting,
 };
 
-export default withNewLocalStore(reducers)(connect(mapStateToProps, mapDispatchToProps)(Form));
+export default withNewLocalStore(reducers)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Form)
+);

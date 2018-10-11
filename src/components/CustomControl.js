@@ -47,7 +47,10 @@ const withReactChloroform = WrappedComponent => {
     setValue: controlActions.setValue,
   };
 
-  return connect(mapStateToProps, mapDispatchToProps)(CustomControl);
+  return connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(CustomControl);
 };
 
 export default withReactChloroform;
