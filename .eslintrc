@@ -45,11 +45,6 @@
     "react/no-multi-comp": ["error", { "ignoreStateless": true }],
     "react/require-default-props": "off",
 
-    "prettier/prettier": ["error", {
-      "singleQuote": true,
-      "bracketSpacing": false,
-      "trailingComma": "all",
-      "printWidth": 100
-    }]
+    "prettier/prettier": "error",
   }
 }
