@@ -1,4 +1,4 @@
-export const isString = val => typeof val === 'string';
+import {isString} from '../utils';
 
 export const parseValidators = (validator = [], value) =>
   validator.reduce((errorList, nextValidator) => {
