@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Control from './Control';
 import controlActions from '../actions/controls';
 import {connect} from '../store';
-import {getValue, hasBeenValidated, hasError} from '../store/reducers';
+import {getValue, hasBeenValidated, hasError, mountModel, isFormInitialized} from '../store/reducers';
 
 class TextArea extends Control {
   static propTypes = {
@@ -32,12 +32,14 @@ class TextArea extends Control {
 
 const mapStateToProps = (state, {model}) => ({
   hasError: hasError(state, model),
+  initialized: isFormInitialized(state),
   isValidated: hasBeenValidated(state, model),
   value: getValue(state, model),
 });
 
 const mapDispatchToProps = {
   markValidated: controlActions.markValidated,
+  mountModel: controlActions.mountModel,
   setErrors: controlActions.setErrors,
   setValue: controlActions.setValue,
 };

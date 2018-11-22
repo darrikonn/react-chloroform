@@ -4,15 +4,13 @@ import PropTypes from 'prop-types';
 import Control from './Control';
 import controlActions from '../actions/controls';
 import {connect} from '../store';
-import {getValue, hasError} from '../store/reducers';
+import {getValue, hasError, mountModel} from '../store/reducers';
 
 class RadioButton extends Control {
   static propTypes = {
     checked: PropTypes.string,
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   };
-
-  componentDidMount() {}
 
   componentDidUpdate() {}
 
@@ -34,10 +32,12 @@ class RadioButton extends Control {
 const mapStateToProps = (state, {model}) => ({
   checked: getValue(state, model),
   hasError: hasError(state, model),
+  parseValue: x => x, // disable parseValue for radio-buttons
 });
 
 const mapDispatchToProps = {
   markValidated: controlActions.markValidated,
+  mountModel: controlActions.mountModel,
   setErrors: controlActions.setErrors,
   setValue: controlActions.setValue,
 };

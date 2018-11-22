@@ -12,7 +12,10 @@ class Control extends Component {
     hasError: PropTypes.bool,
     id: PropTypes.string,
     isValidated: PropTypes.bool,
+    initialized: PropTypes.bool,
     markValidated: PropTypes.func.isRequired,
+    mountModel: PropTypes.func,
+    parseValue: PropTypes.func,
     model: PropTypes.string.isRequired,
     onChange: PropTypes.func,
     setErrors: PropTypes.func.isRequired,
@@ -26,24 +29,18 @@ class Control extends Component {
   static defaultProps = {
     onChange: function() {},
     validator: [],
+    validateOn: MOUNT,
   };
 
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    const {validateOn = MOUNT} = this.props;
-
-    this._validateModel();
-    if (validateOn === MOUNT) {
-      this.markValidated();
-    }
+    props.mountModel(props.model, props.parseValue, props.validateOn === MOUNT);
   }
 
   componentDidUpdate(oldProps) {
-    if (oldProps.value !== this.props.value) {
-      this._validateModel();
+    const {initialized, value} = this.props;
+    if ((!oldProps.initialized && initialized) || (oldProps.value !== value)) {
+      this.validateModel();
     }
   }
 
@@ -85,13 +82,9 @@ class Control extends Component {
     };
   };
 
-  _validateModel = (model = this.props.model, value = this.props.value) => {
-    this.validateModel(model, value);
-  };
-
-  validateModel = (model, value) => {
-    const {validator} = this.props;
-    this.props.setErrors(model, parseValidators(validator, value));
+  validateModel = () => {
+    const {model, value, validator, parseValue} = this.props;
+    this.props.setErrors(model, parseValidators(validator, parseValue ? parseValue(value) : value));
   };
 }
 
