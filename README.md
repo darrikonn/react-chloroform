@@ -88,11 +88,23 @@ Read the [`contributing guidelines`](https://github.com/darrikonn/react-chlorofo
 
 ## Testing
 ```bash
+npm install
+```
+
+Link from the react-chloroform git repo:
+
+```bash
+npm link
+```
+
+And then link from your test project with:
+```bash
 npm link react-chloroform
 ```
 
+Build es with:
 ```bash
-npm run build:es
+npm run build:es:watch
 ```
 
 ## License
