@@ -7,92 +7,27 @@ import {ALL} from '../constants/keywords';
 import {BLUR, FOCUS, INPUT, MOUNT} from '../constants/events';
 import {connect} from '../store';
 import {
-  getGroupModels,
-  getValidateOn,
-  getValidator,
   getValue,
+  isFormInitialized,
   hasBeenValidated,
   hasError,
+  mountModel,
 } from '../store/reducers';
 
 class Checkbox extends Control {
   static propTypes = {
     deleteValue: PropTypes.func.isRequired,
-    group: PropTypes.string,
-    groupModels: PropTypes.shape({}),
-    groupValidateOn: PropTypes.string,
-    groupValidator: PropTypes.arrayOf(PropTypes.func),
-    groupValue: PropTypes.arrayOf(PropTypes.string),
-    initializeGroup: PropTypes.func.isRequired,
     markValidated: PropTypes.func.isRequired,
     model: PropTypes.string.isRequired,
-    setGroup: PropTypes.func.isRequired,
     updateValue: PropTypes.func.isRequired,
     validateOn: PropTypes.oneOf([BLUR, FOCUS, INPUT, MOUNT]),
-    value: PropTypes.bool,
-  };
-
-  componentDidMount() {
-    const {group, groupValidateOn = MOUNT, groupValidator, model} = this.props;
-    this.props.setGroup(model, group);
-
-    if (group && model === ALL) {
-      this.props.initializeGroup(group, groupValidator, groupValidateOn);
-
-      super.componentDidMount();
-    }
-  }
-
-  componentDidUpdate(oldProps) {
-    const {group, groupValue, model, value} = this.props;
-    if (group && model !== ALL) {
-      if (oldProps.value !== value) {
-        if (value) {
-          this.props.updateValue(group, model);
-        } else {
-          this.props.deleteValue(group, model);
-        }
-        this.handleOnGroupChange(Boolean(value));
-      } else if (oldProps.groupValue !== groupValue) {
-        this._validateModel();
-      }
-    }
-  }
-
-  _validateModel = () => {
-    const {group, groupValue} = this.props;
-    this.validateModel(group, groupValue);
-  };
-
-  markValidated = () => {
-    const {group} = this.props;
-    this.props.markValidated(group);
+    value: PropTypes.oneOfType([PropTypes.bool, PropTypes.arrayOf(PropTypes.bool)]),
   };
 
   handleOnChange = e => {
-    const {group, model} = this.props;
-    const isChecked = e.target.checked;
+    const {model, overriddenValue = true} = this.props;
 
-    if (group && model === ALL) {
-      this.handleOnGroupChange(isChecked);
-    }
-
-    this.onChange(isChecked);
-  };
-
-  handleOnGroupChange = isChecked => {
-    const {groupModels, model} = this.props;
-    const groupModelKeys = Object.keys(groupModels);
-    if (model === ALL) {
-      groupModelKeys.forEach(m => this.onChange(isChecked, m));
-    } else if (ALL in groupModels) {
-      this.onChange(
-        isChecked &&
-          groupModelKeys.filter(m => m !== ALL && m !== model && groupModels[m]).length ===
-            groupModelKeys.length - 2,
-        ALL
-      );
-    }
+    this.onChange(e.target.checked);
   };
 
   render() {
@@ -100,7 +35,7 @@ class Checkbox extends Control {
 
     return (
       <input
-        checked={value || false}
+        checked={(Array.isArray(value) ? value.every(Boolean) : value) || false}
         onChange={this.handleOnChange}
         type="checkbox"
         {...this.properties()}
@@ -111,24 +46,17 @@ class Checkbox extends Control {
   }
 }
 
-const mapStateToProps = (state, {group, model, validateOn, validator}) => ({
-  groupModels: getGroupModels(state, group),
-  groupValidateOn: validateOn,
-  groupValidator: validator,
-  groupValue: getValue(state, group),
-  hasError: hasError(state, group),
-  isValidated: hasBeenValidated(state, group),
-  validateOn: getValidateOn(state, group) || validateOn,
-  validator: getValidator(state, group) || validator,
+const mapStateToProps = (state, {model, value, validateOn, validator}) => ({
   value: getValue(state, model),
+  initialized: isFormInitialized(state),
+  overriddenValue: value,
 });
 
 const mapDispatchToProps = {
   deleteValue: controlActions.deleteValue,
-  initializeGroup: controlActions.initializeGroup,
   markValidated: controlActions.markValidated,
+  mountModel: controlActions.mountModel,
   setErrors: controlActions.setErrors,
-  setGroup: controlActions.setGroup,
   setValue: controlActions.setValue,
   updateValue: controlActions.updateValue,
 };
