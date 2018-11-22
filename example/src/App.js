@@ -17,6 +17,14 @@ import MyInput from './MyInput';
 import styles from './app.module.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      numberOfAges: 5,
+      show: true,
+    };
+  }
+
   sleep = ms => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
@@ -26,13 +34,33 @@ class App extends Component {
     console.log(model);
   };
 
+  addAge = () => {
+    this.setState({
+      numberOfAges: this.state.numberOfAges + 1,
+    });
+  };
+
+  decAge = () => {
+    this.setState({
+      numberOfAges: this.state.numberOfAges - 1,
+    });
+  };
+
+  toggle = () => {
+    this.setState({
+      show: !this.state.show,
+    });
+  };
+
   render() {
     const initialState = {
       email: 'bla@bla.is',
       name: 'darri',
       darrmundur: 'true',
-      cocacola: true,
+      'drinks.*': true,
       rickandmorty: 'konn',
+      'human.ages.3': true,
+      'human.ages.2': true,
     };
 
     const selectOptions = [
@@ -83,8 +111,10 @@ class App extends Component {
 
     const isEmail = val =>
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-        val,
+        val
       ) || `"${val}" is not a valid email`;
+
+    const {numberOfAges, show} = this.state;
 
     return (
       <div>
@@ -106,14 +136,93 @@ class App extends Component {
                 id="name"
                 placeholder="name"
                 className={styles.textInput}
-                validator={[val => val === 'darri' && `Do not rump me with "${val}"`]}
-                validateOn="focus"
               />
               <ChloroformError
                 model="name"
                 component={({error}) => <p className={styles.error}>{error}</p>}
               />
             </div>
+            <div>
+              {show && (
+                <div>
+                  <label htmlFor="street">Street: </label>
+                  <FormInput
+                    model="address.street"
+                    id="street"
+                    placeholder="street"
+                    className={styles.textInput}
+                    validateOn="input"
+                    validator={[isRequired]}
+                  />
+                  <ChloroformError
+                    model="address.street"
+                    component={({error}) => <p className={styles.error}>{error}</p>}
+                  />
+                </div>
+              )}
+              <div onClick={this.toggle}>toggle</div>
+              <div>
+                <label htmlFor="zip">Zip: </label>
+                <FormInput
+                  model="address.zip"
+                  id="zip"
+                  type="number"
+                  placeholder="zip"
+                  className={styles.textInput}
+                  validateOn="focus"
+                />
+                <ChloroformError
+                  model="address.zip"
+                  component={({error}) => (error ? <p className={styles.error}>{error}</p> : null)}
+                />
+              </div>
+              <div>
+                <label htmlFor="country">Country: </label>
+                <FormInput
+                  model="address.country"
+                  id="country"
+                  placeholder="country"
+                  className={styles.textInput}
+                  validateOn="focus"
+                />
+                <ChloroformError
+                  model="address.country"
+                  component={({error}) => <p className={styles.error}>{error}</p>}
+                />
+              </div>
+            </div>
+
+            <div>
+              {[...Array(numberOfAges)].map((_, i) => {
+                if (i === 0) {
+                  return (<div key={`age${i}`}><label htmlFor="all.humans">All</label>
+                <Checkbox
+                  model="human.ages.*"
+                  id="all.humans"
+                  validateOn="input"
+                  validator={[v => v.includes('human.ages.1') || 'prump']}
+                /></div>);
+                }
+                if ((i === 2 && show) || i !== 2) {
+                  return (<div key={`age${i}`}>
+                  <label htmlFor={`age${i}`}>Age {i}: </label>
+                  <Checkbox
+                    model={`human.ages.${i-1}`}
+                    id={`age${i}`}
+                    parseValue={x => `human.ages.${i-1}`}
+                  />
+                </div>);
+                }
+                return null;
+              })}
+              <ChloroformError
+                model="human.ages.*"
+                component={({error}) => <p className={styles.error}>{error}</p>}
+              />
+            </div>
+            <div onClick={this.addAge}>+</div>
+            {numberOfAges > 0 && <div onClick={this.decAge}>-</div>}
+
             <div>
               <DataList
                 model="somedatalistyougotthere"
@@ -126,28 +235,21 @@ class App extends Component {
             <div className={styles.checkboxes}>
               <div>
                 <label htmlFor="all">All</label>
-                {/* `all` is a reserved model keyword */}
                 <Checkbox
-                  model="all"
+                  model="drinks.*"
                   id="all"
-                  group="drinks"
-                  validator={[val => {
-                    if (val && val.length > 0) return;
-                    return 'NEIIII';
-                  }]}
-                  validateOn="input"
                 />
               </div>
               <div>
                 <label htmlFor="cocacola">Coca Cola</label>
-                <Checkbox model="cocacola" id="cocacola" group="drinks" />
+                <Checkbox model="drinks.0" id="cocacola" parseValue={x => "cocacola"} />
               </div>
               <div>
                 <label htmlFor="pepsi">Pepsi</label>
-                <Checkbox model="pepsi" id="pepsi" group="drinks" />
+                <Checkbox model="drinks.1" id="pepsi" parseValue={x => "pepsi"} />
               </div>
               <ChloroformError
-                model="drinks"
+                model="drinks.*"
                 component={({error}) => <p className={styles.error}>{error}</p>}
               />
             </div>
@@ -163,7 +265,6 @@ class App extends Component {
               <Select
                 model="wabbalabbadubdub"
                 options={selectOptions}
-                validator={[isRequired]}
                 placeholder="Choose your option"
               />
             </div>
@@ -174,9 +275,13 @@ class App extends Component {
               <TextArea model="mynameisjeff" placeholder="Whuaa?" />
             </div>
 
-            <MyInput model="custominput" validator={[isRequired]} />
+            <MyInput model="custominput" />
 
-            <Button type="submit" text="Submit" className={classNames(styles.root, styles.button)} />
+            <Button
+              type="submit"
+              text="Submit"
+              className={classNames(styles.root, styles.button)}
+            />
             <Button type="reset" text="Reset" className={classNames(styles.root, styles.button)} />
           </Form>
         </div>
