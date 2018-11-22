@@ -3,6 +3,7 @@ import {
   INITIALIZE_GROUP,
   INITIALIZE_STATE,
   MARK_VALIDATED,
+  MOUNT_MODEL,
   RESET_VALUES,
   SET_ERRORS,
   SET_GROUP,
@@ -10,153 +11,206 @@ import {
   SHOW_ERRORS,
   UPDATE_VALUE,
 } from '../action-types';
+import {arrayToObject, mergeDeep, merge, fromDotProp, getIn, getIndex} from '../../utils';
+
+/* Store structure
+{
+  address.zip: {
+    validateOn: String,
+    validated: Boolean,
+    errors: Array,
+    parseValue: Function,
+    value: Scalar,
+  },
+  drinks.*: {
+    validateOn: String,
+    validated: Boolean,
+    errors: Array,
+    parseValue: Function,
+    value: [
+      validateOn: String,
+      validated: Boolean,
+      errors: Array,
+      parseValue: Function,
+      value: Scalar,
+    ],
+  },
+}
+ */
 
 export default (state = {}, action) => {
   const {payload} = action;
   switch (action.type) {
-    case DELETE_VALUE: {
-      const previousValue = getValue(state, payload.model) || [];
-
-      return {
-        ...state,
-        [payload.model]: {
-          ...state[payload.model],
-          value: previousValue.filter(value => value !== payload.value),
-        },
-      };
-    }
-    case INITIALIZE_GROUP:
-      return {
-        ...state,
-        [payload.group]: {
-          skipReset: true,
-          validateOn: payload.validateOn,
-          validator: payload.validator,
-          value: [],
-        },
-      };
     case INITIALIZE_STATE:
       return {
         ...state,
-        ...Object.keys(payload.state).reduce(
-          (accumulator, model) => ({
+        ...Object.keys(payload.state).reduce((accumulator, next) => {
+          const model = fromDotProp(next);
+          return {
             ...accumulator,
             [model]: {
               ...state[model],
-              value: payload.state[model],
+              value: merge(
+                getIn(accumulator, model, 'value') || getIn(state, model, 'value'),
+                payload.state[next],
+                next
+              ),
             },
-          }),
-          {}
-        ),
+          };
+        }, {}),
       };
-    case MARK_VALIDATED:
+    case MOUNT_MODEL: {
+      const model = fromDotProp(payload.model);
       return {
         ...state,
-        [payload.model]: {
-          ...state[payload.model],
-          validated: true,
-        },
-      };
-    case RESET_VALUES:
-      return {
-        ...Object.keys(state).reduce(
-          (accumulator, model) => ({
-            ...accumulator,
-            [model]: {
-              ...state[model],
-              value: state[model].skipReset ? state[model].value : payload.state[model],
+        [model]: {
+          ...state[model],
+          value: merge(getIn(state, model, 'value'), undefined, payload.model),
+          parseValue: {
+            ...getIn(state, model, 'parseValue'),
+            ...(payload.parseValue ? {[getIndex(payload.model)]: payload.parseValue} : {}),
+          },
+          validation: {
+            ...getIn(state, model, 'validation'),
+            [payload.model]: {
+              errors: [],
+              validated: payload.validated,
             },
-          }),
-          {}
-        ),
-      };
-    case SET_ERRORS:
-      return {
-        ...state,
-        [payload.model]: {
-          ...state[payload.model],
-          errors: payload.errors,
-        },
-      };
-    case SET_GROUP:
-      return {
-        ...state,
-        [payload.model]: {
-          ...state[payload.model],
-          group: payload.group,
-        },
-      };
-    case SET_VALUE:
-      return {
-        ...state,
-        [payload.model]: {
-          ...state[payload.model],
-          value: payload.value,
-        },
-      };
-    case SHOW_ERRORS:
-      return {
-        ...Object.keys(state).reduce(
-          (accumulator, model) => ({
-            ...accumulator,
-            [model]: {
-              ...state[model],
-              validated: true,
-            },
-          }),
-          {}
-        ),
-      };
-    case UPDATE_VALUE: {
-      const previousValue = getValue(state, payload.model) || [];
-
-      return {
-        ...state,
-        [payload.model]: {
-          ...state[payload.model],
-          value: [...previousValue, payload.value],
+          },
         },
       };
     }
+    case RESET_VALUES:
+      return Object.keys(state).reduce((nextState, model) => {
+        const value = Object.keys(payload.state).reduce((newValue, key) => {
+          if (fromDotProp(key) === model) {
+            return merge(newValue, payload.state[key], key);
+          }
+          return newValue;
+        }, merge(state[model].value, undefined, model))
+
+        return {
+          ...nextState,
+          [model]: {
+            ...state[model],
+            value,
+          },
+        };
+      }, {});
+    case SET_ERRORS: {
+      const model = fromDotProp(payload.model);
+      return {
+        ...state,
+        [model]: {
+          ...state[model],
+          validation: {
+            ...state[model].validation,
+            [payload.model]: {
+              ...state[model].validation[payload.model],
+              errors: payload.errors,
+            },
+          },
+        },
+      };
+    }
+    case SET_VALUE: {
+      const model = fromDotProp(payload.model);
+      return {
+        ...state,
+        [model]: {
+          ...state[model],
+          value: merge(getIn(state, model, 'value'), payload.value, payload.model),
+        },
+      };
+    }
+    case MARK_VALIDATED: { // combine with show_errors
+      const model = fromDotProp(payload.model);
+      return {
+        ...state,
+        [model]: {
+          ...state[model],
+          validation: {
+            ...state[model].validation,
+            [payload.model]: {
+              ...state[model].validation[payload.model],
+              validated: true,
+            },
+          },
+        },
+      };
+    }
+    case SHOW_ERRORS:
+      return {
+        ...Object.keys(state).reduce((nextState, next) => {
+          const model = fromDotProp(next);
+          return {
+            ...nextState,
+            [model]: {
+              ...state[model],
+              validation: {
+                ...state[model].validation,
+                [payload.model]: {
+                  ...state[model].validation[payload.model],
+                  validated: true,
+                },
+              },
+            },
+          };
+        }, {}),
+      };
     default:
       return state;
   }
 };
 
-export const getError = (state, model) => (state[model] || {}).errors;
+export const getError = (state, model) =>
+  getIn(state, fromDotProp(model), 'validation', model, 'errors');
 
-export const getGroupModels = (state, group) =>
-  Object.keys(state).reduce(
-    (accumulator, model) =>
-      state[model].group === group
-        ? {
-            ...accumulator,
-            [model]: state[model].value,
-          }
-        : accumulator,
-    {}
-  );
+export const getValue = (state, model) => {
+  const value = getIn(state, fromDotProp(model), 'value');
+  if (model.includes('.')) {
+    const idx = getIndex(model);
+    if (!isNaN(idx)) {
+      return getIn(value, idx);
+    }
+  }
+  return value;
+};
 
-export const getValidateOn = (state, model) => (state[model] || {}).validateOn;
+const parseValues = (value, parseValue, model) => {
+  if (Array.isArray(value)) {
+    return value.map((v, i) => {
+      const parse = parseValue['*'] || parseValue[i] || (x => x);
+      return v ? parse(v) : undefined;
+    });
+  }
 
-export const getValidator = (state, model) => (state[model] || {}).validator;
+  const key = getIndex(model);
+  const parse = parseValue[key] || (x => x);
+  return value ? parse(value) : value;
+};
 
-export const getValue = (state, model) => (state[model] || {}).value;
-
-export const getValues = state =>
-  Object.keys(state).reduce(
+export const getValues = state => {
+  return Object.keys(state).reduce(
     (accumulator, model) => ({
-      ...accumulator,
-      [model]: state[model].value,
+      ...mergeDeep(
+        accumulator,
+        arrayToObject(
+          model.split('.'),
+          parseValues(getIn(state, model, 'value'), getIn(state, model, 'parseValue'), model)
+        )
+      ),
     }),
     {}
   );
+};
 
-export const hasBeenValidated = (state, model) => (state[model] || {}).validated;
+export const hasBeenValidated = (state, model) =>
+  getIn(state, fromDotProp(model), 'validation', model, 'validated');
 
 export const hasError = (state, model) => {
   const errors = getError(state, model);
-  return errors !== undefined && errors.length > 0;
+  return Boolean(getIn(errors, 'length'));
 };
 
 export const hasErrors = state =>
