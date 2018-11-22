@@ -24,6 +24,8 @@ export const getFormStatus = state => fromForm.getStatus(state.form, hasFormErro
 
 export const canBeSubmitted = state => [HAS_ERRORS, SUBMITTING].includes(getFormStatus(state));
 
+export const isFormInitialized = state => fromForm.getInitialized(state.form);
+
 /*
  * Controls
  */

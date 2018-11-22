@@ -1,8 +1,15 @@
 import {FAILED, HAS_ERRORS, SUBMITTED, SUBMITTING} from '../../constants/form';
-import {RESET_SUBMIT, SET_SUBMITTED, SET_SUBMITTING, SET_SUBMIT_FAILED} from '../action-types';
+import {
+  RESET_SUBMIT,
+  SET_SUBMITTED,
+  SET_SUBMITTING,
+  SET_SUBMIT_FAILED,
+  INITIALIZE_STATE,
+} from '../action-types';
 
 const initialState = {
   status: undefined,
+  initialized: false,
 };
 
 export default (state = initialState, action) => {
@@ -15,6 +22,8 @@ export default (state = initialState, action) => {
       return {...state, status: FAILED};
     case RESET_SUBMIT:
       return initialState;
+    case INITIALIZE_STATE:
+      return {...state, initialized: true};
     default:
       return state;
   }
@@ -22,3 +31,5 @@ export default (state = initialState, action) => {
 
 export const getStatus = (state, hasFormErrors) =>
   state.status || (hasFormErrors ? HAS_ERRORS : undefined);
+
+export const getInitialized = state => state.initialized;
