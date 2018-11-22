@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import Control from './Control';
 import controlActions from '../actions/controls';
-import {ALL} from '../constants/keywords';
 import {BLUR, FOCUS, INPUT, MOUNT} from '../constants/events';
 import {connect} from '../store';
 import {
