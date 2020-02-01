@@ -3,7 +3,7 @@
   "bracketSpacing": false,
   "insertPragma": false,
   "jsxBracketSameLine": false,
-  "parser": "babylon",
+  "parser": "babel",
   "printWidth": 100,
   "proseWrap": "never",
   "requirePragma": false,

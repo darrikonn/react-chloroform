@@ -1,13 +1,20 @@
 {
+  "settings": {
+    "react": {
+      "version": "16.8.0"
+    }
+  },
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
     "prettier",
-    "prettier/react"
+    "prettier/react",
+    "plugin:@typescript-eslint/recommended"
   ],
   "parser": "babel-eslint",
   "plugins": [
       "react",
+      "@typescript-eslint",
       "import",
       "prettier"
   ],

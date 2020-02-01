@@ -13,71 +13,49 @@
     "react-chloroform",
     "reactjs"
   ],
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "author": "Darri Steinn Konradsson",
   "license": "MIT",
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "jsnext:main": "es/index.js",
-  "files": [
-    "dist",
-    "lib",
-    "es",
-    "src"
-  ],
   "bugs": {
     "url": "https://github.com/darrikonn/react-chloroform/issues"
   },
   "homepage": "https://github.com/darrikonn/react-chloroform#readme",
   "scripts": {
-    "clean": "rimraf lib dist es coverage",
-    "lint": "./node_modules/.bin/eslint src tests",
-    "jest": "cross-env NODE_ENV=commonjs ./node_modules/.bin/jest",
-    "jest:watch": "npm run jest -- --watch",
-    "test": "npm run lint && npm run jest",
-    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
-    "build:commonjs:watch": "npm run build:commonjs -- --watch",
-    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
-    "build:es:watch": "npm run build:es -- --watch",
-    "build:umd": "cross-env BABEL_ENV=es NODE_ENV=development rollup src/index.js --config --sourcemap -o dist/react-chloroform.js",
-    "build:umd:watch": "npm run build:umd -- --watch",
-    "build:umd:min": "cross-env BABEL_ENV=es NODE_ENV=production rollup src/index.js --config -o dist/react-chloroform.min.js",
-    "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min && npm run build:es",
-    "build:watch": "echo 'build && watch the ES version of the package - for other version, run specific tasks' && npm run build:es:watch",
-    "prepare": "npm run clean && npm run test && npm run build"
+    "build": "tsc",
+    "build:watch": "tsc-watch",
+    "clean": "rm -rf dist",
+    "lint": "eslint src --ext ts,tsx",
+    "lint:fix": "eslint src --ext ts,tsx --fix",
+    "tsc": "tsc --noEmit",
+    "format": "prettier --config .prettierrc --write \"src/**/*.ts*\"",
+    "cypress:run": "cypress run",
+    "cypress:open": "cypress open"
   },
-  "jest": {
-    "testRegex": "(/tests/.*\\.test.js)$"
-  },
+  "types": "./dist/index.d.ts",
   "peerDependencies": {
-    "react": "^15.5.0"
+    "react": "^16.8.0"
   },
-  "dependencies": {
-    "prop-types": "^15.5.7"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@babel/cli": "^7.1.2",
-    "@babel/core": "^7.1.2",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-env": "^7.8.4",
     "@babel/preset-react": "^7.0.0",
+    "@types/react": "^16.9.19",
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
+    "@typescript-eslint/parser": "^2.18.0",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-eslint": "^10.0.1",
-    "cross-env": "^5.2.0",
-    "eslint": "^5.8.0",
-    "eslint-config-prettier": "^3.1.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.4.0",
-    "jest": "^23.6.0",
     "prettier": "^1.7.4",
-    "react": "^15.5.0",
-    "rimraf": "^2.6.2",
-    "rollup": "^0.66.6",
-    "rollup-plugin-babel": "^4.1.0-0",
-    "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-replace": "^2.0.0",
-    "rollup-plugin-uglify": "^6.0.0"
+    "tsc-watch": "^4.1.0",
+    "typescript": "^3.7.5"
   }
 }
