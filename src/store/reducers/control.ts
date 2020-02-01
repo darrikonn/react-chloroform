@@ -13,13 +13,11 @@ const constructModel = (arr: string[], state: ExplicitAny = {}): {} => {
   if (arr.length == 0) {
     return 'foo';
   } else if (arr[0] === "*") {
-    // TODO
-    // maxIndex: Math.max(isNumber(arr[0]) ? parseInt(arr[0]) : 0),
-    return state;
+    return state.value;
   } else if (isNumber(arr[0])) {
     return [
       ...(state.value || []).slice(0, parseInt(arr[0])),
-      {value: constructModel(arr.slice(1), getIn(state, 'value', arr[0]))},
+      {value: constructModel(arr.slice(1), getIn(state, 'value', arr[0], 'value'))},
       ...(state.value || []).slice(parseInt(arr[0]) + 1),
     ];
   } else {
@@ -37,8 +35,8 @@ const setDeep: ExplicitAny = (arr: string[], state: ExplicitAny = {}, newValue: 
   if (arr.length == 0) {
     return newValue;
   } else if (arr[0] === "*") {
-    return (state.value || []).map((v: ExplicitAny, i: number) => ({
-      value: setDeep(arr.slice(1), v[i], newValue)
+    return (state.value || []).map((v: ExplicitAny) => ({
+      value: setDeep(arr.slice(1), v.value, newValue)
     }));
   } else if (isNumber(arr[0])) {
     return [
@@ -70,6 +68,7 @@ export default (state: Store.ControlState = {}, action: Store.Action): Store.Con
       };
     case MOUNT_MODEL: {
       const model = payload.model.split('.');
+      // console.log(payload.model, constructModel(model, state));
       return {
         ...state,
         ...constructModel(model, state),
@@ -187,6 +186,7 @@ const getStateValue = (state: ExplicitAny = {}): {} => {
 };
 
 export const getValues = (state: Store.ControlState) => {
+  return state;
   return Object.keys(state).reduce((acc, model) => ({
     ...acc,
     [model]: getStateValue(state[model]),
