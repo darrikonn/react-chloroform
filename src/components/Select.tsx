@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import controlActions from '../actions/controls';
 import {BLUR, FOCUS, INPUT, MOUNT} from '../constants/events';

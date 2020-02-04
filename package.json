@@ -43,6 +43,7 @@
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/preset-env": "^7.8.4",
     "@babel/preset-react": "^7.0.0",
+    "@types/node": "^13.7.0",
     "@types/react": "^16.9.19",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
@@ -54,6 +55,7 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.4.0",
+    "eslint-plugin-react-hooks": "^2.3.0",
     "prettier": "^1.7.4",
     "tsc-watch": "^4.1.0",
     "typescript": "^3.7.5"

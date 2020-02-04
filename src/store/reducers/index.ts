@@ -41,7 +41,7 @@ export const getError = (state: Store.CombinedState, model: string) =>
 export const getFormValues = (state: Store.CombinedState) => fromControl.getValues(state.control);
 
 export const getValue = (state: Store.CombinedState, model: string) =>
-  fromControl.getValue(state.control, model);
+  fromControl.getValue(state.control.store, model.split('.'));
 
 export const hasBeenValidated = (state: Store.CombinedState, model: string) =>
   fromControl.hasBeenValidated(state.control, model);

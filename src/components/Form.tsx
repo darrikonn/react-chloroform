@@ -1,5 +1,4 @@
-import React, {useEffect} from 'react';
-import PropTypes from 'prop-types';
+import React, {memo, useEffect} from 'react';
 
 import controlActions from '../actions/controls';
 import formActions from '../actions/form';
@@ -118,4 +117,4 @@ const mapDispatchToProps = {
   setSubmitting: formActions.setSubmitting,
 };
 
-export default withNewLocalStore(reducers)(connect(mapStateToProps, mapDispatchToProps)(Form));
+export default withNewLocalStore(reducers)(connect(mapStateToProps, mapDispatchToProps)(memo(Form)));

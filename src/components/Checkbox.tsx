@@ -26,7 +26,7 @@ interface PropTypes {
   validateOn?: typeof BLUR | typeof FOCUS | typeof INPUT | typeof MOUNT;
   value?: boolean | boolean[];
 }
-function CheckBox({
+function Checkbox({
   autoFocus,
   className,
   disabled,
@@ -36,7 +36,7 @@ function CheckBox({
   isValidated,
   model,
   mountModel,
-  onChange,
+  onChange = () => {},
   parseValue,
   setErrors,
   setValidated,
@@ -84,10 +84,9 @@ function CheckBox({
   );
 }
 
-const mapStateToProps = (state: Store.CombinedState, {model, value}: PropTypes) => ({
+const mapStateToProps = (state: Store.CombinedState, {model}: PropTypes) => ({
   value: getValue(state, model),
   initialized: isFormInitialized(state),
-  overriddenValue: value,
 });
 
 const mapDispatchToProps = {
@@ -99,4 +98,4 @@ const mapDispatchToProps = {
   updateValue: controlActions.updateValue,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CheckBox);
+export default connect(mapStateToProps, mapDispatchToProps)(Checkbox);

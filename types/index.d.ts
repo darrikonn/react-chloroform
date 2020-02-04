@@ -27,7 +27,8 @@ type ArrayValue = ValueControl & {
 
 declare namespace Store {
   type ControlState = {
-    [key: string]: ScalarValue | ArrayValue | ObjectValue;
+    blueprint: {[key: string]: {} | undefined},
+    store: {[key: string]: ScalarValue | ArrayValue | ObjectValue},
   };
 
   type FormState = {

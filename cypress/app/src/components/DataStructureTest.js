@@ -15,12 +15,12 @@ function DataStructureTest() {
     <div>
       <Form
         initialState={{
+          'drinks.0.type': true,
           /*
-          'drinks.*.type': true,
           'dog': 'barfoo',
           */
           'human.*.interests.*': 'First item should be set',
-          // 'human.*.gender': 'male',
+          'human.*.gender': 'male',
         }}
         // onSubmit={}
         // onChange={}
@@ -31,17 +31,17 @@ function DataStructureTest() {
         }}
       >
         {/* list of checkboxes */}
-        {/*
         <div>
           <Checkbox model="drinks.*" />
           <Checkbox model="drinks.0.type" />
           <Checkbox model="drinks.1.type" />
           <Checkbox model="drinks.2.type" />
           <Checkbox model="drinks.3.type" />
+          <Checkbox model="drinks.0.foo" />
         </div>
-        */}
 
         {/* list of list of input objects */}
+        {/*
         <div>
           <div>
             <Input model="human.0.interests.0" />
@@ -50,6 +50,15 @@ function DataStructureTest() {
           <div>
             <Input model="human.1.interests.0" />
             <Input model="human.1.interests.1" />
+          </div>
+        </div>
+        */}
+
+        {/* complex input objects */}
+        <div>
+          <div>
+            <Input model="foo.bar.foobar" />
+            <Input model="foo.bar.barfoo" />
           </div>
         </div>
 
