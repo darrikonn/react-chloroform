@@ -2,35 +2,11 @@ import {
   MOUNT_MODEL,
   INITIALIZE_STATE,
   MARK_VALIDATED,
-  RESET_VALUES,
   SET_ERRORS,
   SET_VALUE,
   SHOW_ERRORS,
 } from '../action-types';
-import {/*arrayToObject, mergeDeep, merge,*/ fromDotProp, getIn, /*getIndex, */ isNumber, isObject, isArray} from '../../utils';
-
-// const constructModel = (arr: string[], state: ExplicitAny = {}): {} => {
-//   if (arr.length == 0) {
-//     return 'foo';
-//   } else if (arr[0] === '*') {
-//     return state.value;
-//   } else if (isNumber(arr[0])) {
-//     return [
-//       ...(state.value || []).slice(0, parseInt(arr[0])),
-//       {value: constructModel(arr.slice(1), getIn(state, 'value', arr[0], 'value'))},
-//       ...(state.value || []).slice(parseInt(arr[0]) + 1),
-//     ];
-//   } else {
-//     return {
-//       ...state,
-//       [arr[0]]: {
-//         ...state[arr[0]],
-//         value: constructModel(arr.slice(1), state[arr[0]]),
-//       },
-//     } as ObjectValue;
-//   }
-// };
-//
+import {fromDotProp, getIn, isNumber, isObject, isArray} from '../../utils';
 
 const constructBlueprint = (arr: string[], state: ExplicitAny = {}): ExplicitAny => {
   if (arr.length == 0) {
@@ -88,7 +64,6 @@ const initializeState = (state: ExplicitAny = {}, initialState: {}, currentPath:
 };
 
 const setInEveryLeaf = (state: ExplicitAny, newValue: ExplicitAny): ExplicitAny => {
-  console.log(state, newValue);
   if (isArray(state)) {
     return state.map((s: ExplicitAny) => ({
       value: setInEveryLeaf(s.value, newValue),
@@ -99,7 +74,7 @@ const setInEveryLeaf = (state: ExplicitAny, newValue: ExplicitAny): ExplicitAny 
         ...acc,
         [next]: {
           ...acc[next],
-          value: setInEveryLeaf(getIn(state, next, 'value'), newValue),
+          value: setInEveryLeaf(state[next].value, newValue),
         },
       };
     }, {});
@@ -110,23 +85,30 @@ const setInEveryLeaf = (state: ExplicitAny, newValue: ExplicitAny): ExplicitAny 
 
 const setDeep: ExplicitAny = (arr: string[], state: ExplicitAny = {}, newValue: ExplicitAny) => {
   if (arr.length == 0) {
-    return setInEveryLeaf(state.value, newValue);
+    return {
+      ...state,
+      value: setInEveryLeaf(state.value, newValue),
+    }
   } else if (arr[0] === "*") {
-    return (state.value || []).map((v: ExplicitAny) => ({
-      value: setDeep(arr.slice(1), v, newValue)
-    }));
+    return {
+      ...state,
+      value: (state.value || []).map((v: ExplicitAny) => setDeep(arr.slice(1), v, newValue)),
+    };
   } else if (isNumber(arr[0])) {
-    return [
-      ...(state.value || []).slice(0, parseInt(arr[0])),
-      {value: setDeep(arr.slice(1), getIn(state, 'value', arr[0], 'value'), newValue)},
-      ...(state.value || []).slice(parseInt(arr[0]) + 1),
-    ];
+    return {
+      ...state,
+      value: [
+        ...(state.value || []).slice(0, parseInt(arr[0])),
+        setDeep(arr.slice(1), state.value[arr[0]], newValue),
+        ...(state.value || []).slice(parseInt(arr[0]) + 1),
+      ]
+    };
   } else {
     return {
       ...state,
-      [arr[0]]: {
-        ...state[arr[0]],
-        value: setDeep(arr.slice(1), state[arr[0]], newValue),
+      value: {
+        ...state.value,
+        [arr[0]]: setDeep(arr.slice(1), state.value[arr[0]], newValue),
       },
     } as ObjectValue;
   }
@@ -150,24 +132,6 @@ export default (state: Store.ControlState = {blueprint: {}, store: {}}, action: 
         ...state,
         store: initializeState(state.blueprint, payload.initialState),
       };
-    case RESET_VALUES:
-      return state;
-      // return Object.keys(state).reduce((nextState, model) => {
-      //   const value = Object.keys(payload.state).reduce((newValue, key) => {
-      //     if (fromDotProp(key) === model) {
-      //       return merge(newValue, payload.state[key], key);
-      //     }
-      //     return newValue;
-      //   }, merge(state[model].value, undefined, model))
-      //
-      //   return {
-      //     ...nextState,
-      //     [model]: {
-      //       ...state[model],
-      //       value,
-      //     },
-      //   };
-      // }, {});
     case SET_ERRORS: {
       return state;
       // const model = fromDotProp(payload.model);
@@ -180,9 +144,13 @@ export default (state: Store.ControlState = {blueprint: {}, store: {}}, action: 
       // };
     }
     case SET_VALUE: {
+      const model = payload.model.split('.');
       return {
         ...state,
-        store: setDeep(payload.model.split('.'), state.store, payload.value),
+        store: {
+          ...state.store,
+          [model[0]]: setDeep(model.slice(1), state.store[model[0]], payload.value),
+        },
       };
       // const model = fromDotProp(payload.model);
       // return {
@@ -226,15 +194,6 @@ export default (state: Store.ControlState = {blueprint: {}, store: {}}, action: 
 export const getError = (state: Store.ControlState, model: string) =>
   getIn(state, fromDotProp(model), 'validation', model, 'errors');
 
-// const unflattenLeafs = (obj: ExplicitAny): ExplicitAny => {
-//   if (isObject(obj)) {
-//     return Object.keys(obj).forEach((k: ExplicitAny) => unflattenLeafs(obj[k]));
-//   } else if (isArray(obj)) {
-//     return obj.forEach((o: ExplicitAny) => unflattenLeafs(o));
-//   } else {
-//     return obj;
-//   }
-// };
 const flattenObject = (obj: ExplicitAny, result: ExplicitAny = []) => {
   for (const i in obj) {
     if (isObject(obj[i])) {
@@ -249,7 +208,7 @@ const flattenObject = (obj: ExplicitAny, result: ExplicitAny = []) => {
 export const getValue = (state: ExplicitAny, arr: string[]): ExplicitAny => {
   if (arr.length == 0) {
     return state;
-  } else if (Object.keys(state).length === 0) {
+  } else if (!state || Object.keys(state).length === 0) {
     return undefined;
   } else if (arr[0] === "*") {
     const values: ExplicitAny = flattenObject((state || []).map((v: ExplicitAny) => getValue(v.value, arr.slice(1))));

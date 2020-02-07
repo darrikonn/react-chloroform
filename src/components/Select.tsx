@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useLayoutEffect, memo} from 'react';
 
 import controlActions from '../actions/controls';
 import {BLUR, FOCUS, INPUT, MOUNT} from '../constants/events';
 import {connect} from '../store';
 import {getValue, isFormInitialized, hasBeenValidated, hasError} from '../store/reducers';
-import {useWillMount} from '../hooks';
 
 interface PropTypes {
   options: ({
@@ -48,7 +47,7 @@ function Select({
   isValidated,
   model,
   mountModel,
-  onChange,
+  onChange = () => {},
   options,
   parseValue,
   placeholder,
@@ -58,7 +57,8 @@ function Select({
   validateOn,
   value,
 }: PropTypes) {
-  useWillMount(() => mountModel(model, parseValue, validateOn === MOUNT));
+  console.log('RENDERING: select', model);
+  useLayoutEffect(() => {mountModel(model, parseValue, validateOn === MOUNT)}, []);
 
   const getClassName: () => string = () => {
     return [className, hasError && isValidated ? `CHl3Error ${model}-CHl3Error` : undefined]
@@ -143,4 +143,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Select);
+)(memo(Select));

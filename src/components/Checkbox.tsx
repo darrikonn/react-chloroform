@@ -1,10 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useLayoutEffect, memo/*, useEffect*/} from 'react';
 
 import controlActions from '../actions/controls';
 import {BLUR, FOCUS, INPUT, MOUNT} from '../constants/events';
 import {connect} from '../store';
-import {getValue, isFormInitialized} from '../store/reducers';
-import {useWillMount} from '../hooks';
+import {getValue/*, isFormInitialized*/} from '../store/reducers';
 
 interface PropTypes {
   autoFocus?: boolean;
@@ -32,25 +31,26 @@ function Checkbox({
   disabled,
   hasError,
   id,
-  initialized,
+  // initialized,
   isValidated,
   model,
   mountModel,
   onChange = () => {},
   parseValue,
-  setErrors,
+  // setErrors,
   setValidated,
   setValue,
   style,
   validateOn,
-  validator = () => {},
+  // validator = () => {},
   value,
 }: PropTypes) {
-  useWillMount(() => mountModel(model, parseValue, validateOn === MOUNT));
-
-  useEffect(() => {
-    setErrors(model, validator(parseValue ? parseValue(value) : value));
-  }, [value, initialized]);
+  console.log('RENDERING: checkbox', model, value, /*initialized, */ isValidated, validateOn);
+  useLayoutEffect(() => {mountModel(model, parseValue, validateOn === MOUNT)}, []);
+  //
+  // useEffect(() => {
+  //   setErrors(model, validator(parseValue ? parseValue(value) : value));
+  // }, [value, initialized]);
 
   const handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -86,7 +86,7 @@ function Checkbox({
 
 const mapStateToProps = (state: Store.CombinedState, {model}: PropTypes) => ({
   value: getValue(state, model),
-  initialized: isFormInitialized(state),
+  // initialized: isFormInitialized(state),
 });
 
 const mapDispatchToProps = {
@@ -98,4 +98,4 @@ const mapDispatchToProps = {
   updateValue: controlActions.updateValue,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Checkbox);
+export default connect(mapStateToProps, mapDispatchToProps)(memo(Checkbox));

@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useLayoutEffect, memo} from 'react';
 
 import controlActions from '../actions/controls';
 import {BLUR, FOCUS, INPUT, MOUNT} from '../constants/events';
 import {connect} from '../store';
-import {getValue, hasError} from '../store/reducers';
-import {useWillMount} from '../hooks';
+import {getValue/*, hasError*/} from '../store/reducers';
 
 interface PropTypes {
   autoFocus?: boolean;
@@ -36,7 +35,7 @@ function RadioButton({
   isValidated,
   model,
   mountModel,
-  onChange,
+  onChange = () => {},
   parseValue,
   placeholder,
   setValidated,
@@ -45,7 +44,8 @@ function RadioButton({
   validateOn,
   value,
 }: PropTypes) {
-  useWillMount(() => mountModel(model, parseValue, validateOn === MOUNT));
+  console.log('RENDERING: radiobutton', model);
+  useLayoutEffect(() => {mountModel(model, parseValue, validateOn === MOUNT)}, []);
 
   const getClassName: () => string = () => {
     return [className, hasError && isValidated ? `CHl3Error ${model}-CHl3Error` : undefined]
@@ -83,8 +83,8 @@ function RadioButton({
 
 const mapStateToProps = (state: Store.CombinedState, {model}: PropTypes) => ({
   checked: getValue(state, model),
-  hasError: hasError(state, model),
-  parseValue: (x: string | number) => x, // disable parseValue for radio-buttons
+  // hasError: hasError(state, model),
+  // parseValue: (x: string | number) => x, // disable parseValue for radio-buttons
 });
 
 const mapDispatchToProps = {
@@ -94,4 +94,4 @@ const mapDispatchToProps = {
   setValue: controlActions.setValue,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RadioButton);
+export default connect(mapStateToProps, mapDispatchToProps)(memo(RadioButton));

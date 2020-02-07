@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {memo, useLayoutEffect} from 'react';
 
 import controlActions from '../actions/controls';
 import {BLUR, FOCUS, INPUT, MOUNT} from '../constants/events';
 import {connect} from '../store';
 import {getValue, isFormInitialized, hasBeenValidated, hasError} from '../store/reducers';
-import {useWillMount} from '../hooks';
 
 interface PropTypes {
   autoFocus?: boolean;
@@ -39,7 +38,7 @@ function DataList({
   isValidated,
   model,
   mountModel,
-  onChange,
+  onChange = () => {},
   options,
   parseValue,
   placeholder,
@@ -49,7 +48,8 @@ function DataList({
   validateOn,
   value,
 }: PropTypes) {
-  useWillMount(() => mountModel(model, parseValue, validateOn === MOUNT));
+  console.log('RENDERING: datalist', model);
+  useLayoutEffect(() => {mountModel(model, parseValue, validateOn === MOUNT)}, []);
 
   const getClassName: () => string = () => {
     return [className, hasError && isValidated ? `CHl3Error ${model}-CHl3Error` : undefined]
@@ -107,4 +107,4 @@ const mapDispatchToProps = {
   setValue: controlActions.setValue,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DataList);
+export default connect(mapStateToProps, mapDispatchToProps)(memo(DataList));

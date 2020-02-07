@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useLayoutEffect, memo} from 'react';
 
 import controlActions from '../actions/controls';
 import {BLUR, FOCUS, INPUT, MOUNT} from '../constants/events';
 import {connect} from '../store';
 import {getValue, hasBeenValidated, hasError, isFormInitialized} from '../store/reducers';
-import {useWillMount} from '../hooks';
 
 interface PropTypes {
   autoFocus?: boolean;
@@ -37,7 +36,7 @@ function TextArea({
   isValidated,
   model,
   mountModel,
-  onChange,
+  onChange = () => {},
   parseValue,
   placeholder,
   rows = 10,
@@ -47,7 +46,8 @@ function TextArea({
   validateOn,
   value = '',
 }: PropTypes) {
-  useWillMount(() => mountModel(model, parseValue, validateOn === MOUNT));
+  console.log('RENDERING: textarea', model);
+  useLayoutEffect(() => {mountModel(model, parseValue, validateOn === MOUNT)}, []);
 
   const getClassName: () => string = () => {
     return [className, hasError && isValidated ? `CHl3Error ${model}-CHl3Error` : undefined]
@@ -97,4 +97,4 @@ const mapDispatchToProps = {
   setValue: controlActions.setValue,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TextArea);
+export default connect(mapStateToProps, mapDispatchToProps)(memo(TextArea));

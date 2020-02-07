@@ -2,14 +2,16 @@ import React, {memo, useEffect} from 'react';
 
 import controlActions from '../actions/controls';
 import formActions from '../actions/form';
-import {withNewLocalStore, connect} from '../store';
-import reducers, {getFormValues, hasFormErrors} from '../store/reducers';
+import {withLocalStore, connect, compose} from '../store';
+import {getFormValues/*, hasFormErrors*/} from '../store/reducers';
 
 interface PropTypes {
   afterSubmitState?: {};
   children?: React.ReactNode;
   className?: string;
-  hasFormErrors?: boolean;
+  getValues: Function;
+  // hasFormErrors?: boolean;
+  id?: string;
   initialState?: {};
   initializeState: Function;
   onChange?: Function;
@@ -18,20 +20,20 @@ interface PropTypes {
   onSubmit: Function;
   onSubmitFailed?: Function;
   resetSubmit: Function;
-  resetValues: Function;
-  setSubmitFailed: Function;
-  setSubmitted: Function;
-  setSubmitting: Function;
-  showErrors: Function;
+  // setSubmitFailed: Function;
+  // setSubmitted: Function;
+  // setSubmitting: Function;
+  // showErrors: Function;
   style?: React.CSSProperties;
-  values?: {};
 }
 
 function Form({
-  afterSubmitState = {},
+  afterSubmitState,
   children,
   className,
-  hasFormErrors,
+  getValues,
+  // hasFormErrors,
+  id,
   initialState = {},
   initializeState,
   onChange = () => {},
@@ -40,14 +42,13 @@ function Form({
   onSubmit,
   onSubmitFailed = () => {},
   resetSubmit,
-  resetValues,
-  setSubmitFailed,
-  setSubmitted,
-  setSubmitting,
-  showErrors,
+  // setSubmitFailed,
+  // setSubmitted,
+  // setSubmitting,
+  // showErrors,
   style,
-  values,
 }: PropTypes) {
+  console.log('RENDERING: form');
   useEffect(() => {
     initializeState(initialState);
   }, []);
@@ -59,21 +60,21 @@ function Form({
   const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (hasFormErrors) {
-      showErrors();
-      return;
-    }
+    // if (hasFormErrors) {
+    //   showErrors();
+    //   return;
+    // }
 
     // this.props.setPending(this.props.model);
-    setSubmitting();
+    // setSubmitting();
     Promise.resolve()
-      .then(() => onSubmit(values))
+      .then(() => onSubmit(getValues()))
       .then(() => {
-        initializeState(afterSubmitState);
-        setSubmitted();
+        initializeState(afterSubmitState || initialState);
+        // setSubmitted();
       })
       .catch(err => {
-        setSubmitFailed();
+        // setSubmitFailed();
         onSubmitFailed(err);
       })
       .finally(() => resetSubmit());
@@ -82,10 +83,9 @@ function Form({
   const handleReset = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    resetValues(onResetState || initialState);
+    initializeState(onResetState || initialState);
     onReset();
   };
-  console.log("***", values);
 
   return (
     <form
@@ -94,6 +94,7 @@ function Form({
       onReset={handleReset}
       onSubmit={handleSubmit}
       style={style}
+      id={id}
     >
       {children}
     </form>
@@ -101,20 +102,23 @@ function Form({
 }
 
 const mapStateToProps = (state: Store.CombinedState) => ({
-  hasFormErrors: hasFormErrors(state),
-  values: getFormValues(state),
+  // hasFormErrors: hasFormErrors(state),
+  getValues: () => getFormValues(state),
 });
 
 const mapDispatchToProps = {
   initializeState: controlActions.initializeState,
-  resetValues: controlActions.resetValues,
-  setPending: controlActions.setPending,
-  showErrors: controlActions.showErrors,
+  // setPending: controlActions.setPending,
+  // showErrors: controlActions.showErrors,
 
   resetSubmit: formActions.resetSubmit,
-  setSubmitFailed: formActions.setSubmitFailed,
-  setSubmitted: formActions.setSubmitted,
-  setSubmitting: formActions.setSubmitting,
+  // setSubmitFailed: formActions.setSubmitFailed,
+  // setSubmitted: formActions.setSubmitted,
+  // setSubmitting: formActions.setSubmitting,
 };
 
-export default withNewLocalStore(reducers)(connect(mapStateToProps, mapDispatchToProps)(memo(Form)));
+export default compose(
+  withLocalStore(),
+  connect(mapStateToProps, mapDispatchToProps),
+  memo,
+)(Form);

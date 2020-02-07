@@ -5,8 +5,7 @@
 
 describe('Form Interactions', function () {
   beforeEach(function () {
-    cy.viewport(400, 300)
-    cy.visit('/index.html')
+    cy.server();
   })
 
   it('updates range value when moving slider', function () {

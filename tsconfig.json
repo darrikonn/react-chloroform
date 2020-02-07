@@ -6,7 +6,6 @@
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
     "alwaysStrict": true,
-    "alwaysStrict": true,
     "baseUrl": "./",
     "declaration": true,
     "emitDecoratorMetadata": false,
