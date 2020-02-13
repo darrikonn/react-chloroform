@@ -11,7 +11,6 @@ interface PropTypes {
 }
 
 function Button({className, disabled, onClick, id, style, text, type = 'button'}: PropTypes) {
-  console.log('RENDERING: button', type);
   return (
     <button
       id={id}

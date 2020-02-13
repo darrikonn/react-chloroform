@@ -35,16 +35,15 @@ function Form({
   style,
   validators = {},
 }: PropTypes) {
-  console.log('RENDERING: form');
+  // console.log('RENDERING: form');
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(controlActions.initializeState(initialState, validators));
   }, []);
+  const values = useSelector((state: Store.CombinedState) => getFormValues(state));
 
   const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const x = useSelector((state: Store.CombinedState) => getFormValues(state));
-    console.log("************", x);
 
     // if (hasFormErrors) {
     //   showErrors();
@@ -54,7 +53,7 @@ function Form({
     // this.props.setPending(this.props.model);
     // setSubmitting();
     Promise.resolve()
-      .then(() => onSubmit(x))
+      .then(() => onSubmit(values))
       .then(() => {
         dispatch(controlActions.initializeState(afterSubmitState || initialState, validators));
         // setSubmitted();

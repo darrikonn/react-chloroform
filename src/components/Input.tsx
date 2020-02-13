@@ -41,8 +41,8 @@ function Input({
   const value = useCachedSelector(getValue, model) || '';
   const errors: string[] = useGetErrors(model, value);
 
-  console.log('RENDERING: input', model, value);
-  console.log("ERRORS", model, errors);
+  // console.log('RENDERING: input', model, value);
+  // console.log("ERRORS", model, errors);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     dispatch(controlActions.setValue(model, e.target.value));

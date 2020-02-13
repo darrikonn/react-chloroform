@@ -41,7 +41,7 @@ function RadioButton({
   const dispatch = useDispatch();
   const checked = useCachedSelector(getValue, model) || '';
   const errors: string[] = useGetErrors(model, value);
-  console.log('RENDERING: radiobutton', model);
+  // console.log('RENDERING: radiobutton', model);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     dispatch(controlActions.setValue(model, e.target.value));

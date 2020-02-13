@@ -55,7 +55,7 @@ function Select({
   const dispatch = useDispatch();
   const value = useCachedSelector(getValue, model) || '';
   const errors: string[] = useGetErrors(model, value);
-  console.log('RENDERING: select', model);
+  // console.log('RENDERING: select', model);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     dispatch(controlActions.setValue(model, e.target.value));

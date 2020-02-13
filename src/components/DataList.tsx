@@ -45,7 +45,7 @@ function DataList({
   const dispatch = useDispatch();
   const value = useCachedSelector(getValue, model) || '';
   const errors: string[] = useGetErrors(model, value);
-  console.log('RENDERING: datalist', model);
+  // console.log('RENDERING: datalist', model);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     dispatch(controlActions.setValue(model, e.target.value));

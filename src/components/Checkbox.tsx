@@ -36,7 +36,7 @@ function Checkbox({
   const dispatch = useDispatch();
   const value = useCachedSelector(getValue, model) || '';
   const errors: string[] = useGetErrors(model, value);
-  console.log('RENDERING: checkbox', model, errors);
+  // console.log('RENDERING: checkbox', model, errors);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     dispatch(controlActions.setValue(model, e.target.checked));

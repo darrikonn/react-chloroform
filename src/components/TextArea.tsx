@@ -43,7 +43,7 @@ function TextArea({
   const dispatch = useDispatch();
   const value = useCachedSelector(getValue, model) || '';
   const errors: string[] = useGetErrors(model, value);
-  console.log('RENDERING: textarea', model);
+  // console.log('RENDERING: textarea', model);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     dispatch(controlActions.setValue(model, e.target.value));
