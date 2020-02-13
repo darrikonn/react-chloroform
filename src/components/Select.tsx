@@ -1,9 +1,11 @@
-import React, {useLayoutEffect, memo} from 'react';
+import React, {memo} from 'react';
+import {useDispatch} from 'react-redux';
 
+import {useCachedSelector, useGetErrors, useWillMount} from '../hooks';
 import controlActions from '../actions/controls';
 import {BLUR, FOCUS, INPUT, MOUNT} from '../constants/events';
-import {connect} from '../store';
-import {getValue, isFormInitialized, hasBeenValidated, hasError} from '../store/reducers';
+// import {getValue2 as getValue, isFormInitialized, hasBeenValidated, hasError} from '../store/reducers';
+import {getValue/*, hasBeenValidated, isFormInitialized*/} from '../store/reducers';
 
 interface PropTypes {
   options: ({
@@ -24,56 +26,49 @@ interface PropTypes {
   autoFocus?: boolean;
   className?: string;
   disabled?: boolean;
-  hasError: boolean;
   id?: string;
-  isValidated: boolean;
   model: string;
-  mountModel: Function;
   onChange: Function;
   parseValue: Function;
-  setValidated: Function;
-  setValue: Function;
   style: React.CSSProperties;
   type?: 'text' | 'email' | 'password' | 'number';
   validateOn?: typeof BLUR | typeof FOCUS | typeof INPUT | typeof MOUNT;
+  validator?: Function;
 }
 
 function Select({
   autoFocus,
   className,
   disabled,
-  hasError,
   id,
-  isValidated,
   model,
-  mountModel,
   onChange = () => {},
   options,
   parseValue,
   placeholder,
-  setValidated,
-  setValue,
   style,
   validateOn,
-  value,
+  validator,
 }: PropTypes) {
+  useWillMount(() => controlActions.mountModel(model, parseValue, validateOn === MOUNT, validator));
+
+  const dispatch = useDispatch();
+  const value = useCachedSelector(getValue, model) || '';
+  const errors: string[] = useGetErrors(model, value);
   console.log('RENDERING: select', model);
-  useLayoutEffect(() => {mountModel(model, parseValue, validateOn === MOUNT)}, []);
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    dispatch(controlActions.setValue(model, e.target.value));
+    onChange(model, e.target.value);
+  };
 
   const getClassName: () => string = () => {
-    return [className, hasError && isValidated ? `CHl3Error ${model}-CHl3Error` : undefined]
+    return [className, errors.length < 1] // && isValidated ? `CHCl3Error ${model}-CHCl3Error` : undefined]
       .join(' ')
       .trim();
   };
 
-  const handleOnChange: (event: React.ChangeEvent<HTMLSelectElement>) => void = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setValue(model, e.target.value);
-    onChange(model, e.target.value);
-  };
-
-  const markValidated = () => setValidated(model);
+  const markValidated = () => {}; // isValidated || setValidated(model);
 
   const mappedOptions = options.map(option => {
     if ('group' in option) {
@@ -126,6 +121,7 @@ function Select({
   );
 }
 
+/*
 const mapStateToProps = (state: Store.CombinedState, {model}: PropTypes) => ({
   hasError: hasError(state, model),
   initialized: isFormInitialized(state),
@@ -139,8 +135,6 @@ const mapDispatchToProps = {
   setErrors: controlActions.setErrors,
   setValue: controlActions.setValue,
 };
+*/
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(memo(Select));
+export default memo(Select);

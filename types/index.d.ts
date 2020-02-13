@@ -29,6 +29,7 @@ declare namespace Store {
   type ControlState = {
     blueprint: {[key: string]: {} | undefined},
     store: {[key: string]: ScalarValue | ArrayValue | ObjectValue},
+    validators: {[key: string]: Function},
   };
 
   type FormState = {

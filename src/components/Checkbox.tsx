@@ -1,71 +1,55 @@
-import React, {useLayoutEffect, memo/*, useEffect*/} from 'react';
+import React, {memo} from 'react';
+import {useDispatch} from 'react-redux';
 
+import {useCachedSelector, useGetErrors, useWillMount} from '../hooks';
 import controlActions from '../actions/controls';
 import {BLUR, FOCUS, INPUT, MOUNT} from '../constants/events';
-import {connect} from '../store';
-import {getValue/*, isFormInitialized*/} from '../store/reducers';
+import {getValue/*, hasBeenValidated, isFormInitialized*/} from '../store/reducers';
 
 interface PropTypes {
   autoFocus?: boolean;
   className?: string;
   disabled?: boolean;
-  hasError: boolean;
   id?: string;
-  initialized: boolean;
-  isValidated: boolean;
   model: string;
-  mountModel: Function;
   onChange: Function;
   parseValue: Function;
-  setErrors: Function;
-  setValidated: Function;
-  setValue: Function;
-  validator: Function;
+  validator?: Function;
   style?: React.CSSProperties;
   validateOn?: typeof BLUR | typeof FOCUS | typeof INPUT | typeof MOUNT;
-  value?: boolean | boolean[];
 }
+
 function Checkbox({
   autoFocus,
   className,
   disabled,
-  hasError,
   id,
-  // initialized,
-  isValidated,
   model,
-  mountModel,
   onChange = () => {},
   parseValue,
-  // setErrors,
-  setValidated,
-  setValue,
   style,
   validateOn,
-  // validator = () => {},
-  value,
+  validator = () => {},
 }: PropTypes) {
-  console.log('RENDERING: checkbox', model, value, /*initialized, */ isValidated, validateOn);
-  useLayoutEffect(() => {mountModel(model, parseValue, validateOn === MOUNT)}, []);
-  //
-  // useEffect(() => {
-  //   setErrors(model, validator(parseValue ? parseValue(value) : value));
-  // }, [value, initialized]);
+  useWillMount(() => controlActions.mountModel(model, parseValue, validateOn === MOUNT, validator));
 
-  const handleOnChange: (event: React.ChangeEvent<HTMLInputElement>) => void = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setValue(model, e.target.checked);
+  const dispatch = useDispatch();
+  const value = useCachedSelector(getValue, model) || '';
+  const errors: string[] = useGetErrors(model, value);
+  console.log('RENDERING: checkbox', model, errors);
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    dispatch(controlActions.setValue(model, e.target.checked));
     onChange(model, e.target.checked);
   };
 
   const getClassName: () => string = () => {
-    return [className, hasError && isValidated ? `CHl3Error ${model}-CHl3Error` : undefined]
+    return [className, errors.length < 1] // && isValidated ? `CHCl3Error ${model}-CHCl3Error` : undefined]
       .join(' ')
       .trim();
   };
 
-  const markValidated = () => setValidated(model);
+  const markValidated = () => {}; // isValidated || setValidated(model);
 
   return (
     <input
@@ -84,8 +68,10 @@ function Checkbox({
   );
 }
 
+/*
 const mapStateToProps = (state: Store.CombinedState, {model}: PropTypes) => ({
   value: getValue(state, model),
+  errors: [],
   // initialized: isFormInitialized(state),
 });
 
@@ -97,5 +83,6 @@ const mapDispatchToProps = {
   setValue: controlActions.setValue,
   updateValue: controlActions.updateValue,
 };
+*/
 
-export default connect(mapStateToProps, mapDispatchToProps)(memo(Checkbox));
+export default memo(Checkbox);

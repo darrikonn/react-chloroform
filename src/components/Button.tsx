@@ -1,9 +1,5 @@
 import React, {memo} from 'react';
 
-import {SUBMIT} from '../constants/form';
-import {canBeSubmitted} from '../store/reducers';
-import {connect} from '../store';
-
 interface PropTypes {
   className?: string;
   disabled?: boolean;
@@ -30,8 +26,10 @@ function Button({className, disabled, onClick, id, style, text, type = 'button'}
   );
 }
 
+/*
 const mapStateToProps = (state: Store.CombinedState, {type, disabled}: PropTypes) => ({
   disabled: disabled === undefined ? type === SUBMIT && canBeSubmitted(state) : disabled,
 });
+*/
 
-export default connect(mapStateToProps)(memo(Button));
+export default memo(Button);

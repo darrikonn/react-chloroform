@@ -1,3 +1,5 @@
+import {createSelector} from 'reselect';
+
 import {HAS_ERRORS, SUBMITTING} from '../../constants/form';
 
 import control, * as fromControl from './control';
@@ -38,10 +40,19 @@ export const isFormInitialized = (state: Store.CombinedState) =>
 export const getError = (state: Store.CombinedState, model: string) =>
   fromControl.getError(state.control, model);
 
-export const getFormValues = (state: Store.CombinedState) => fromControl.getValues(state.control);
+export const getFormValues = (state: Store.CombinedState) => fromControl.getValues(state.control.store);
 
-export const getValue = (state: Store.CombinedState, model: string) =>
-  fromControl.getValue(state.control.store, model.split('.'));
+export const getValue = () => createSelector(
+  (state: Store.CombinedState): {[_: string]: ExplicitAny}  => state.control.store,
+  (_: ExplicitAny, model: string): string => model,
+  (store: {[_: string]: Function}, model: string) => fromControl.getValue(store, model.split('.')),
+)
+
+export const getValidators = () => createSelector(
+  (state: Store.CombinedState): {[_: string]: Function}  => state.control.validators,
+  (_: ExplicitAny, model: string): string => model,
+  (validators: {[_: string]: Function}, model: string) => fromControl.getValidators(validators, model),
+)
 
 export const hasBeenValidated = (state: Store.CombinedState, model: string) =>
   fromControl.hasBeenValidated(state.control, model);

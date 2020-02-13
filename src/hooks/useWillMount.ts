@@ -1,14 +1,10 @@
 import {useLayoutEffect} from 'react';
+import {useDispatch} from 'react-redux';
 
-export default (func: Function) => {useLayoutEffect(() => func(), [])};
-// import {useEffect, useState} from 'react';
-//
-// export default (func: Function) => {
-//   const [hasRendered, setHasRendered] = useState(false);
-//
-//   useEffect(() => setHasRendered(true), [hasRendered]);
-//
-//   if (!hasRendered) {
-//     func();
-//   }
-// };
+export default (func: Function) => {
+  const dispatch = useDispatch();
+
+  return useLayoutEffect(() => {
+    dispatch(func());
+  }, [dispatch]);
+};

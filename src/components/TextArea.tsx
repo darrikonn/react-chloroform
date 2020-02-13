@@ -1,29 +1,26 @@
-import React, {useLayoutEffect, memo} from 'react';
+import React, {memo} from 'react';
+import {useDispatch} from 'react-redux';
 
+import {useCachedSelector, useGetErrors, useWillMount} from '../hooks';
 import controlActions from '../actions/controls';
 import {BLUR, FOCUS, INPUT, MOUNT} from '../constants/events';
-import {connect} from '../store';
-import {getValue, hasBeenValidated, hasError, isFormInitialized} from '../store/reducers';
+// import {getValue2 as getValue, hasBeenValidated, hasError, isFormInitialized} from '../store/reducers';
+import {getValue/*, hasBeenValidated, isFormInitialized*/} from '../store/reducers';
 
 interface PropTypes {
   autoFocus?: boolean;
   className?: string;
   cols?: number;
   disabled?: boolean;
-  hasError: boolean;
   id?: string;
-  isValidated: boolean;
   model: string;
-  mountModel: Function;
   onChange: Function;
   parseValue: Function;
   placeholder?: string;
   rows?: number;
-  setValidated: Function;
-  setValue: Function;
   style?: React.CSSProperties;
   validateOn?: typeof BLUR | typeof FOCUS | typeof INPUT | typeof MOUNT;
-  value?: string | number;
+  validator?: Function;
 }
 
 function TextArea({
@@ -31,38 +28,35 @@ function TextArea({
   className,
   cols = 30,
   disabled,
-  hasError,
   id,
-  isValidated,
   model,
-  mountModel,
   onChange = () => {},
   parseValue,
   placeholder,
   rows = 10,
-  setValidated,
-  setValue,
   style,
   validateOn,
-  value = '',
+  validator,
 }: PropTypes) {
+  useWillMount(() => controlActions.mountModel(model, parseValue, validateOn === MOUNT, validator));
+
+  const dispatch = useDispatch();
+  const value = useCachedSelector(getValue, model) || '';
+  const errors: string[] = useGetErrors(model, value);
   console.log('RENDERING: textarea', model);
-  useLayoutEffect(() => {mountModel(model, parseValue, validateOn === MOUNT)}, []);
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    dispatch(controlActions.setValue(model, e.target.value));
+    onChange(model, e.target.value);
+  };
 
   const getClassName: () => string = () => {
-    return [className, hasError && isValidated ? `CHl3Error ${model}-CHl3Error` : undefined]
+    return [className, errors.length < 1] // && isValidated ? `CHCl3Error ${model}-CHCl3Error` : undefined]
       .join(' ')
       .trim();
   };
 
-  const handleOnChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setValue(model, e.target.value);
-    onChange(model, e.target.value);
-  };
-
-  const markValidated = () => setValidated(model);
+  const markValidated = () => {}; // isValidated || setValidated(model);
 
   return (
     <textarea
@@ -83,6 +77,7 @@ function TextArea({
   );
 }
 
+/*
 const mapStateToProps = (state: Store.CombinedState, {model}: PropTypes) => ({
   hasError: hasError(state, model),
   initialized: isFormInitialized(state),
@@ -96,5 +91,6 @@ const mapDispatchToProps = {
   setErrors: controlActions.setErrors,
   setValue: controlActions.setValue,
 };
+*/
 
-export default connect(mapStateToProps, mapDispatchToProps)(memo(TextArea));
+export default memo(TextArea);

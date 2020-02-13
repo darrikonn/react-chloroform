@@ -2,7 +2,6 @@ import {
   MOUNT_MODEL,
   INITIALIZE_STATE,
   MARK_VALIDATED,
-  SET_ERRORS,
   SET_VALUE,
   SHOW_ERRORS,
 } from '../action-types';
@@ -32,14 +31,39 @@ const constructBlueprint = (arr: string[], state: ExplicitAny = {}): ExplicitAny
     } as ObjectValue;
   }
 };
+
+const escapeRegExp = (str: string): string => {
+  return str.replace(/[.*]/g, '\\$&');
+};
+
 const findBestMatch = (map: {[key: string]: ExplicitAny}, match: string): ExplicitAny => {
-  if (match in map) {
-    return map[match];
-  } else if (match && match.split('.').some(m => isNumber(m))) {
-    return findBestMatch(map, match.replace(/\.\d+(?![\s\S]*\.\d+)/, '.*'))
-  } else {
+  const regex = escapeRegExp(`^(${match.replace(/\.(\d+)\b/g, '.($1|*))?(')})?$`);
+  const matches: {[_: string]: ExplicitAny} = Object.keys(map).reduce(
+    (acc: {[_: string]: ExplicitAny}, key: string) => {
+      if (key.match(regex)) {
+        return {...acc, [key]: map[key]};
+      }
+      return acc;
+    }, {});
+
+  // parse result
+  const keys = Object.keys(matches);
+  if (keys.length === 0) {
     return undefined;
   }
+
+  let index: number = -2;
+  return keys.reduce((acc: ExplicitAny, k: string) => {
+    const lastDigit = k.match(/\d+(?![\s\S]*\.\d+)/);
+    if (lastDigit) {
+      const lastIndex = k.split('.').lastIndexOf(lastDigit.toString());
+      if (lastIndex > index) {
+        index = lastIndex;
+        return matches[k];
+      }
+    }
+    return acc;
+  }, matches[keys[0]])
 };
 
 const initializeState = (state: ExplicitAny = {}, initialState: {}, currentPath: string = ''): {} => {
@@ -49,7 +73,9 @@ const initializeState = (state: ExplicitAny = {}, initialState: {}, currentPath:
   } else {
     return keys.reduce((acc: ExplicitAny, next: ExplicitAny) => {
       if (next === '*') {
-        return Array.from({length: state['*'].length}).map((_, i: number) => ({value: initializeState(state['*'].value, initialState, `${currentPath}.${i}`)}));
+        return Array.from({length: state['*'].length}).map((_, i: number) => ({
+          value: initializeState(state['*'].value, initialState, `${currentPath}.${i}`),
+        }));
       } else {
         return {
           ...acc,
@@ -114,7 +140,7 @@ const setDeep: ExplicitAny = (arr: string[], state: ExplicitAny = {}, newValue: 
   }
 };
 
-export default (state: Store.ControlState = {blueprint: {}, store: {}}, action: Store.Action): Store.ControlState => {
+export default (state: Store.ControlState = {blueprint: {}, store: {}, validators: {}}, action: Store.Action): Store.ControlState => {
   const {payload} = action;
   switch (action.type) {
     case MOUNT_MODEL: {
@@ -124,25 +150,19 @@ export default (state: Store.ControlState = {blueprint: {}, store: {}}, action: 
         blueprint: {
           ...state.blueprint,
           ...constructBlueprint(model, state.blueprint),
-        }
+        },
+        validators: {
+          ...state.validators,
+          [payload.model]: payload.validator,
+        },
       };
     }
     case INITIALIZE_STATE:
       return {
         ...state,
         store: initializeState(state.blueprint, payload.initialState),
+        validators: {...state.validators, ...payload.validators},
       };
-    case SET_ERRORS: {
-      return state;
-      // const model = fromDotProp(payload.model);
-      // return {
-      //   ...state,
-      //   [model]: {
-      //     ...state[model],
-      //     errors: payload.errors,
-      //   },
-      // };
-    }
     case SET_VALUE: {
       const model = payload.model.split('.');
       return {
@@ -152,14 +172,6 @@ export default (state: Store.ControlState = {blueprint: {}, store: {}}, action: 
           [model[0]]: setDeep(model.slice(1), state.store[model[0]], payload.value),
         },
       };
-      // const model = fromDotProp(payload.model);
-      // return {
-      //   ...state,
-      //   [model]: {
-      //     ...state[model],
-      //     value: merge(getIn(state, model, 'value'), payload.value, payload.model),
-      //   },
-      // };
     }
     case MARK_VALIDATED: { // combine with show_errors
       return state;
@@ -203,6 +215,22 @@ const flattenObject = (obj: ExplicitAny, result: ExplicitAny = []) => {
     }
   };
   return result;
+};
+
+export const getValidators = (
+  validators: {[key: string]: Function},
+  model: string,
+  modelValidators: Function[] = [],
+): Function[] => {
+  let combinedValidators = modelValidators;
+  if (validators[model]) {
+    combinedValidators = [...modelValidators, validators[model]];
+  }
+
+  if (model && model.split('.').some(m => isNumber(m))) {
+    return getValidators(validators, model.replace(/\.\d+(?![\s\S]*\.\d+)/, '.*'), combinedValidators)
+  }
+  return combinedValidators;
 };
 
 export const getValue = (state: ExplicitAny, arr: string[]): ExplicitAny => {
@@ -249,10 +277,10 @@ const getStateValue = (state: ExplicitAny = {}): {} => {
   }
 };
 
-export const getValues = (state: Store.ControlState) => {
-  return Object.keys(state.store).reduce((acc, model) => ({
+export const getValues = (store: {[key: string]: ScalarValue | ArrayValue | ObjectValue}) => {
+  return Object.keys(store).reduce((acc, model) => ({
     ...acc,
-    [model]: getStateValue(state.store[model]),
+    [model]: getStateValue(store[model]),
   }), {});
 };
 

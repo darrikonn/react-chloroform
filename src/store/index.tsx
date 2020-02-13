@@ -1,7 +1,7 @@
 import React from 'react';
 import {Provider, connect as reduxConnect} from 'react-redux';
 import thunk from 'redux-thunk';
-import { createStore, applyMiddleware } from 'redux';
+import {createStore, applyMiddleware} from 'redux';
 
 import reducers from './reducers';
 
