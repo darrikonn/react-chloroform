@@ -1,6 +1,16 @@
 test/
 src/
 example/
+examples/
+CONTRIBUTING.md
+cypress/
 .babelrc
 .eslintrc
+.prettierrc
 .travis.yml
+types/
+yarn*
+tsconfig.json
+.td.cfg
+jest.config.js
+cypress.json

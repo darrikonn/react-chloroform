@@ -13,8 +13,8 @@ interface PropTypes {
   disabled?: boolean;
   id?: string;
   model: string;
-  onChange: Function;
-  parseValue: Function;
+  onChange?: Function;
+  parseValue?: Function;
   placeholder?: string;
   style?: React.CSSProperties;
   validateOn?: typeof BLUR | typeof FOCUS | typeof INPUT | typeof MOUNT;

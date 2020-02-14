@@ -12,8 +12,8 @@ interface PropTypes {
   disabled?: boolean;
   id?: string;
   model: string;
-  onChange: Function;
-  parseValue: Function;
+  onChange?: Function;
+  parseValue?: Function;
   placeholder?: string;
   style?: React.CSSProperties;
   type?: 'text' | 'email' | 'password' | 'number';

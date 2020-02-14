@@ -18,7 +18,7 @@ interface PropTypes {
   onSubmit: Function;
   onSubmitFailed?: Function;
   style?: React.CSSProperties;
-  validators: {[key: string]: Function};
+  validators?: {[key: string]: Function};
 }
 
 function Form({

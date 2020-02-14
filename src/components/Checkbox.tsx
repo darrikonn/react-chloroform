@@ -12,8 +12,8 @@ interface PropTypes {
   disabled?: boolean;
   id?: string;
   model: string;
-  onChange: Function;
-  parseValue: Function;
+  onChange?: Function;
+  parseValue?: Function;
   validator?: Function;
   style?: React.CSSProperties;
   validateOn?: typeof BLUR | typeof FOCUS | typeof INPUT | typeof MOUNT;
