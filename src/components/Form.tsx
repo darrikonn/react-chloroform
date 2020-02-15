@@ -7,7 +7,7 @@ import {withLocalStore, compose} from '../store';
 import {getFormValues/*, hasFormErrors*/} from '../store/reducers';
 
 interface PropTypes {
-  afterSubmitState?: {};
+  afterSubmitState?: {} | undefined;
   children?: React.ReactNode;
   className?: string;
   id?: string;
@@ -55,7 +55,9 @@ function Form({
     Promise.resolve()
       .then(() => onSubmit(values))
       .then(() => {
-        dispatch(controlActions.initializeState(afterSubmitState || initialState, validators));
+        if (afterSubmitState) {
+          dispatch(controlActions.initializeState(afterSubmitState, validators));
+        }
         // setSubmitted();
       })
       .catch(err => {

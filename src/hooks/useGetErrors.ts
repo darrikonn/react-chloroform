@@ -8,9 +8,12 @@ export default (model: string, value: ExplicitAny): string[] => {
   return useMemo(
     () =>
       validators.reduce((acc: string[], validate: Function) => {
-        const [isValid, message] = validate(value);
-        if (!isValid) {
-          return [...acc, message];
+        const validation = validate(value);
+        if (validation) {
+          const [isValid, message] = validation;
+          if (!isValid) {
+            return [...acc, message];
+          }
         }
         return acc;
       }, []),
