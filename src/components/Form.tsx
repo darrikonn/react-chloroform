@@ -55,7 +55,7 @@ function Form({
     Promise.resolve()
       .then(() => onSubmit(values))
       .then(() => {
-        if (afterSubmitState) {
+        if (afterSubmitState && false) {
           dispatch(controlActions.initializeState(afterSubmitState, validators));
         }
         // setSubmitted();
