@@ -14,7 +14,7 @@ interface PropTypes {
   initialState?: {};
   onChange?: (_: React.ChangeEvent<HTMLFormElement>) => void;
   onReset?: Function;
-  onResetState?: {};
+  onResetState?: {} | undefined;
   onSubmit: Function;
   onSubmitFailed?: Function;
   style?: React.CSSProperties;
