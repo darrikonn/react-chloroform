@@ -1,10 +1,11 @@
-import React, {memo, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector, Provider} from 'react-redux';
 
 import controlActions from '../actions/controls';
 import formActions from '../actions/form';
-import {withLocalStore, compose} from '../store';
-import {getFormValues/*, hasFormErrors*/} from '../store/reducers';
+import reducers, {getFormValues/*, hasFormErrors*/} from '../store/reducers';
+import thunk from 'redux-thunk';
+import {createStore, applyMiddleware} from 'redux';
 
 interface PropTypes {
   afterSubmitState?: {} | undefined;
@@ -44,6 +45,7 @@ function Form({
 
   const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
+    event.stopPropagation();
 
     // if (hasFormErrors) {
     //   showErrors();
@@ -69,6 +71,7 @@ function Form({
 
   const handleReset = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
+    event.stopPropagation();
 
     dispatch(controlActions.initializeState(onResetState || initialState, validators));
     onReset();
@@ -106,7 +109,14 @@ const mapDispatchToProps = {
 };
 */
 
-export default compose(
-  withLocalStore(),
-  memo,
-)(Form);
+function StoreProvider(props: PropTypes) {
+  const [store] = useState(createStore(reducers, applyMiddleware(thunk)));
+
+  return (
+    <Provider store={store}>
+      <Form {...props as PropTypes} />
+    </Provider>
+  );
+}
+
+export default StoreProvider;

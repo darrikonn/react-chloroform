@@ -6,5 +6,5 @@ export default (func: Function) => {
 
   return useLayoutEffect(() => {
     dispatch(func());
-  }, [dispatch]);
+  }, []);
 };

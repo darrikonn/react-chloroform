@@ -1,17 +1,16 @@
 import React from 'react';
-import {Provider, connect as reduxConnect} from 'react-redux';
-import thunk from 'redux-thunk';
-import {createStore, applyMiddleware} from 'redux';
+// import {Provider, connect as reduxConnect} from 'react-redux';
+// import {Store} from 'redux';
 
-import reducers from './reducers';
+export const Store = React.createContext({});
 
-export const withLocalStore = () => <P extends object>(WrappedComponent: React.ComponentType<P> | ExplicitAny) =>
-  (props: P) =>
-    <Provider store={createStore(reducers, applyMiddleware(thunk))}>
-      <WrappedComponent {...props as P} />
-    </Provider>;
-
-export const connect = reduxConnect;
+// export const withLocalStore = (store: Store) => <P extends object>(WrappedComponent: React.ComponentType<P> | ExplicitAny) =>
+//   (props: P) =>
+//     <Provider store={store}>
+//       <WrappedComponent {...props as P} />
+//     </Provider>;
+//
+// export const connect = reduxConnect;
 
 export const compose = (...funcs: Function[]) => {
   if (funcs.length === 0) {
@@ -25,3 +24,30 @@ export const compose = (...funcs: Function[]) => {
 
   return funcs.reduce((a, b) => (...args: any) => a(b(...args)))
 };
+
+/*
+// import React from 'react'
+import {
+  // Provider,
+  createStoreHook,
+  createDispatchHook,
+  createSelectorHook
+} from 'react-redux'
+
+const MyContext = React.createContext(null)
+
+// Export your custom hooks if you wish to use them in other files.
+export const useStore = createStoreHook(MyContext)
+export const useDispatch = createDispatchHook(MyContext)
+export const useSelector = createSelectorHook(MyContext)
+
+const myStore = createStore(rootReducer)
+
+export function MyProvider({ children }) {
+  return (
+    <Provider context={MyContext} store={myStore}>
+      {children}
+    </Provider>
+  )
+}
+*/
