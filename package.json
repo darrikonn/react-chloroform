@@ -32,7 +32,8 @@
     "tsc": "tsc --noEmit",
     "format": "prettier --config .prettierrc --write \"src/**/*.ts*\"",
     "cypress:run": "cypress run",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "prepublish": "tsc"
   },
   "types": "./dist/index.d.ts",
   "peerDependencies": {
